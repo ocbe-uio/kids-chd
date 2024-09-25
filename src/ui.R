@@ -1,16 +1,16 @@
 ui <- fluidPage(
   # Step 1: selecting diagnosis
-  h1("Kids with congenital heart defects"),
+  h1("Kids with Congenital Heart Defects"),
   wellPanel(
     h2("Select diagnosis"),
-    selectInput(
-      inputId = "diagnosis",
-      label   = "Diagnostic group:",
-      choices = c(
-        "Simple defects" = "simple_defects",
-        "Moderate complex defects" = "moderate_complex_defects",
-        "Fontan circulation" = "fontan_circulation"
-      )
+    radioButtons(
+      "diagnosis", "Diagnostic group:",
+      choiceNames = c(
+        "Simple defects",
+        "Moderate complex defects",
+        "Univentricular defects with Fontan circulation"
+      ),
+      choiceValues = c("simple", "moderate", "fontan")
     ),
     # Add "Next" button
     actionButton("next", "Next")
@@ -20,7 +20,11 @@ ui <- fluidPage(
     condition = "input.next > 0",
     wellPanel(
       h2("Select covariates"),
-      radioButtons("sex", "Sex", c("Male", "Female")),
+      radioButtons(
+        "sex", "Sex",
+        selected = character(0),
+        choiceNames = list("Male", "Female"), choiceValues = list(1L, 0L)
+      ),
       numericInput(
         "height", "Height (cm)",
         value = 100L, min = 0L, step = 1L, max = 200L
@@ -37,13 +41,7 @@ ui <- fluidPage(
     condition = "input.submit > 0",
     wellPanel(
       h2("Results"),
-      "VO2 ml/min: ", textOutput("vo2_ml_min"),
-      "VO2 ml/kg/min: ", textOutput("vo2_ml_kg_min"),
-      "Heart rate: ", textOutput("heart_rate"),
-      "Ventilation: ", textOutput("ventilation"),
-      "Oxygen pulse: ", textOutput("oxygen_pulse"),
-      "VE/VCO2 slope: ", textOutput("ve_vco2_slope"),
-      "Breathing frequency: ", textOutput("breathing_frequency")
+      tableOutput("results_table")
     )
   )
 )
