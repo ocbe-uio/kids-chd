@@ -21,8 +21,14 @@ ui <- fluidPage(
     wellPanel(
       h2("Select covariates"),
       radioButtons("sex", "Sex", c("Male", "Female")),
-      numericInput("height", "Height (cm)", value = 0, min = 0),
-      numericInput("bmi", "BMI", value = 0, min = 0)
+      numericInput(
+        "height", "Height (cm)",
+        value = 100L, min = 0L, step = 1L, max = 200L
+      ),
+      numericInput(
+        "bmi", "BMI",
+        value = 20, min = 0, max = 50, step = 0.1
+      )
     ),
     actionButton("submit", "Calculate endpoints")
   ),
