@@ -5,6 +5,6 @@ account: ocbe
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12809468
-bundleId: 9143601
+bundleId: 9143989
 url: https://ocbe.shinyapps.io/kids-chd/
 version: 1
