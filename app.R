@@ -27,7 +27,7 @@ ui <- fluidPage(
       ),
       numericInput(
         "bmi", "BMI",
-        value = 20, min = 0, max = 50, step = 0.1
+        value = 20.0, min = 0.1, max = 50.0, step = 0.1
       )
     ),
     actionButton("submit", "Calculate endpoints")
