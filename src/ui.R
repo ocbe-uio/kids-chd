@@ -1,6 +1,6 @@
 ui <- fluidPage(
   # Step 1: selecting diagnosis
-  h1("Kids with congenital heart defects"),
+  h1("Kids with Congenital Heart Defects"),
   wellPanel(
     h2("Select diagnosis"),
     radioButtons(
