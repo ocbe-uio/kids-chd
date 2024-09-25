@@ -20,7 +20,11 @@ ui <- fluidPage(
     condition = "input.next > 0",
     wellPanel(
       h2("Select covariates"),
-      radioButtons("sex", "Sex", c("Male", "Female")),
+      radioButtons(
+        "sex", "Sex",
+        selected = character(0),
+        choiceNames = list("Male", "Female"), choiceValues = list(1L, 0L)
+      ),
       numericInput(
         "height", "Height (cm)",
         value = 100L, min = 0L, step = 1L, max = 200L
