@@ -7,9 +7,9 @@ ui <- fluidPage(
       inputId = "diagnosis",
       label   = "Diagnostic group:",
       choices = c(
-        "Simple defects" = "simple_defects",
-        "Moderate complex defects" = "moderate_complex_defects",
-        "Fontan circulation" = "fontan_circulation"
+        "Simple defects" = "simple",
+        "Moderate complex defects" = "moderate",
+        "Fontan circulation" = "fontan"
       )
     ),
     # Add "Next" button

@@ -32,9 +32,9 @@ server <- function(input, output) {
 
   heart_rate <- function(diagnosis, height, bmi) {
     switch(diagnosis,
-      simple_defects = (9168804 * height + 5.13e9) ^ (1 / 4.3),
-      moderate_complex_defects = (9.9e8 * height - 2.86e9 * bmi + 1.4e11) ^ (1 / 5),
-      fontan_circulation = NA
+      simple = (9168804 * height + 5.13e9) ^ (1 / 4.3),
+      moderate = (9.9e8 * height - 2.86e9 * bmi + 1.4e11) ^ (1 / 5),
+      fontan = NA
     )
   }
 
