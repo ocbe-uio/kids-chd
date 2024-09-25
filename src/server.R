@@ -21,32 +21,32 @@ server <- function(input, output) {
   output$breathing_frequency <- renderText({
     breathing_frequency()
   })
-}
 
-vo2_ml_min <- function() {
-  1
-}
+  vo2_ml_min <- function() {
+    1
+  }
 
-vo2_ml_kg_min <- function() {
-  2
-}
+  vo2_ml_kg_min <- function() {
+    2
+  }
 
-heart_rate <- function() {
-  3
-}
+  heart_rate <- function() {
+    3
+  }
 
-ventilation <- function() {
-  4
-}
+  ventilation <- function() {
+    4
+  }
 
-oxygen_pulse <- function() {
-  5
-}
+  oxygen_pulse <- function() {
+    5
+  }
 
-ve_vco2_slope <- function() {
-  6
-}
+  ve_vco2_slope <- function() {
+    6
+  }
 
-breathing_frequency <- function() {
-  7
+  breathing_frequency <- function() {
+    7
+  }
 }
