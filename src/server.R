@@ -1,27 +1,4 @@
 server <- function(input, output) {
-  # Calculate endpoints
-  output$vo2_ml_min <- renderText({
-    vo2_ml_min()
-  })
-  output$vo2_ml_kg_min <- renderText({
-    vo2_ml_kg_min()
-  })
-  output$heart_rate <- renderText({
-    heart_rate(input$diagnosis, input$height, input$bmi, as.numeric(input$sex))
-  })
-  output$ventilation <- renderText({
-    ventilation()
-  })
-  output$oxygen_pulse <- renderText({
-    oxygen_pulse()
-  })
-  output$ve_vco2_slope <- renderText({
-    ve_vco2_slope()
-  })
-  output$breathing_frequency <- renderText({
-    breathing_frequency()
-  })
-
   vo2_ml_min <- function() {
     NA
   }
@@ -54,4 +31,22 @@ server <- function(input, output) {
   breathing_frequency <- function() {
     NA
   }
+
+  output$results_table <- renderTable({
+    data.frame(
+      "Metric" = c(
+        "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
+        "Oxygen pulse", "VE/VCO2 slope", "Breathing frequency"
+      ),
+      "Value" = c(
+        vo2_ml_min(),
+        vo2_ml_kg_min(),
+        heart_rate(input$diagnosis, input$height, input$bmi, as.numeric(input$sex)),
+        ventilation(),
+        oxygen_pulse(),
+        ve_vco2_slope(),
+        breathing_frequency()
+      )
+    )
+  })
 }

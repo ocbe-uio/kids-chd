@@ -41,13 +41,7 @@ ui <- fluidPage(
     condition = "input.submit > 0",
     wellPanel(
       h2("Results"),
-      "VO2 ml/min: ", textOutput("vo2_ml_min"),
-      "VO2 ml/kg/min: ", textOutput("vo2_ml_kg_min"),
-      "Heart rate: ", textOutput("heart_rate"),
-      "Ventilation: ", textOutput("ventilation"),
-      "Oxygen pulse: ", textOutput("oxygen_pulse"),
-      "VE/VCO2 slope: ", textOutput("ve_vco2_slope"),
-      "Breathing frequency: ", textOutput("breathing_frequency")
+      tableOutput("results_table")
     )
   )
 )
