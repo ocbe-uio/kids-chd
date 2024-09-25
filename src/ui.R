@@ -3,14 +3,14 @@ ui <- fluidPage(
   h1("Kids with congenital heart defects"),
   wellPanel(
     h2("Select diagnosis"),
-    selectInput(
-      inputId = "diagnosis",
-      label   = "Diagnostic group:",
-      choices = c(
-        "Simple defects" = "simple",
-        "Moderate complex defects" = "moderate",
-        "Fontan circulation" = "fontan"
-      )
+    radioButtons(
+      "diagnosis", "Diagnostic group:",
+      choiceNames = c(
+        "Simple defects",
+        "Moderate complex defects",
+        "Univentricular defects with Fontan circulation"
+      ),
+      choiceValues = c("simple", "moderate", "fontan")
     ),
     # Add "Next" button
     actionButton("next", "Next")
