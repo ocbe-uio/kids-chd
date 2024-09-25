@@ -7,7 +7,7 @@ server <- function(input, output) {
     vo2_ml_kg_min()
   })
   output$heart_rate <- renderText({
-    heart_rate(input$diagnosis, input$height)
+    heart_rate(input$diagnosis, input$height, input$bmi)
   })
   output$ventilation <- renderText({
     ventilation()
@@ -30,10 +30,10 @@ server <- function(input, output) {
     NA
   }
 
-  heart_rate <- function(diagnosis, height) {
+  heart_rate <- function(diagnosis, height, bmi) {
     switch(diagnosis,
       simple_defects = (9168804 * height + 5.13e9) ^ (1 / 4.3),
-      moderate_complex_defects = NA,
+      moderate_complex_defects = (9.9e8 * height - 2.86e9 * bmi + 1.4e11) ^ (1 / 5),
       fontan_circulation = NA
     )
   }
