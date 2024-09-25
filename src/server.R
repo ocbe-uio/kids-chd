@@ -23,11 +23,11 @@ server <- function(input, output) {
   })
 
   vo2_ml_min <- function() {
-    1
+    NA
   }
 
   vo2_ml_kg_min <- function() {
-    2
+    NA
   }
 
   heart_rate <- function(diagnosis, height) {
@@ -39,18 +39,18 @@ server <- function(input, output) {
   }
 
   ventilation <- function() {
-    4
+    NA
   }
 
   oxygen_pulse <- function() {
-    5
+    NA
   }
 
   ve_vco2_slope <- function() {
-    6
+    NA
   }
 
   breathing_frequency <- function() {
-    7
+    NA
   }
 }
