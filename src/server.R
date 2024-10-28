@@ -1,10 +1,11 @@
 diagnosis <- setRefClass(
   "Diagnosis",
   fields = list(
-    hosp_soft = "numeric", # cross-proportion of non-surgical and vyntus
-    hosp = "numeric",  # proportion of non-surgical centres
+    hosp_soft = "numeric", # cross-proportion of surgical and vyntus
+    hosp = "numeric",  # proportion of surgical centres
     soft = "numeric",  # proportion of vyntus software
-    heart_rate = "function"
+    heart_rate = "function",
+    breathing_frequency = "function"
   )
 )
 
@@ -23,19 +24,33 @@ simple <- diagnosis(
   soft = 0.0528,
   heart_rate = function(.self, person) {
     (9168804 * person$height + 5.13e9) ^ (1 / 4.3)
+  },
+  breathing_frequency = function(.self, person) {
+   (- 0.0114363 * person$height + 0.0007431 * person$sex - 0.1421088 * .self$hosp + 6.693345) ^ (1 / 0.4)
   }
 )
 
 moderate <- diagnosis(
+  hosp_soft = c(0.6439, 0.0060, 0.2938, 0.0563),
+  hosp = 0.6499,
+  soft = 0.0624,
   heart_rate = function(.self, person) {
     (9.9e8 * person$height - 2.86e9 * person$bmi + 1.4e11) ^ (1 / 5)
+  },
+  breathing_frequency = function(.self, person) {
+    (-0.037375 * person$height - 1.778892 * person$sex + 0.0134113 * person$height * person$sex - 0.3806323 * .self$hosp + 16.65239) ^ (1 / 0.6)
   }
 )
 
 fontan <- diagnosis(
+  hosp_soft = c(0.7834, 0.0072, 0.1697, 0.0397),
+  hosp = 0.7906,
   soft = 0.0469,
   heart_rate = function(.self, person) {
     (-144400.5 * person$height - 3.81e7 * person$sex + 2076971 * person$bmi * person$sex + 1.24e7 * .self$soft + 9.75e7) ^ (1 / 3.5)
+  },
+  breathing_frequency = function(.self, person) {
+    exp(-0.0044619 * person$height + 0.0225936 * log(person$bmi) * person$sex - 0.0820773 * .self$hosp + 4.609728)
   }
 )
 
@@ -59,10 +74,6 @@ server <- function(input, output) {
     NA
   }
 
-  breathing_frequency <- function() {
-    NA
-  }
-
   output$results_table <- renderTable({
     diag <- get(input$diagnosis)
     person <- person(
@@ -80,7 +91,7 @@ server <- function(input, output) {
         ventilation(),
         oxygen_pulse(),
         ve_vco2_slope(),
-        breathing_frequency()
+        diag$breathing_frequency(diag, person)
       )
     )
   })
