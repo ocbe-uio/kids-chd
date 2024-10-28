@@ -8,6 +8,9 @@ diagnosis <- setRefClass(
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
     heart_rate = "function",
+    ventilation = "function",
+    oxygen_pulse = "function",
+    ve_vco2_slope = "function",
     breathing_frequency = "function"
   )
 )
@@ -41,8 +44,23 @@ simple <- diagnosis(
   heart_rate = function(.self, person) {
     (9168804 * person$height + 5.13e9) ^ (1 / 4.3)
   },
+  ventilation = function(.self, person) {
+    exp(0.0109834 * person$height - 3642.842 * (person$bmi ^ -3.6) - 0.4839596 * person$sex + 0.0038111 * person$height * person$sex + 2.581131)
+  },
+  oxygen_pulse = function(.self, person) {
+    results = apply(.self$grid, 1, function(config) {
+      exp(0.0146831 * person$height - 42.58742 * (person$bmi ^ -1.7) + 0.0009018 * person$height * person$sex - 0.1793433 * config["vyntus"] + 0.1046776 * config["surg"] + 0.2350272)
+    })
+    weighted.mean(results, .self$surg_vyntus)
+  },
+  ve_vco2_slope = function(.self, person) {
+    results = apply(.self$grid, 1, function(config) {
+      (0.0005124 * person$height + 0.0170638 * log(person$bmi) + 0.0294384 * person$sex - 0.0001712 * person$height * person$sex - 0.0143388 * config["vyntus"] + 0.0126451 * config["surg"] + 0.1285197) ^ (1 / -0.4)
+    })
+    weighted.mean(results, .self$surg_vyntus)
+  },
   breathing_frequency = function(.self, person) {
-   (- 0.0114363 * person$height + 0.0007431 * person$sex - 0.1421088 * .self$surg + 6.693345) ^ (1 / 0.4)
+   (- 0.0114363 * person$height + 0.0007431 * person$height * person$sex - 0.1421088 * .self$surg + 6.693345) ^ (1 / 0.4)
   }
 )
 
@@ -65,6 +83,21 @@ moderate <- diagnosis(
   },
   heart_rate = function(.self, person) {
     (9.9e8 * person$height - 2.86e9 * person$bmi + 1.4e11) ^ (1 / 5)
+  },
+  ventilation = function(.self, person) {
+    exp(0.0118031 * person$height + 0.3617417 * log(person$bmi) - 0.3458141 * person$sex + 0.003166 * person$height * person$sex + 1.202455)
+  },
+  oxygen_pulse = function(.self, person) {
+    results = apply(.self$grid, 1, function(config) {
+      exp(0.0146831 * person$height - 0.4460709 * log(person$bmi) + 0.0010929 * person$height * person$sex - 0.0851175 * config["vyntus"] + 0.0796701 * config["surg"] - 1.143238)
+    })
+    weighted.mean(results, .self$surg_vyntus)
+  },
+  ve_vco2_slope = function(.self, person) {
+    results = apply(.self$grid, 1, function(config) {
+      (0.0003922 * person$height - 0.0152721 * config["vyntus"] + 0.0171314 * config["surg"] + 0.1956142) ^ (1 / -0.4)
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   breathing_frequency = function(.self, person) {
     (-0.037375 * person$height - 1.778892 * person$sex + 0.0134113 * person$height * person$sex - 0.3806323 * .self$surg + 16.65239) ^ (1 / 0.6)
@@ -91,24 +124,27 @@ fontan <- diagnosis(
   heart_rate = function(.self, person) {
     (-144400.5 * person$height - 3.81e7 * person$sex + 2076971 * person$bmi * person$sex + 1.24e7 * .self$vyntus + 9.75e7) ^ (1 / 3.5)
   },
+  ventilation = function(.self, person) {
+    exp(0.0118031 * person$height + 0.3613543 * log(person$bmi) + 0.0007153 * person$height * person$sex + 0.9744558)
+  },
+  oxygen_pulse = function(.self, person) {
+    results = apply(.self$grid, 1, function(config) {
+      exp(0.0152299 * person$height - 0.0158716 * log(person$bmi) + 0.0071081 * person$bmi * person$sex - 0.1669066 * config["vyntus"] + 0.0745283 * config["surg"] -0.6453765)
+    })
+    weighted.mean(results, .self$surg_vyntus)
+  },
+  ve_vco2_slope = function(.self, person) {
+    results = apply(.self$grid, 1, function(config) {
+      exp(-0.0058539 * person$height - 0.6899319 * person$sex + 0.0041379 * person$height * person$sex + 0.1335418 * config["vyntus"] - 0.1643959 * config["surg"] + 4.505025)
+    })
+    weighted.mean(results, .self$surg_vyntus)
+  },
   breathing_frequency = function(.self, person) {
     exp(-0.0044619 * person$height + 0.0225936 * log(person$bmi) * person$sex - 0.0820773 * .self$surg + 4.609728)
   }
 )
 
 server <- function(input, output) {
-  ventilation <- function() {
-    NA
-  }
-
-  oxygen_pulse <- function() {
-    NA
-  }
-
-  ve_vco2_slope <- function() {
-    NA
-  }
-
   output$results_table <- renderTable({
     diag <- get(input$diagnosis)
     person <- person(
@@ -123,9 +159,9 @@ server <- function(input, output) {
         diag$vo2_ml_min(diag, person),
         diag$vo2_ml_kg_min(diag, person),
         diag$heart_rate(diag, person),
-        ventilation(),
-        oxygen_pulse(),
-        ve_vco2_slope(),
+        diag$ventilation(diag, person),
+        diag$oxygen_pulse(diag, person),
+        diag$ve_vco2_slope(diag, person),
         diag$breathing_frequency(diag, person)
       )
     )
