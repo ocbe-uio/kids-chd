@@ -1,41 +1,32 @@
 ui <- fluidPage(
-  # Step 1: selecting diagnosis
   titlePanel("Kids with Congenital Heart Defects"),
   sidebarPanel(
-    wellPanel(
-      h2("Select diagnosis"),
-      radioButtons(
-        "diagnosis", "Diagnostic group:",
-        choiceNames = c(
-          "Simple defects",
-          "Moderate complex defects",
-          "Univentricular defects with Fontan circulation"
-        ),
-        choiceValues = c("simple", "moderate", "fontan")
+    # Step 1: selecting diagnosis
+    h2("Select diagnosis"),
+    radioButtons(
+      "diagnosis", "Diagnostic group:",
+      choiceNames = c(
+        "Simple defects",
+        "Moderate complex defects",
+        "Univentricular defects with Fontan circulation"
       ),
-      # Add "Next" button
-      actionButton("next", "Next")
+      choiceValues = c("simple", "moderate", "fontan")
     ),
     # Step 2: selecting covariates
-    conditionalPanel(
-      condition = "input.next > 0",
-      wellPanel(
-        h2("Select covariates"),
-        radioButtons(
-          "sex", "Sex",
-          choiceNames = list("Male", "Female"), choiceValues = list(1L, 0L)
-        ),
-        numericInput(
-          "height", "Height (cm)",
-          value = 100L, min = 0L, step = 1L, max = 200L
-        ),
-        numericInput(
-          "bmi", "BMI",
-          value = 20.0, min = 0.1, max = 50.0, step = 0.1
-        )
-      ),
-      actionButton("submit", "Calculate endpoints")
+    h2("Select covariates"),
+    radioButtons(
+      "sex", "Sex",
+      choiceNames = list("Male", "Female"), choiceValues = list(1L, 0L)
     ),
+    numericInput(
+      "height", "Height (cm)",
+      value = 100L, min = 0L, step = 1L, max = 200L
+    ),
+    numericInput(
+      "bmi", "BMI",
+      value = 20.0, min = 0.1, max = 50.0, step = 0.1
+    ),
+    actionButton("submit", "Calculate endpoints")
   ),
   mainPanel(
     # Step 3: displaying results
