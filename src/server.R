@@ -152,7 +152,7 @@ moderate <- diagnosis(
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
-        + 0.0146831 * person$height
+        + 0.0125909 * person$height
         - 0.4460709 * log(person$bmi)
         + 0.0010929 * person$height * person$sex
         - 0.0851175 * config["vyntus"]
@@ -224,7 +224,7 @@ fontan <- diagnosis(
   },
   ventilation = function(.self, person) {
     exp(
-      + 0.0118031 * person$height
+      + 0.0131873 * person$height
       + 0.3613543 * log(person$bmi)
       + 0.0007153 * person$height * person$sex
       + 0.9744558
@@ -234,7 +234,7 @@ fontan <- diagnosis(
     results = apply(.self$grid, 1, function(config) {
       exp(
         + 0.0152299 * person$height
-        - 0.0158716 * log(person$bmi)
+        - 0.0158716 * person$bmi
         + 0.0071081 * person$bmi * person$sex
         - 0.1669066 * config["vyntus"]
         + 0.0745283 * config["surg"]
