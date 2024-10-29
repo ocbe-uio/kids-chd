@@ -1,10 +1,10 @@
 diagnosis <- setRefClass(
   "Diagnosis",
   fields = list(
-    surg_vyntus = "numeric", # cross-proportion of surgical and vyntus
+    grid = function() expand.grid("vyntus" = 0:1, "surg" = 1:0),# 01, 11, 00, 10
+    surg_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
     surg = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
-    grid = function() expand.grid("vyntus" = 0:1, "surg" = 1:0),
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
     heart_rate = "function",
