@@ -4,7 +4,7 @@ diagnosis <- setRefClass(
     surg_vyntus = "numeric", # cross-proportion of surgical and vyntus
     surg = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
-    grid = "data.frame",
+    grid = function() expand.grid("vyntus" = 0:1, "surg" = 1:0),
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
     heart_rate = "function",
@@ -28,7 +28,6 @@ simple <- diagnosis(
   surg_vyntus = c(0.3994, 0.0029, 0.5478, 0.0499),
   surg = 0.5849,
   vyntus = 0.0528,
-  grid = expand.grid("vyntus" = 0:1, "surg" = 1:0),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
@@ -109,7 +108,6 @@ moderate <- diagnosis(
   surg_vyntus = c(0.6439, 0.0060, 0.2938, 0.0563),
   surg = 0.6499,
   vyntus = 0.0624,
-  grid = expand.grid("vyntus" = 0:1, "surg" = 1:0),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
@@ -188,7 +186,6 @@ fontan <- diagnosis(
   surg_vyntus = c(0.7834, 0.0072, 0.1697, 0.0397),
   surg = 0.7906,
   vyntus = 0.0469,
-  grid = expand.grid("vyntus" = 0:1, "surg" = 1:0),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
