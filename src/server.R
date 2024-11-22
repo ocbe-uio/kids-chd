@@ -43,12 +43,14 @@ simple <- diagnosis(
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
-      + 0.0983195 * person$height
-      - 1.152879 * person$bmi
-      + 0.0423992 * person$height * person$sex
-      - 7.601633 * config["vyntus"]
-      + 4.73933 * config["surg"]
-      + 45.77055
+      (
+        + 0.0983195 * person$height
+        - 1.152879 * person$bmi
+        + 0.0423992 * person$height * person$sex
+        - 7.601633 * config["vyntus"]
+        + 4.73933 * config["surg"]
+        + 45.77055
+      )
     })
     weighted.mean(results, .self$surg_vyntus)
   },
@@ -123,11 +125,13 @@ moderate <- diagnosis(
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
-      - 21.99611 * log(person$bmi)
-      + 0.0430605 * person$height * person$sex
-      - 3.504218 * config["vyntus"]
-      + 3.483406 * config["surg"]
-      + 99.9302
+      (
+        - 21.99611 * log(person$bmi)
+        + 0.0430605 * person$height * person$sex
+        - 3.504218 * config["vyntus"]
+        + 3.483406 * config["surg"]
+        + 99.9302
+      )
     })
     weighted.mean(results, .self$surg_vyntus)
   },
@@ -151,7 +155,7 @@ moderate <- diagnosis(
     results = apply(.self$grid, 1, function(config) {
       exp(
         + 0.0125909 * person$height
-        - 0.4460709 * log(person$bmi)
+        + 0.4460709 * log(person$bmi)
         + 0.0010929 * person$height * person$sex
         - 0.0851175 * config["vyntus"]
         + 0.0796701 * config["surg"]
@@ -202,11 +206,13 @@ fontan <- diagnosis(
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
-      - 0.6682767 * person$bmi
-      + 0.0329825 * person$height * person$sex
-      - 4.52337 * config["vyntus"]
-      + 3.745683 * config["surg"]
-      + 42.38803
+      (
+        - 0.6682767 * person$bmi
+        + 0.0329825 * person$height * person$sex
+        - 4.52337 * config["vyntus"]
+        + 3.745683 * config["surg"]
+        + 42.38803
+      )
     })
     weighted.mean(results, .self$surg_vyntus)
   },
