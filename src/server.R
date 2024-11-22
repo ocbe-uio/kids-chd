@@ -97,12 +97,12 @@ simple <- diagnosis(
     weighted.mean(results, .self$surg_vyntus)
   },
   breathing_frequency = function(.self, person) {
-   (
-    - 0.0114363 * person$height
-    + 0.0007431 * person$height * person$sex
-    - 0.1421088 * .self$surg
-    + 6.693345
-  ) ^ (1 / 0.4)
+    (
+      - 0.0114363 * person$height
+      + 0.0007431 * person$height * person$sex
+      - 0.1421088 * .self$surg
+      + 6.693345
+    ) ^ (1 / 0.4)
   }
 )
 
