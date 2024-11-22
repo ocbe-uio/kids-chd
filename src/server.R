@@ -155,7 +155,7 @@ moderate <- diagnosis(
     results = apply(.self$grid, 1, function(config) {
       exp(
         + 0.0125909 * person$height
-        - 0.4460709 * log(person$bmi)
+        + 0.4460709 * log(person$bmi)
         + 0.0010929 * person$height * person$sex
         - 0.0851175 * config["vyntus"]
         + 0.0796701 * config["surg"]
