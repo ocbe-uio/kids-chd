@@ -1,5 +1,5 @@
-diagnosis <- setRefClass(
-  "Diagnosis",
+group <- setRefClass(
+  "Diagnostic group",
   fields = list(
     grid = function() expand.grid("vyntus" = 0:1, "surg" = 1:0),# 01, 11, 00, 10
     surg_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
@@ -24,7 +24,7 @@ person <- setRefClass(
   )
 )
 
-simple <- diagnosis(
+simple <- group(
   surg_vyntus = c(0.3994, 0.0029, 0.5478, 0.0499),
   surg = 0.5849,
   vyntus = 0.0528,
@@ -106,7 +106,7 @@ simple <- diagnosis(
   }
 )
 
-moderate <- diagnosis(
+moderate <- group(
   surg_vyntus = c(0.6439, 0.0060, 0.2938, 0.0563),
   surg = 0.6499,
   vyntus = 0.0624,
@@ -186,7 +186,7 @@ moderate <- diagnosis(
   }
 )
 
-fontan <- diagnosis(
+fontan <- group(
   surg_vyntus = c(0.7834, 0.0072, 0.1697, 0.0397),
   surg = 0.7906,
   vyntus = 0.0469,
@@ -271,7 +271,7 @@ fontan <- diagnosis(
 
 server <- function(input, output) {
   output$results_table <- renderTable({
-    diag <- get(input$diagnosis)
+    group <- get(input$group)
     person <- person(
       sex = as.numeric(input$sex), height = input$height, bmi = input$bmi
     )
@@ -281,13 +281,13 @@ server <- function(input, output) {
         "Oxygen pulse", "VE/VCO2 slope", "Breathing frequency"
       ),
       "Value" = c(
-        diag$vo2_ml_min(diag, person),
-        diag$vo2_ml_kg_min(diag, person),
-        diag$heart_rate(diag, person),
-        diag$ventilation(diag, person),
-        diag$oxygen_pulse(diag, person),
-        diag$ve_vco2_slope(diag, person),
-        diag$breathing_frequency(diag, person)
+        group$vo2_ml_min(group, person),
+        group$vo2_ml_kg_min(group, person),
+        group$heart_rate(group, person),
+        group$ventilation(group, person),
+        group$oxygen_pulse(group, person),
+        group$ve_vco2_slope(group, person),
+        group$breathing_frequency(group, person)
       )
     )
   })
