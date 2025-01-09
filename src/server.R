@@ -1,9 +1,9 @@
 group <- setRefClass(
   "Diagnostic group",
   fields = list(
-    grid = function() expand.grid("vyntus" = 0:1, "oslo" = 0:1),# 00, 10, 01, 11
-    oslo_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
-    oslo = "numeric",  # proportion of surgical centres
+    grid = function() expand.grid("vyntus" = 0:1, "haukeland" = 1:0), # 01, 11, 00, 10
+    haukeland_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
+    haukeland = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
@@ -25,8 +25,8 @@ person <- setRefClass(
 )
 
 simple <- group(
-  oslo_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
-  oslo = 0.5849,
+  haukeland_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
+  haukeland = 0.4151,
   vyntus = 0.0528,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -35,11 +35,11 @@ simple <- group(
         + 0.4371531 * log(person$bmi)
         + 0.0009139 * person$height * person$sex
         - 0.1803019 * config["vyntus"]
-        + 0.102317 * config["oslo"]
+        + 0.102317 * config["haukeland"]
         + 3.760053
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -48,11 +48,11 @@ simple <- group(
         - 1.152879 * person$bmi
         + 0.0423992 * person$height * person$sex
         - 7.601633 * config["vyntus"]
-        + 4.73933 * config["oslo"]
+        + 4.73933 * config["haukeland"]
         + 45.77055
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -61,7 +61,7 @@ simple <- group(
         + 5.13e9
       ) ^ (1 / 4.3)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -73,7 +73,7 @@ simple <- group(
         + 2.581131
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -82,11 +82,11 @@ simple <- group(
         - 42.58742 * (person$bmi ^ -1.7)
         + 0.0009018 * person$height * person$sex
         - 0.1793433 * config["vyntus"]
-        + 0.1046776 * config["oslo"]
+        + 0.1046776 * config["haukeland"]
         + 0.2350272
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -96,28 +96,28 @@ simple <- group(
         + 0.0294384 * person$sex
         - 0.0001712 * person$height * person$sex
         - 0.0143388 * config["vyntus"]
-        + 0.0126451 * config["oslo"]
+        + 0.0126451 * config["haukeland"]
         + 0.1285197
       ) ^ (1 / -0.4)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       (
         - 0.0114363 * person$height
         + 0.0007431 * person$height * person$sex
-        - 0.1421088 * config["oslo"]
+        - 0.1421088 * config["haukeland"]
         + 6.693345
       ) ^ (1 / 0.4)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   }
 )
 
 moderate <- group(
-  oslo_vyntus = c(0.2938, 0.0563, 0.6439, 0.0060),
-  oslo = 0.6499,
+  haukeland_vyntus = c(0.2938, 0.0563, 0.6439, 0.0060),
+  haukeland = 0.3501,
   vyntus = 0.0623,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -126,11 +126,11 @@ moderate <- group(
         + 0.3949761 * log(person$bmi)
         + 0.0010347 * person$height * person$sex
         - 0.0829085 * config["vyntus"]
-        + 0.088169 * config["oslo"]
+        + 0.088169 * config["haukeland"]
         + 4.069768
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -138,11 +138,11 @@ moderate <- group(
         - 21.99611 * log(person$bmi)
         + 0.0430605 * person$height * person$sex
         - 3.504218 * config["vyntus"]
-        + 3.483406 * config["oslo"]
+        + 3.483406 * config["haukeland"]
         + 99.9302
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -152,7 +152,7 @@ moderate <- group(
         + 1.4e11
       ) ^ (1 / 5)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -164,7 +164,7 @@ moderate <- group(
         + 1.202455
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -173,22 +173,22 @@ moderate <- group(
         + 0.4460709 * log(person$bmi)
         + 0.0010929 * person$height * person$sex
         - 0.0851175 * config["vyntus"]
-        + 0.0796701 * config["oslo"]
+        + 0.0796701 * config["haukeland"]
         - 1.143238
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       (
         + 0.0003922 * person$height
         - 0.0152721 * config["vyntus"]
-        + 0.0171314 * config["oslo"]
+        + 0.0171314 * config["haukeland"]
         + 0.1956142
       ) ^ (1 / -0.4)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -196,17 +196,17 @@ moderate <- group(
         - 0.037375 * person$height
         - 1.778892 * person$sex
         + 0.0134113 * person$height * person$sex
-        - 0.3806323 * config["oslo"]
+        - 0.3806323 * config["haukeland"]
         + 16.65239
         ) ^ (1 / 0.6)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   }
 )
 
 fontan <- group(
-  oslo_vyntus = c(0.1697, 0.0397, 0.7834, 0.0072),
-  oslo = 0.7906, # TODO: check why coding here is different (config 2 is Haukeland)
+  haukeland_vyntus = c(0.1697, 0.0397, 0.7834, 0.0072),
+  haukeland = 0.2094, # TODO: check why coding here is different (config 2 is Haukeland)
   vyntus = 0.0469,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -216,11 +216,11 @@ fontan <- group(
         - 0.8410274 * person$sex
         + 0.3348171 * log(person$bmi) * person$sex
         - 0.1212021 * config["vyntus"]
-        + 0.0948334 * config["oslo"]
+        + 0.0948334 * config["haukeland"]
         + 3.929859
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -228,11 +228,11 @@ fontan <- group(
         - 0.6682767 * person$bmi
         + 0.0329825 * person$height * person$sex
         - 4.52337 * config["vyntus"]
-        + 3.745683 * config["oslo"]
+        + 3.745683 * config["haukeland"]
         + 42.38803
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -244,7 +244,7 @@ fontan <- group(
         + 9.75e7
       ) ^ (1 / 3.5)
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -255,7 +255,7 @@ fontan <- group(
         + 0.9744558
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -264,11 +264,11 @@ fontan <- group(
         - 0.0158716 * person$bmi
         + 0.0071081 * person$bmi * person$sex
         - 0.1669066 * config["vyntus"]
-        + 0.0745283 * config["oslo"]
+        + 0.0745283 * config["haukeland"]
         - 0.6453765
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -277,22 +277,22 @@ fontan <- group(
         - 0.6899319 * person$sex
         + 0.0041379 * person$height * person$sex
         + 0.1335418 * config["vyntus"]
-        - 0.1643959 * config["oslo"]
+        - 0.1643959 * config["haukeland"]
         + 4.505025
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
         - 0.0044619 * person$height
         + 0.0225936 * log(person$bmi) * person$sex
-        - 0.0820773 * config["oslo"]
+        - 0.0820773 * config["haukeland"]
         + 4.609728
       )
     })
-    weighted.mean(results, .self$oslo_vyntus)
+    weighted.mean(results, .self$haukeland_vyntus)
   }
 )
 
