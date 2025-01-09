@@ -1,9 +1,9 @@
 group <- setRefClass(
   "Diagnostic group",
   fields = list(
-    grid = function() expand.grid("vyntus" = 0:1, "surg" = 1:0),# 01, 11, 00, 10
+    grid = function() expand.grid("vyntus" = 0:1, "oslo" = 1:0),# 01, 11, 00, 10
     surg_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
-    surg = "numeric",  # proportion of surgical centres
+    oslo = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
@@ -26,7 +26,7 @@ person <- setRefClass(
 
 simple <- group(
   surg_vyntus = c(0.3994, 0.0029, 0.5478, 0.0499),
-  surg = 0.5849,
+  oslo = 0.5849,
   vyntus = 0.0528,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -35,7 +35,7 @@ simple <- group(
         + 0.4371531 * log(person$bmi)
         + 0.0009139 * person$height * person$sex
         - 0.1803019 * config["vyntus"]
-        + 0.102317 * config["surg"]
+        + 0.102317 * config["oslo"]
         + 3.760053
       )
     })
@@ -48,7 +48,7 @@ simple <- group(
         - 1.152879 * person$bmi
         + 0.0423992 * person$height * person$sex
         - 7.601633 * config["vyntus"]
-        + 4.73933 * config["surg"]
+        + 4.73933 * config["oslo"]
         + 45.77055
       )
     })
@@ -82,7 +82,7 @@ simple <- group(
         - 42.58742 * (person$bmi ^ -1.7)
         + 0.0009018 * person$height * person$sex
         - 0.1793433 * config["vyntus"]
-        + 0.1046776 * config["surg"]
+        + 0.1046776 * config["oslo"]
         + 0.2350272
       )
     })
@@ -96,7 +96,7 @@ simple <- group(
         + 0.0294384 * person$sex
         - 0.0001712 * person$height * person$sex
         - 0.0143388 * config["vyntus"]
-        + 0.0126451 * config["surg"]
+        + 0.0126451 * config["oslo"]
         + 0.1285197
       ) ^ (1 / -0.4)
     })
@@ -107,7 +107,7 @@ simple <- group(
       (
         - 0.0114363 * person$height
         + 0.0007431 * person$height * person$sex
-        - 0.1421088 * config["surg"]
+        - 0.1421088 * config["oslo"]
         + 6.693345
       ) ^ (1 / 0.4)
     })
@@ -117,7 +117,7 @@ simple <- group(
 
 moderate <- group(
   surg_vyntus = c(0.6439, 0.0060, 0.2938, 0.0563),
-  surg = 0.6499,
+  oslo = 0.6499,
   vyntus = 0.0624,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -126,7 +126,7 @@ moderate <- group(
         + 0.3949761 * log(person$bmi)
         + 0.0010347 * person$height * person$sex
         - 0.0829085 * config["vyntus"]
-        + 0.088169 * config["surg"]
+        + 0.088169 * config["oslo"]
         + 4.069768
       )
     })
@@ -138,7 +138,7 @@ moderate <- group(
         - 21.99611 * log(person$bmi)
         + 0.0430605 * person$height * person$sex
         - 3.504218 * config["vyntus"]
-        + 3.483406 * config["surg"]
+        + 3.483406 * config["oslo"]
         + 99.9302
       )
     })
@@ -173,7 +173,7 @@ moderate <- group(
         + 0.4460709 * log(person$bmi)
         + 0.0010929 * person$height * person$sex
         - 0.0851175 * config["vyntus"]
-        + 0.0796701 * config["surg"]
+        + 0.0796701 * config["oslo"]
         - 1.143238
       )
     })
@@ -184,7 +184,7 @@ moderate <- group(
       (
         + 0.0003922 * person$height
         - 0.0152721 * config["vyntus"]
-        + 0.0171314 * config["surg"]
+        + 0.0171314 * config["oslo"]
         + 0.1956142
       ) ^ (1 / -0.4)
     })
@@ -196,7 +196,7 @@ moderate <- group(
         - 0.037375 * person$height
         - 1.778892 * person$sex
         + 0.0134113 * person$height * person$sex
-        - 0.3806323 * config["surg"]
+        - 0.3806323 * config["oslo"]
         + 16.65239
         ) ^ (1 / 0.6)
     })
@@ -206,7 +206,7 @@ moderate <- group(
 
 fontan <- group(
   surg_vyntus = c(0.7834, 0.0072, 0.1697, 0.0397),
-  surg = 0.7906,
+  oslo = 0.7906,
   vyntus = 0.0469,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -216,7 +216,7 @@ fontan <- group(
         - 0.8410274 * person$sex
         + 0.3348171 * log(person$bmi) * person$sex
         - 0.1212021 * config["vyntus"]
-        + 0.0948334 * config["surg"]
+        + 0.0948334 * config["oslo"]
         + 3.929859
       )
     })
@@ -228,7 +228,7 @@ fontan <- group(
         - 0.6682767 * person$bmi
         + 0.0329825 * person$height * person$sex
         - 4.52337 * config["vyntus"]
-        + 3.745683 * config["surg"]
+        + 3.745683 * config["oslo"]
         + 42.38803
       )
     })
@@ -264,7 +264,7 @@ fontan <- group(
         - 0.0158716 * person$bmi
         + 0.0071081 * person$bmi * person$sex
         - 0.1669066 * config["vyntus"]
-        + 0.0745283 * config["surg"]
+        + 0.0745283 * config["oslo"]
         - 0.6453765
       )
     })
@@ -277,7 +277,7 @@ fontan <- group(
         - 0.6899319 * person$sex
         + 0.0041379 * person$height * person$sex
         + 0.1335418 * config["vyntus"]
-        - 0.1643959 * config["surg"]
+        - 0.1643959 * config["oslo"]
         + 4.505025
       )
     })
@@ -288,7 +288,7 @@ fontan <- group(
       exp(
         - 0.0044619 * person$height
         + 0.0225936 * log(person$bmi) * person$sex
-        - 0.0820773 * config["surg"]
+        - 0.0820773 * config["oslo"]
         + 4.609728
       )
     })
