@@ -25,7 +25,7 @@ person <- setRefClass(
 )
 
 simple <- group(
-  surg_vyntus = c(0.3994, 0.0029, 0.5478, 0.0499),
+  surg_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
   oslo = 0.5849,
   vyntus = 0.0528,
   vo2_ml_min = function(.self, person) {
@@ -116,9 +116,9 @@ simple <- group(
 )
 
 moderate <- group(
-  surg_vyntus = c(0.6439, 0.0060, 0.2938, 0.0563),
+  surg_vyntus = c(0.2938, 0.0563, 0.6439, 0.0060),
   oslo = 0.6499,
-  vyntus = 0.0624,
+  vyntus = 0.0623,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
@@ -205,8 +205,8 @@ moderate <- group(
 )
 
 fontan <- group(
-  surg_vyntus = c(0.7834, 0.0072, 0.1697, 0.0397),
-  oslo = 0.7906,
+  surg_vyntus = c(0.1697, 0.0397, 0.7834, 0.0072),
+  oslo = 0.7906, # TODO: check why coding here is different (config 2 is Haukeland)
   vyntus = 0.0469,
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
