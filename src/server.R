@@ -55,19 +55,25 @@ simple <- group(
     weighted.mean(results, .self$surg_vyntus)
   },
   heart_rate = function(.self, person) {
-    (
-      + 9168804 * person$height
-      + 5.13e9
-    ) ^ (1 / 4.3)
+    results = apply(.self$grid, 1, function(config) {
+      (
+        + 9168804 * person$height
+        + 5.13e9
+      ) ^ (1 / 4.3)
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   ventilation = function(.self, person) {
-    exp(
-      + 0.0109834 * person$height
-      - 3642.842 * (person$bmi ^ -3.6)
-      - 0.4839596 * person$sex
-      + 0.0038111 * person$height * person$sex
-      + 2.581131
-    )
+    results = apply(.self$grid, 1, function(config) {
+      exp(
+        + 0.0109834 * person$height
+        - 3642.842 * (person$bmi ^ -3.6)
+        - 0.4839596 * person$sex
+        + 0.0038111 * person$height * person$sex
+        + 2.581131
+      )
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -97,12 +103,15 @@ simple <- group(
     weighted.mean(results, .self$surg_vyntus)
   },
   breathing_frequency = function(.self, person) {
-    (
-      - 0.0114363 * person$height
-      + 0.0007431 * person$height * person$sex
-      - 0.1421088 * .self$surg
-      + 6.693345
-    ) ^ (1 / 0.4)
+    results = apply(.self$grid, 1, function(config) {
+      (
+        - 0.0114363 * person$height
+        + 0.0007431 * person$height * person$sex
+        - 0.1421088 * config["surg"]
+        + 6.693345
+      ) ^ (1 / 0.4)
+    })
+    weighted.mean(results, .self$surg_vyntus)
   }
 )
 
@@ -136,20 +145,26 @@ moderate <- group(
     weighted.mean(results, .self$surg_vyntus)
   },
   heart_rate = function(.self, person) {
-    (
-      + 9.9e8 * person$height
-      - 2.86e9 * person$bmi
-      + 1.4e11
-    ) ^ (1 / 5)
+    results = apply(.self$grid, 1, function(config) {
+      (
+        + 9.9e8 * person$height
+        - 2.86e9 * person$bmi
+        + 1.4e11
+      ) ^ (1 / 5)
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   ventilation = function(.self, person) {
-    exp(
-      + 0.0118031 * person$height
-      + 0.3617417 * log(person$bmi)
-      - 0.3458141 * person$sex
-      + 0.003166 * person$height * person$sex
-      + 1.202455
+    results = apply(.self$grid, 1, function(config) {
+      exp(
+        + 0.0118031 * person$height
+        + 0.3617417 * log(person$bmi)
+        - 0.3458141 * person$sex
+        + 0.003166 * person$height * person$sex
+        + 1.202455
       )
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -176,13 +191,16 @@ moderate <- group(
     weighted.mean(results, .self$surg_vyntus)
   },
   breathing_frequency = function(.self, person) {
-    (
-      - 0.037375 * person$height
-      - 1.778892 * person$sex
-      + 0.0134113 * person$height * person$sex
-      - 0.3806323 * .self$surg
-      + 16.65239
-    ) ^ (1 / 0.6)
+    results = apply(.self$grid, 1, function(config) {
+      (
+        - 0.037375 * person$height
+        - 1.778892 * person$sex
+        + 0.0134113 * person$height * person$sex
+        - 0.3806323 * config["surg"]
+        + 16.65239
+        ) ^ (1 / 0.6)
+    })
+    weighted.mean(results, .self$surg_vyntus)
   }
 )
 
@@ -217,21 +235,27 @@ fontan <- group(
     weighted.mean(results, .self$surg_vyntus)
   },
   heart_rate = function(.self, person) {
-    (
-      - 144400.5 * person$height
-      - 3.81e7 * person$sex
-      + 2076971 * person$bmi * person$sex
-      + 1.24e7 * .self$vyntus
-      + 9.75e7
-    ) ^ (1 / 3.5)
+    results = apply(.self$grid, 1, function(config) {
+      (
+        - 144400.5 * person$height
+        - 3.81e7 * person$sex
+        + 2076971 * person$bmi * person$sex
+        + 1.24e7 * config["vyntus"]
+        + 9.75e7
+      ) ^ (1 / 3.5)
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   ventilation = function(.self, person) {
-    exp(
-      + 0.0131873 * person$height
-      + 0.3613543 * log(person$bmi)
-      + 0.0007153 * person$height * person$sex
-      + 0.9744558
-    )
+    results = apply(.self$grid, 1, function(config) {
+      exp(
+        + 0.0131873 * person$height
+        + 0.3613543 * log(person$bmi)
+        + 0.0007153 * person$height * person$sex
+        + 0.9744558
+      )
+    })
+    weighted.mean(results, .self$surg_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -260,12 +284,15 @@ fontan <- group(
     weighted.mean(results, .self$surg_vyntus)
   },
   breathing_frequency = function(.self, person) {
-    exp(
-      - 0.0044619 * person$height
-      + 0.0225936 * log(person$bmi) * person$sex
-      - 0.0820773 * .self$surg
-      + 4.609728
-    )
+    results = apply(.self$grid, 1, function(config) {
+      exp(
+        - 0.0044619 * person$height
+        + 0.0225936 * log(person$bmi) * person$sex
+        - 0.0820773 * config["surg"]
+        + 4.609728
+      )
+    })
+    weighted.mean(results, .self$surg_vyntus)
   }
 )
 
