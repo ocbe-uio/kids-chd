@@ -1,7 +1,7 @@
 group <- setRefClass(
   "Diagnostic group",
   fields = list(
-    grid = function() expand.grid("vyntus" = 0:1, "oslo" = 1:0),# 01, 11, 00, 10
+    grid = function() expand.grid("vyntus" = 0:1, "oslo" = 0:1),# 00, 10, 01, 11
     surg_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
     oslo = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
