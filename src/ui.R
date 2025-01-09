@@ -1,10 +1,10 @@
 ui <- fluidPage(
   titlePanel("Kids with Congenital Heart Defects"),
   sidebarPanel(
-    # Step 1: selecting diagnosis
-    h2("Select diagnosis"),
+    # Step 1: selecting diagnostic group
+    h2("Select group"),
     radioButtons(
-      "diagnosis", "Diagnostic group:",
+      "group", "Diagnostic group",
       choiceNames = c(
         "Simple defects",
         "Moderate complex defects",
