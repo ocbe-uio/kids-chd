@@ -2,7 +2,7 @@ group <- setRefClass(
   "Diagnostic group",
   fields = list(
     grid = function() expand.grid("vyntus" = 0:1, "oslo" = 0:1),# 00, 10, 01, 11
-    surg_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
+    oslo_vyntus = "numeric", # proportion of vyntus and surgical (see grid)
     oslo = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
     vo2_ml_min = "function",
@@ -25,7 +25,7 @@ person <- setRefClass(
 )
 
 simple <- group(
-  surg_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
+  oslo_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
   oslo = 0.5849,
   vyntus = 0.0528,
   vo2_ml_min = function(.self, person) {
@@ -39,7 +39,7 @@ simple <- group(
         + 3.760053
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -52,7 +52,7 @@ simple <- group(
         + 45.77055
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -61,7 +61,7 @@ simple <- group(
         + 5.13e9
       ) ^ (1 / 4.3)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -73,7 +73,7 @@ simple <- group(
         + 2.581131
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -86,7 +86,7 @@ simple <- group(
         + 0.2350272
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -100,7 +100,7 @@ simple <- group(
         + 0.1285197
       ) ^ (1 / -0.4)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -111,12 +111,12 @@ simple <- group(
         + 6.693345
       ) ^ (1 / 0.4)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   }
 )
 
 moderate <- group(
-  surg_vyntus = c(0.2938, 0.0563, 0.6439, 0.0060),
+  oslo_vyntus = c(0.2938, 0.0563, 0.6439, 0.0060),
   oslo = 0.6499,
   vyntus = 0.0623,
   vo2_ml_min = function(.self, person) {
@@ -130,7 +130,7 @@ moderate <- group(
         + 4.069768
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -142,7 +142,7 @@ moderate <- group(
         + 99.9302
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -152,7 +152,7 @@ moderate <- group(
         + 1.4e11
       ) ^ (1 / 5)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -164,7 +164,7 @@ moderate <- group(
         + 1.202455
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -177,7 +177,7 @@ moderate <- group(
         - 1.143238
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -188,7 +188,7 @@ moderate <- group(
         + 0.1956142
       ) ^ (1 / -0.4)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -200,12 +200,12 @@ moderate <- group(
         + 16.65239
         ) ^ (1 / 0.6)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   }
 )
 
 fontan <- group(
-  surg_vyntus = c(0.1697, 0.0397, 0.7834, 0.0072),
+  oslo_vyntus = c(0.1697, 0.0397, 0.7834, 0.0072),
   oslo = 0.7906, # TODO: check why coding here is different (config 2 is Haukeland)
   vyntus = 0.0469,
   vo2_ml_min = function(.self, person) {
@@ -220,7 +220,7 @@ fontan <- group(
         + 3.929859
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -232,7 +232,7 @@ fontan <- group(
         + 42.38803
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -244,7 +244,7 @@ fontan <- group(
         + 9.75e7
       ) ^ (1 / 3.5)
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -255,7 +255,7 @@ fontan <- group(
         + 0.9744558
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   oxygen_pulse = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -268,7 +268,7 @@ fontan <- group(
         - 0.6453765
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -281,7 +281,7 @@ fontan <- group(
         + 4.505025
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -292,7 +292,7 @@ fontan <- group(
         + 4.609728
       )
     })
-    weighted.mean(results, .self$surg_vyntus)
+    weighted.mean(results, .self$oslo_vyntus)
   }
 )
 
