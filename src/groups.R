@@ -3,7 +3,7 @@ simple <- group(
   haukeland = 0.4151,
   vyntus = 0.0528,
   beta_hat = list(
-    vo2_ml_min = numeric(
+    vo2_ml_min = c(
       0.0155584, 0.4371531, 0.0009139, -0.1803019, 0.102317, 3.760053
     ),
     vo2_ml_kg_min = numeric(),
@@ -14,17 +14,10 @@ simple <- group(
     breathing_frequency = numeric()
   ),
   vo2_ml_min = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0155584 * person$height
-        + 0.4371531 * log(person$bmi)
-        + 0.0009139 * person$height * person$sex
-        - 0.1803019 * config["vyntus"]
-        + 0.102317 * config["haukeland"]
-        + 3.760053
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x = c(person$height, log(person$bmi), person$height * person$sex)
+    x = matrix(rep(x, 4), ncol = 4L)
+    x = as.matrix(cbind(t(x), .self$grid, 1))
+    .self$haukeland_vyntus %*% exp(x %*% .self$beta_hat$vo2_ml_min)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
