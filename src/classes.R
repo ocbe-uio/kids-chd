@@ -24,3 +24,10 @@ person <- setRefClass(
     bmi = "numeric"
   )
 )
+
+y <- function(x, beta_hat, weights, grid) {
+  n_configs <- nrow(grid)
+  x <- matrix(rep(x, n_configs), ncol = n_configs) # FIXME: doesn't work well for k > 1
+  x <- as.matrix(cbind(t(x), grid, 1)) # 1 for the intercept
+  weights %*% exp(x %*% beta_hat)
+}

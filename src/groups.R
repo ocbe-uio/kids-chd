@@ -14,10 +14,8 @@ simple <- group(
     breathing_frequency = numeric()
   ),
   vo2_ml_min = function(.self, person) {
-    x = c(person$height, log(person$bmi), person$height * person$sex)
-    x = matrix(rep(x, 4), ncol = 4L)
-    x = as.matrix(cbind(t(x), .self$grid, 1))
-    .self$haukeland_vyntus %*% exp(x %*% .self$beta_hat$vo2_ml_min)
+    x <- c(person$height, log(person$bmi), person$height * person$sex)
+    y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
