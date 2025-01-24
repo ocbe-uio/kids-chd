@@ -1,7 +1,7 @@
 simple <- group(
   haukeland_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
-  haukeland = 0.4151,
-  vyntus = 0.0528,
+  haukeland = c("0" = 0.5849, "1" = 0.4151),
+  vyntus = c("0" = 0.9472, "1" = 0.0528),
   beta_hat = list(
     vo2_ml_min = c(
       0.0155584, 0.4371531, 0.0009139, -0.1803019, 0.102317, 3.760053
@@ -81,15 +81,15 @@ simple <- group(
     weighted.mean(results, .self$haukeland_vyntus)
   },
   breathing_frequency = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
+    results = apply(expand.grid(0:1), 1, function(config) {
       (
         - 0.0114363 * person$height
         + 0.0007431 * person$height * person$sex
-        - 0.1421088 * config["haukeland"]
+        - 0.1421088 * config
         + 6.693345
       ) ^ (1 / 0.4)
     })
-    weighted.mean(results, .self$haukeland_vyntus)
+    weighted.mean(results, .self$haukeland)
   }
 )
 
