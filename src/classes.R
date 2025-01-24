@@ -24,3 +24,9 @@ person <- setRefClass(
     bmi = "numeric"
   )
 )
+
+y <- function(x, beta_hat, weights, grid) {
+  x <- matrix(rep(x, 4), ncol = 4L)
+  x <- as.matrix(cbind(t(x), grid, 1))
+  weights %*% exp(x %*% beta_hat)
+}
