@@ -2,6 +2,17 @@ simple <- group(
   haukeland_vyntus = c(0.3652, 0.0499, 0.5820, 0.0029),
   haukeland = 0.4151,
   vyntus = 0.0528,
+  beta_hat = list(
+    vo2_ml_min = numeric(
+      0.0155584, 0.4371531, 0.0009139, -0.1803019, 0.102317, 3.760053
+    ),
+    vo2_ml_kg_min = numeric(),
+    heart_rate = numeric(),
+    ventilation = numeric(),
+    oxygen_pulse = numeric(),
+    ve_vco2_slope = numeric(),
+    breathing_frequency = numeric()
+  ),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
