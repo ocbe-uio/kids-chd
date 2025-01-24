@@ -26,7 +26,8 @@ person <- setRefClass(
 )
 
 y <- function(x, beta_hat, weights, grid) {
-  x <- matrix(rep(x, 4), ncol = 4L)
-  x <- as.matrix(cbind(t(x), grid, 1))
+  n_configs <- nrow(grid)
+  x <- matrix(rep(x, n_configs), ncol = n_configs)
+  x <- as.matrix(cbind(t(x), grid, 1)) # 1 for the intercept
   weights %*% exp(x %*% beta_hat)
 }
