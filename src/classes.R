@@ -39,3 +39,7 @@ y.numeric <- function(x, beta_hat, weights, grid, trans) {
   x <- as.matrix(cbind(t(x), grid, 1)) # 1 for the intercept
   weights %*% trans(x %*% beta_hat)
 }
+
+y.matrix <- function(x, beta_hat, weights, grid, trans) {
+  -99
+}
