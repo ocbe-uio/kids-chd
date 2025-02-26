@@ -6,7 +6,9 @@ simple <- group(
     vo2_ml_min = c(
       0.0155584, 0.4371531, 0.0009139, -0.1803019, 0.102317, 3.760053
     ),
-    vo2_ml_kg_min = numeric(),
+    vo2_ml_kg_min = c(
+      0.0983195, -1.152879, 0.0423992, -7.601633, 4.73933, 45.77055
+    ),
     heart_rate = numeric(),
     ventilation = numeric(),
     oxygen_pulse = numeric(),
@@ -18,17 +20,8 @@ simple <- group(
     y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        + 0.0983195 * person$height
-        - 1.152879 * person$bmi
-        + 0.0423992 * person$height * person$sex
-        - 7.601633 * config["vyntus"]
-        + 4.73933 * config["haukeland"]
-        + 45.77055
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- c(person$height, person$bmi, person$height * person$sex)
+    y(x, .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {

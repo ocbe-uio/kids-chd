@@ -26,8 +26,20 @@ person <- setRefClass(
 )
 
 y <- function(x, beta_hat, weights, grid, trans) {
+  UseMethod("y")
+}
+
+y.numeric <- function(x, beta_hat, weights, grid, trans) {
+  # Calculate the estimated endpoints
+  # x starts as a vector of covariates and is eventually transformed into a
+  # matrix with copies of the covariates on the rows and the different grid
+  # configurations on the columns
   n_configs <- nrow(grid)
   x <- matrix(rep(x, n_configs), ncol = n_configs) # FIXME: doesn't work well for k > 1
   x <- as.matrix(cbind(t(x), grid, 1)) # 1 for the intercept
   weights %*% trans(x %*% beta_hat)
+}
+
+y.matrix <- function(x, beta_hat, weights, grid, trans) {
+  -99
 }
