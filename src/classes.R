@@ -26,6 +26,7 @@ person <- setRefClass(
 )
 
 y <- function(x, beta_hat, weights, grid, trans) {
+  # TODO: artificially duplicate x to emulate different k and trigger y.matrix()
   UseMethod("y")
 }
 
