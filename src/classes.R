@@ -41,5 +41,7 @@ y.numeric <- function(x, beta_hat, weights, grid, trans) {
 }
 
 y.matrix <- function(x, beta_hat, weights, grid, trans) {
+  # This differs from y.numeric in that x is already a matrix, with sets of
+  # covariates on the rows
   -99
 }
