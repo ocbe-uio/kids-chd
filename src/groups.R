@@ -15,7 +15,7 @@ simple <- group(
   ),
   vo2_ml_min = function(.self, person) {
     x <- c(person$height, log(person$bmi), person$height * person$sex)
-    y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid)
+    y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
