@@ -46,3 +46,8 @@ y.matrix <- function(x, beta_hat, weights, grid, trans) {
   # covariates on the rows
   -99
 }
+
+expand_matrix <- function(mx, times) {
+  # Expand a matrix by repeating each row `times` times
+  kronecker(rep(1, times), as.matrix(mx))
+}
