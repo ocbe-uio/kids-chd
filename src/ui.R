@@ -1,5 +1,5 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9002"),
+  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9003"),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
@@ -29,6 +29,7 @@ ui <- fluidPage(
     actionButton("submit", "Calculate endpoints")
   ),
   mainPanel(
+    h1("⚠️ THIS PAGE IS UNDER DEVELOPMENT ⚠️"),
     # Step 3: displaying results
     conditionalPanel(
       condition = "input.submit > 0",
