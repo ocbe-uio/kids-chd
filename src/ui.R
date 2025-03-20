@@ -29,6 +29,7 @@ ui <- fluidPage(
     actionButton("submit", "Calculate endpoints")
   ),
   mainPanel(
+    h1("⚠️ THIS PAGE IS UNDER DEVELOPMENT ⚠️"),
     # Step 3: displaying results
     conditionalPanel(
       condition = "input.submit > 0",
