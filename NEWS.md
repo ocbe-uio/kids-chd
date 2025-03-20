@@ -1,3 +1,8 @@
+# Deployment v0.0.0.9003
+
+- Fixed calculation when only "haukeland" or "vyntus" is used (issue #12)
+- Minor code refactoring (issue #11)
+
 # Deployment v0.0.0.9002
 
 - Refactoring
