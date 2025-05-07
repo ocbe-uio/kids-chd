@@ -25,12 +25,12 @@ person <- setRefClass(
   )
 )
 
-y <- function(x, beta_hat, weights, grid, trans) {
+y <- function(x, beta_hat, weights, grid, transf) {
   # TODO: artificially duplicate x to emulate different k and trigger y.matrix()
   UseMethod("y")
 }
 
-y.numeric <- function(x, beta_hat, weights, grid, trans) {
+y.numeric <- function(x, beta_hat, weights, grid, transf) {
   # Calculate the estimated endpoints
   # x starts as a vector of covariates and is eventually transformed into a
   # matrix with copies of the covariates on the rows and the different grid
@@ -38,14 +38,14 @@ y.numeric <- function(x, beta_hat, weights, grid, trans) {
   n_configs <- nrow(grid)
   x <- matrix(rep(x, n_configs), ncol = n_configs) # FIXME: doesn't work well for k > 1
   x <- as.matrix(cbind(t(x), grid, 1)) # 1 for the intercept
-  weights %*% trans(x %*% beta_hat)
+  weights %*% transf(x %*% beta_hat)
 }
 
-y.matrix <- function(x, beta_hat, weights, grid, trans) {
+y.matrix <- function(x, beta_hat, weights, grid, transf) {
   # This differs from y.numeric in that x is already a matrix, with sets of
   # covariates on the rows
   for (row in 1:nrow(x)) {
-    print(y(x[row, ], beta_hat, weights, grid, trans))
+    print(y(x[row, ], beta_hat, weights, grid, transf))
   }
   -99
 }
