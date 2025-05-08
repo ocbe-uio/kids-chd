@@ -16,12 +16,20 @@ simple <- group(
     breathing_frequency = numeric()
   ),
   vo2_ml_min = function(.self, person) {
-    x <- c(person$height, log(person$bmi), person$height * person$sex)
+    x <- c(
+      "height" = person$height,
+      "log_bmi" = log(person$bmi),
+      "height_sex" = person$height * person$sex
+    )
     x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
     y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
-    x <- c(person$height, person$bmi, person$height * person$sex)
+    x <- c(
+      "height" = person$height,
+      "bmi" = person$bmi,
+      "height_sex" = person$height * person$sex
+    )
     x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
     y(x, .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)
   },
