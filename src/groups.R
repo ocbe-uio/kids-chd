@@ -9,7 +9,7 @@ simple <- group(
     vo2_ml_kg_min = c(
       0.0983195, -1.152879, 0.0423992, -7.601633, 4.73933, 45.77055
     ),
-    heart_rate = numeric(),
+    heart_rate = c(9168804, 5.13e9),
     ventilation = numeric(),
     oxygen_pulse = numeric(),
     ve_vco2_slope = numeric(),
@@ -34,13 +34,10 @@ simple <- group(
     y(as.data.frame(x), .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)
   },
   heart_rate = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        + 9168804 * person$height
-        + 5.13e9
-      ) ^ (1 / 4.3)
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- data.frame("height" = person$height)
+    x <- cbind(t(x), 1) # 1 for the intercept
+    transf <- function(x) x ^ (1 / 4.3)
+    y(as.data.frame(x), .self$beta_hat$heart_rate, .self$haukeland_vyntus, .self$grid, transf)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
