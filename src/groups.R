@@ -17,10 +17,12 @@ simple <- group(
   ),
   vo2_ml_min = function(.self, person) {
     x <- c(person$height, log(person$bmi), person$height * person$sex)
+    x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
     y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
     x <- c(person$height, person$bmi, person$height * person$sex)
+    x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
     y(x, .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)
   },
   heart_rate = function(.self, person) {
