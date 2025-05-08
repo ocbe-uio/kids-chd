@@ -35,13 +35,12 @@ y.data.frame <- function(x, beta_hat, weights, grid, transf) {
   # x starts as a vector of covariates and is eventually transformed into a
   # matrix with copies of the covariates on the rows and the different grid
   # configurations on the columns
-  weights %*% transf(as.matrix(x) %*% beta_hat)
-}
-
-y.matrix <- function(x, beta_hat, weights, grid, transf) {
-  # This differs from y.numeric in that x is already a matrix, with sets of
-  # covariates on the rows
-  -99
+  y_weightless <- transf(as.matrix(x) %*% beta_hat)
+  if (all(c("vyntus", "haukeland") %in% colnames(x))) {
+  } else {
+    y_weightless <- expand_matrix(as.matrix(y_weightless), nrow(grid))
+  }
+  weights %*% y_weightless
 }
 
 expand_matrix <- function(mx, times) {
