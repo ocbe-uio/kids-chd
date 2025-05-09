@@ -29,7 +29,6 @@ simple <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    # TODO: refactor. Everythin here is very ad-hoc!
     X <- matrix(nrow = 2L, ncol = 4L)
     X[, 4] <- 1 # intercept
     Y <- matrix(nrow = 2L, ncol = 1L)
@@ -48,7 +47,7 @@ simple <- group(
     var_y <- X %*% .self$sigma_beta_hat$vo2_ml_min %*% t(X)
     standard_errors <- sqrt(diag(var_y))
     confidence_interval <- c(
-      "lower" = Y[1, 1] - 1.96 * standard_errors[1], # FIXME: wong. Ignores [2]
+      "lower" = Y[1, 1] - 1.96 * standard_errors[1], # TODO: add second sex
       "upper" = Y[1, 1] + 1.96 * standard_errors[1]
     )
     c("Y" = Y[1, 1], "CI_lower" = confidence_interval[1], "CI_upper" = confidence_interval[2])
