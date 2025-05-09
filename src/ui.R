@@ -35,7 +35,8 @@ ui <- fluidPage(
       condition = "input.submit > 0",
       wellPanel(
         h2("Results"),
-        tableOutput("results_table")
+        tableOutput("results_table"),
+        plotOutput("confidence_intervals")
       )
     )
   )
