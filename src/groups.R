@@ -9,28 +9,63 @@ simple <- group(
     vo2_ml_kg_min = c(
       0.0983195, -1.152879, 0.0423992, -7.601633, 4.73933, 45.77055
     ),
-    heart_rate = numeric(),
+    heart_rate = c(9168804, 5.13e9),
     ventilation = numeric(),
     oxygen_pulse = numeric(),
     ve_vco2_slope = numeric(),
     breathing_frequency = numeric()
   ),
+  sigma_beta_hat = list( # from Supplement 4; remove software and hospital
+    vo2_ml_min = matrix(
+      c(
+        2.11e-07, -0.00001263, -1.46e-08, 5.55e-06,
+        -0.00001263, 0.0018624, 6.41e-07, -0.00358706,
+        -1.46e-08, 6.41e-07, 8.52e-09, -4.38e-07,
+        5.55e-06, -0.00358706, -4.38e-07, 0.00986512
+      ),
+      nrow = 4,
+      ncol = 4,
+      byrow = TRUE
+    )
+  ),
   vo2_ml_min = function(.self, person) {
-    x <- c(person$height, log(person$bmi), person$height * person$sex)
-    y(x, .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
+    X <- matrix(nrow = 2L, ncol = 4L)
+    X[, 4] <- 1 # intercept
+    Y <- matrix(nrow = 2L, ncol = 3L)
+    for (i in 1:2) {
+      x <- c(
+        "height" = person$height,
+        "log_bmi" = log(person$bmi),
+        "height_sex" = person$height * person$sex
+      )
+      x_expanded <- cbind(t(x), .self$grid, "intercept" = 1)
+      y <- y(as.data.frame(x_expanded), .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
+      X[i, 1:3] <- t(x)
+      Y[i, ] <- t(y)
+      person$sex <- ifelse(person$sex == 1, 0, 1)
+    }
+    var_y <- X %*% .self$sigma_beta_hat$vo2_ml_min %*% t(X)
+    standard_errors <- sqrt(diag(var_y))
+    for (i in 1:2) {
+      Y[i, 2] <- Y[i, 1] - 1.96 * standard_errors[i]
+      Y[i, 3] <- Y[i, 1] + 1.96 * standard_errors[i]
+    }
+    Y
   },
   vo2_ml_kg_min = function(.self, person) {
-    x <- c(person$height, person$bmi, person$height * person$sex)
-    y(x, .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)
+    x <- c(
+      "height" = person$height,
+      "bmi" = person$bmi,
+      "height_sex" = person$height * person$sex
+    )
+    x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
+    y(as.data.frame(x), .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)
   },
   heart_rate = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        + 9168804 * person$height
-        + 5.13e9
-      ) ^ (1 / 4.3)
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- data.frame("height" = person$height)
+    x <- cbind(t(x), 1) # 1 for the intercept
+    transf <- function(x) x ^ (1 / 4.3)
+    y(as.data.frame(x), .self$beta_hat$heart_rate, .self$haukeland_vyntus, .self$grid, transf)
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {

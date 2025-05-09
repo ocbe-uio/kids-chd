@@ -1,5 +1,5 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9003"),
+  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9004"),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
@@ -35,7 +35,8 @@ ui <- fluidPage(
       condition = "input.submit > 0",
       wellPanel(
         h2("Results"),
-        tableOutput("results_table")
+        tableOutput("results_table"),
+        plotOutput("confidence_intervals")
       )
     )
   )

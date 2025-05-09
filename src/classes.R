@@ -6,6 +6,7 @@ group <- setRefClass(
     haukeland = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
     beta_hat = "list",
+    sigma_beta_hat = "list",
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
     heart_rate = "function",
@@ -25,21 +26,25 @@ person <- setRefClass(
   )
 )
 
-y <- function(x, beta_hat, weights, grid, trans) {
+y <- function(x, beta_hat, weights, grid, transf) {
   UseMethod("y")
 }
 
-y.numeric <- function(x, beta_hat, weights, grid, trans) {
+y.data.frame <- function(x, beta_hat, weights, grid, transf) {
   # Calculate the estimated endpoints
   # x starts as a vector of covariates and is eventually transformed into a
   # matrix with copies of the covariates on the rows and the different grid
   # configurations on the columns
-  n_configs <- nrow(grid)
-  x <- matrix(rep(x, n_configs), ncol = n_configs) # FIXME: doesn't work well for k > 1
-  x <- as.matrix(cbind(t(x), grid, 1)) # 1 for the intercept
-  weights %*% trans(x %*% beta_hat)
+  y_weightless <- transf(as.matrix(x) %*% beta_hat)
+  if (all(c("vyntus", "haukeland") %in% colnames(x))) {
+    # x is already expanded, no need to expand here
+  } else {
+    y_weightless <- expand_matrix(as.matrix(y_weightless), nrow(grid))
+  }
+  weights %*% y_weightless
 }
 
-y.matrix <- function(x, beta_hat, weights, grid, trans) {
-  -99
+expand_matrix <- function(mx, times) {
+  # Expand a matrix by repeating each row `times` times
+  kronecker(rep(1, times), as.matrix(mx))
 }
