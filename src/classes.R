@@ -26,7 +26,6 @@ person <- setRefClass(
 )
 
 y <- function(x, beta_hat, weights, grid, transf) {
-  # TODO: artificially duplicate x to emulate different k and trigger y.matrix()
   UseMethod("y")
 }
 
@@ -37,6 +36,7 @@ y.data.frame <- function(x, beta_hat, weights, grid, transf) {
   # configurations on the columns
   y_weightless <- transf(as.matrix(x) %*% beta_hat)
   if (all(c("vyntus", "haukeland") %in% colnames(x))) {
+    # x is already expanded, no need to expand here
   } else {
     y_weightless <- expand_matrix(as.matrix(y_weightless), nrow(grid))
   }

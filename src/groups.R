@@ -16,13 +16,39 @@ simple <- group(
     breathing_frequency = numeric()
   ),
   vo2_ml_min = function(.self, person) {
-    x <- c(
-      "height" = person$height,
-      "log_bmi" = log(person$bmi),
-      "height_sex" = person$height * person$sex
+    # TODO: refactor. Everythin here is very ad-hoc!
+    X <- matrix(nrow = 2L, ncol = 4L)
+    X[, 4] <- 1 # intercept
+    Y <- matrix(nrow = 2L, ncol = 1L)
+    for (i in 1:2) {
+      x <- c(
+        "height" = person$height,
+        "log_bmi" = log(person$bmi),
+        "height_sex" = person$height * person$sex
+      )
+      x_expanded <- cbind(t(x), .self$grid, "intercept" = 1)
+      y <- y(as.data.frame(x_expanded), .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
+      X[i, 1:3] <- t(x)
+      Y[i, ] <- t(y)
+      person$sex <- ifelse(person$sex == 1, 0, 1)
+    }
+    print(X) # TEMP
+    print(Y) # TEMP
+    var_beta_hat <- matrix(
+      c(
+        2.11e-07, -0.00001263, -1.46e-08, 5.55e-06,
+        -0.00001263, 0.0018624, 6.41e-07, -0.00358706,
+        -1.46e-08, 6.41e-07, 8.52e-09, -4.38e-07,
+        5.55e-06, -0.00358706, -4.38e-07, 0.00986512
+      ),
+      nrow = 4,
+      ncol = 4,
+      byrow = TRUE
     )
-    x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
-    y(as.data.frame(x), .self$beta_hat$vo2_ml_min, .self$haukeland_vyntus, .self$grid, exp)
+    var_y <- X %*% var_beta_hat %*% t(X)
+    print(var_y) # TEMP
+    print(sqrt(diag(var_y)))
+    Y[1, 1]
   },
   vo2_ml_kg_min = function(.self, person) {
     x <- c(
