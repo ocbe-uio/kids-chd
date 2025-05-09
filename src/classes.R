@@ -6,6 +6,7 @@ group <- setRefClass(
     haukeland = "numeric",  # proportion of surgical centres
     vyntus = "numeric",  # proportion of vyntus software
     beta_hat = "list",
+    sigma_beta_hat = "list",
     vo2_ml_min = "function",
     vo2_ml_kg_min = "function",
     heart_rate = "function",

@@ -15,6 +15,19 @@ simple <- group(
     ve_vco2_slope = numeric(),
     breathing_frequency = numeric()
   ),
+  sigma_beta_hat = list( # from Supplement 4; remove software and hospital
+    vo2_ml_min = matrix(
+      c(
+        2.11e-07, -0.00001263, -1.46e-08, 5.55e-06,
+        -0.00001263, 0.0018624, 6.41e-07, -0.00358706,
+        -1.46e-08, 6.41e-07, 8.52e-09, -4.38e-07,
+        5.55e-06, -0.00358706, -4.38e-07, 0.00986512
+      ),
+      nrow = 4,
+      ncol = 4,
+      byrow = TRUE
+    )
+  ),
   vo2_ml_min = function(.self, person) {
     # TODO: refactor. Everythin here is very ad-hoc!
     X <- matrix(nrow = 2L, ncol = 4L)
@@ -34,18 +47,7 @@ simple <- group(
     }
     print(X) # TEMP
     print(Y) # TEMP
-    var_beta_hat <- matrix(
-      c(
-        2.11e-07, -0.00001263, -1.46e-08, 5.55e-06,
-        -0.00001263, 0.0018624, 6.41e-07, -0.00358706,
-        -1.46e-08, 6.41e-07, 8.52e-09, -4.38e-07,
-        5.55e-06, -0.00358706, -4.38e-07, 0.00986512
-      ),
-      nrow = 4,
-      ncol = 4,
-      byrow = TRUE
-    )
-    var_y <- X %*% var_beta_hat %*% t(X)
+    var_y <- X %*% .self$sigma_beta_hat$vo2_ml_min %*% t(X)
     print(var_y) # TEMP
     print(sqrt(diag(var_y)))
     Y[1, 1]
