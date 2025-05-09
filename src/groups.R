@@ -45,12 +45,13 @@ simple <- group(
       Y[i, ] <- t(y)
       person$sex <- ifelse(person$sex == 1, 0, 1)
     }
-    print(X) # TEMP
-    print(Y) # TEMP
     var_y <- X %*% .self$sigma_beta_hat$vo2_ml_min %*% t(X)
-    print(var_y) # TEMP
-    print(sqrt(diag(var_y)))
-    Y[1, 1]
+    standard_errors <- sqrt(diag(var_y))
+    confidence_interval <- c(
+      "lower" = Y[1, 1] - 1.96 * standard_errors[1], # FIXME: wong. Ignores [2]
+      "upper" = Y[1, 1] + 1.96 * standard_errors[1]
+    )
+    c("Y" = Y[1, 1], "CI_lower" = confidence_interval[1], "CI_upper" = confidence_interval[2])
   },
   vo2_ml_kg_min = function(.self, person) {
     x <- c(
