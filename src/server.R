@@ -21,6 +21,13 @@ server <- function(input, output) {
         group$oxygen_pulse(group, person),
         group$ve_vco2_slope(group, person),
         group$breathing_frequency(group, person)
+      ),
+      "Confidence_Interval" = c(
+        paste0(
+          round(group$vo2_ml_min(group, person)[1, 2], 2), " - ",
+          round(group$vo2_ml_min(group, person)[1, 3], 2)
+        ),
+        NA, NA, NA, NA, NA, NA
       )
     )
   })
