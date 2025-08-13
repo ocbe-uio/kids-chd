@@ -8,7 +8,12 @@ server <- function(input, output) {
     person <- person(
       sex = as.numeric(input$sex), height = input$height, bmi = input$bmi
     )
-    vo2_ml_min_results <- group$vo2_ml_min(group, person)
+    if (input$group == "simple") {
+      # Workaround while plots are not implemented for all groups
+      vo2_ml_min_results <- group$vo2_ml_min(group, person)
+    } else {
+      vo2_ml_min_results <- matrix(c(group$vo2_ml_min(group, person), NA, NA), 1)
+    }
     data.frame(
       "Metric" = c(
         "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
