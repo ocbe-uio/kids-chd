@@ -40,7 +40,7 @@ simple <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    Y_hat_CI <- matrix(NA, nrow = 2, ncol = 3)
+    Y_HAT_CI <- create_y_hat_ci()
     for (i in 1:2) {
       # Loop through genders
       x <- c(
@@ -48,28 +48,16 @@ simple <- group(
         "log_bmi" = log(person$bmi),
         "height_sex" = person$height * person$sex
       )
-      x_across_configs <- cbind(t(x), .self$grid, "intercept" = 1)
-      y_hat_list <- y(
-        x = as.data.frame(x_across_configs),
-        beta_hat = .self$beta_hat$vo2_ml_min,
-        weights = .self$haukeland_vyntus,
-        grid = .self$grid,
-        transf = exp
+      Y_HAT_CI[i, ] <- fill_y_hat_ci(
+        x, .self$beta_hat$vo2_ml_min, .self$sigma_beta_hat$vo2_ml_min, exp,
+        .self$haukeland_vyntus, .self$grid
       )
-      ci <- ci(
-        y_hat = y_hat_list,
-        X = x_across_configs,
-        sigma_beta_hat = .self$sigma_beta_hat$vo2_ml_min,
-        weights = .self$haukeland_vyntus,
-        transf = exp
-      )
-      Y_hat_CI[i, ] <- cbind(y_hat_list$detransformed_avg, ci)
       person$sex <- ifelse(person$sex == 1, 0, 1)
     }
-    Y_hat_CI
+    Y_HAT_CI
   },
   vo2_ml_kg_min = function(.self, person) {
-    Y_hat_CI <- matrix(NA, nrow = 2, ncol = 3)
+    Y_HAT_CI <- create_y_hat_ci()
     for (i in 1:2) {
       # Loop through genders
       x <- c(
@@ -77,25 +65,13 @@ simple <- group(
         "bmi" = person$bmi,
         "height_sex" = person$height * person$sex
       )
-      x_across_configs <- cbind(t(x), .self$grid, "intercept" = 1)
-      y_hat_list <- y(
-        x = as.data.frame(x_across_configs),
-        beta_hat = .self$beta_hat$vo2_ml_kg_min,
-        weights = .self$haukeland_vyntus,
-        grid = .self$grid,
-        transf = identity
+      Y_HAT_CI[i, ] <- fill_y_hat_ci(
+        x, .self$beta_hat$vo2_ml_kg_min, .self$sigma_beta_hat$vo2_ml_kg_min, identity,
+        .self$haukeland_vyntus, .self$grid
       )
-      ci <- ci(
-        y_hat = y_hat_list,
-        X = x_across_configs,
-        sigma_beta_hat = .self$sigma_beta_hat$vo2_ml_kg_min,
-        weights = .self$haukeland_vyntus,
-        transf = identity
-      )
-      Y_hat_CI[i, ] <- cbind(y_hat_list$detransformed_avg, ci)
       person$sex <- ifelse(person$sex == 1, 0, 1)
     }
-    Y_hat_CI
+    Y_HAT_CI
   },
   heart_rate = function(.self, person) {
     x <- data.frame("height" = person$height)

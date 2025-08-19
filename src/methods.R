@@ -35,3 +35,26 @@ expand_matrix <- function(mx, times) {
   # Expand a matrix by repeating each row `times` times
   kronecker(rep(1, times), as.matrix(mx))
 }
+
+create_y_hat_ci <- function() {
+  n_genders <- 2L
+  matrix(
+    data = NA,
+    nrow = n_genders,
+    ncol = 3L,
+    dimnames = list(
+      c("Selected genger", "Other gender"),
+      c("Point estimate", "Lower CI", "Upper CI")
+    )
+  )
+}
+
+fill_y_hat_ci <- function(x, beta_hat, sigma_beta_hat, transf, weights, grid) {
+  # Expand x
+  x_across_configs <- cbind(t(x), grid, "intercept" = 1)
+  y_hat_list <- y(as.data.frame(x_across_configs), beta_hat, weights, grid, transf)
+  ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf)
+
+  # Return vector
+  cbind(y_hat_list$detransformed_avg, ci)
+}
