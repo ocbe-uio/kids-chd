@@ -1,6 +1,5 @@
 source("classes.R")
-source("groups.R")
-
+source("models.R")
 
 server <- function(input, output) {
   output$results_table <- renderTable({
@@ -11,8 +10,10 @@ server <- function(input, output) {
     if (input$group == "simple") {
       # Workaround while plots are not implemented for all groups
       vo2_ml_min_results <- group$vo2_ml_min(group, person)
+      vo2_ml_kg_min_results <- group$vo2_ml_kg_min(group, person)
     } else {
       vo2_ml_min_results <- matrix(c(group$vo2_ml_min(group, person), NA, NA), 1)
+      vo2_ml_kg_min_results <- matrix(c(group$vo2_ml_kg_min(group, person), NA, NA), 1)
     }
     data.frame(
       "Metric" = c(
@@ -21,7 +22,7 @@ server <- function(input, output) {
       ),
       "Value" = c(
         vo2_ml_min_results[1, 1],
-        group$vo2_ml_kg_min(group, person),
+        vo2_ml_kg_min_results[1, 1],
         group$heart_rate(group, person),
         group$ventilation(group, person),
         group$oxygen_pulse(group, person),
@@ -33,7 +34,11 @@ server <- function(input, output) {
           round(vo2_ml_min_results[1, 2], 2), " - ",
           round(vo2_ml_min_results[1, 3], 2)
         ),
-        NA, NA, NA, NA, NA, NA
+        paste0(
+          round(vo2_ml_kg_min_results[1, 2], 2), " - ",
+          round(vo2_ml_kg_min_results[1, 3], 2)
+        ),
+        NA, NA, NA, NA, NA
       )
     )
   })
@@ -53,7 +58,7 @@ server <- function(input, output) {
 
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Group", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = "blue"
+      xlab = "Group", ylab = "Measurement", xaxt = "n", pch = 16, col = "blue"
     )
     axis(1, at = 1:2, labels = c("Selected sex", "Other sex"))
     arrows(
