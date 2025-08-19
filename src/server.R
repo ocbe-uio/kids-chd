@@ -1,4 +1,5 @@
 source("classes.R")
+source("methods.R")
 source("models.R")
 
 server <- function(input, output) {
