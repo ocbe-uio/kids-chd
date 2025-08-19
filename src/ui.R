@@ -36,7 +36,7 @@ ui <- fluidPage(
       wellPanel(
         h2("Results"),
         tableOutput("results_table"),
-        plotOutput("confidence_intervals")
+        uiOutput("confidence_intervals")
       )
     )
   )

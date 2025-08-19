@@ -42,9 +42,15 @@ server <- function(input, output) {
       )
     )
   })
-  output$confidence_intervals <- renderPlot({
+  output$confidence_intervals <- renderUI({
+    tabsetPanel(
+      tabPanel("VO2 ml/min", plotOutput("vo2_ml_min_plot")),
+      tabPanel("VO2 ml/kg/min", plotOutput("vo2_ml_kg_min_plot"))
+    )
+  })
+
+  output$vo2_ml_min_plot <- renderPlot({
     if (input$group != "simple") {
-      # Workaround while plots are not implemented for all groups
       return(NULL)
     }
     group <- get(input$group)
@@ -58,12 +64,37 @@ server <- function(input, output) {
 
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Group", ylab = "Measurement", xaxt = "n", pch = 16, col = "blue"
+      xlab = "Group", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = "blue"
     )
     axis(1, at = 1:2, labels = c("Selected sex", "Other sex"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
       angle = 90, code = 3, length = 0.1, col = "blue"
+    )
+  })
+
+  output$vo2_ml_kg_min_plot <- renderPlot({
+    if (input$group != "simple") {
+      return(NULL)
+    }
+    group <- get(input$group)
+    person <- person(
+      sex = as.numeric(input$sex), height = input$height, bmi = input$bmi
+    )
+    results <- group$vo2_ml_kg_min(group, person)
+    # Assuming results is a matrix with columns: estimate, lower, upper
+    point_estimates <- results[, 1]
+    lower_limits <- results[, 2]
+    upper_limits <- results[, 3]
+
+    plot(
+      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
+      xlab = "Group", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = "red"
+    )
+    axis(1, at = 1:2, labels = c("Selected sex", "Other sex"))
+    arrows(
+      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
+      angle = 90, code = 3, length = 0.1, col = "red"
     )
   })
 }
