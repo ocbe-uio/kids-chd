@@ -26,10 +26,21 @@ simple <- group(
         5.55e-06, -0.00358706, -4.38e-07, 1.58e-04, -1.84e-04, 0.00986512
       ),
       nrow = 6, ncol = 6, byrow = TRUE
+    ),
+    vo2_ml_kg_min = matrix(
+      c(
+        0.00035024, -0.00098016, -0.00002489, -0.00171601, -0.00015618, -0.03344335,
+        -0.00098016, 0.00757501, 0.0000504, -0.00036311, 0.00335704, 0.0006148,
+        -0.00002489, 0.0000504, 0.00001519, 0.00028271, -0.00003328, 0.00142169,
+        -0.00171601, -0.00036311, 0.00028271, 1.2854802, -0.1644319, 0.24078036,
+        -0.00015618, 0.00335704, -0.00003328, -0.1644319, 0.36629488, -0.17410341,
+        -0.03344335, 0.0006148, 0.00142169, 0.24078036, -0.17410341, 5.2525623
+      ),
+      nrow = 6, ncol = 6, byrow = TRUE
     )
   ),
   vo2_ml_min = function(.self, person) {
-    Y_hat_CI <- matrix(NA, nrow = 2, ncol = 3)
+    Y_HAT_CI <- create_y_hat_ci()
     for (i in 1:2) {
       # Loop through genders
       x <- c(
@@ -37,34 +48,30 @@ simple <- group(
         "log_bmi" = log(person$bmi),
         "height_sex" = person$height * person$sex
       )
-      x_across_configs <- cbind(t(x), .self$grid, "intercept" = 1)
-      y_hat_list <- y(
-        x = as.data.frame(x_across_configs),
-        beta_hat = .self$beta_hat$vo2_ml_min,
-        weights = .self$haukeland_vyntus,
-        grid = .self$grid,
-        transf = exp
+      Y_HAT_CI[i, ] <- fill_y_hat_ci(
+        x, .self$beta_hat$vo2_ml_min, .self$sigma_beta_hat$vo2_ml_min, exp,
+        .self$haukeland_vyntus, .self$grid
       )
-      ci <- ci(
-        y_hat = y_hat_list,
-        X = x_across_configs,
-        sigma_beta_hat = .self$sigma_beta_hat$vo2_ml_min,
-        weights = .self$haukeland_vyntus,
-        transf = exp
-      )
-      Y_hat_CI[i, ] <- cbind(y_hat_list$detransformed_avg, ci)
       person$sex <- ifelse(person$sex == 1, 0, 1)
     }
-    Y_hat_CI
+    Y_HAT_CI
   },
   vo2_ml_kg_min = function(.self, person) {
-    x <- c(
-      "height" = person$height,
-      "bmi" = person$bmi,
-      "height_sex" = person$height * person$sex
-    )
-    x <- cbind(t(x), .self$grid, 1) # 1 for the intercept
-    y(as.data.frame(x), .self$beta_hat$vo2_ml_kg_min, .self$haukeland_vyntus, .self$grid, identity)$detransformed_avg
+    Y_HAT_CI <- create_y_hat_ci()
+    for (i in 1:2) {
+      # Loop through genders
+      x <- c(
+        "height" = person$height,
+        "bmi" = person$bmi,
+        "height_sex" = person$height * person$sex
+      )
+      Y_HAT_CI[i, ] <- fill_y_hat_ci(
+        x, .self$beta_hat$vo2_ml_kg_min, .self$sigma_beta_hat$vo2_ml_kg_min, identity,
+        .self$haukeland_vyntus, .self$grid
+      )
+      person$sex <- ifelse(person$sex == 1, 0, 1)
+    }
+    Y_HAT_CI
   },
   heart_rate = function(.self, person) {
     x <- data.frame("height" = person$height)
