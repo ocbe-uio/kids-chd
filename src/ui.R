@@ -1,5 +1,5 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9006"),
+  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9007"),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
@@ -14,10 +14,7 @@ ui <- fluidPage(
     ),
     # Step 2: selecting covariates
     h2("Select covariates"),
-    radioButtons(
-      "sex", "Sex",
-      choiceNames = list("Male", "Female"), choiceValues = list(1L, 0L)
-    ),
+  # Sex selection removed; results will be shown for both genders
     numericInput(
       "height", "Height (cm)",
       value = 100L, min = 0L, step = 1L, max = 200L
