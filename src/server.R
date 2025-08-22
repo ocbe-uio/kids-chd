@@ -11,10 +11,7 @@ server <- function(input, output) {
 
     # Helper to get results for both sexes
     get_metric <- function(fun) {
-      c(
-        male = fun(group, person_male),
-        female = fun(group, person_female)
-      )
+      c(male = fun(group, person_male), female = fun(group, person_female))
     }
 
     # For metrics with confidence intervals (assume matrix with 3 columns)
@@ -61,15 +58,26 @@ server <- function(input, output) {
       group$ve_vco2_slope(group, person_female),
       group$breathing_frequency(group, person_female)
     )
+    format_ci <- function(mat) {
+      if (is.null(mat) || any(is.na(mat[1, 2:3]))) {
+      return(NA)
+      }
+      paste(
+      formatC(mat[1, 2], width = 6, format = "f", digits = 2, flag = "#"),
+      "-",
+      formatC(mat[1, 3], width = 6, format = "f", digits = 2, flag = "#")
+      )
+    }
+
     ci_male <- c(
-      paste0(round(vo2_ml_min_results$male[1, 2], 2), " - ", round(vo2_ml_min_results$male[1, 3], 2)),
-      paste0(round(vo2_ml_kg_min_results$male[1, 2], 2), " - ", round(vo2_ml_kg_min_results$male[1, 3], 2)),
-      NA, NA, NA, NA, NA
+      format_ci(vo2_ml_min_results$male),
+      format_ci(vo2_ml_kg_min_results$male),
+      rep(NA, 5)
     )
     ci_female <- c(
-      paste0(round(vo2_ml_min_results$female[1, 2], 2), " - ", round(vo2_ml_min_results$female[1, 3], 2)),
-      paste0(round(vo2_ml_kg_min_results$female[1, 2], 2), " - ", round(vo2_ml_kg_min_results$female[1, 3], 2)),
-      NA, NA, NA, NA, NA
+      format_ci(vo2_ml_min_results$female),
+      format_ci(vo2_ml_kg_min_results$female),
+      rep(NA, 5)
     )
 
     data.frame(
@@ -80,7 +88,7 @@ server <- function(input, output) {
       CI_Girl = ci_female,
       check.names = FALSE
     )
-  })
+  }, align = "lccrc")
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO2 ml/min", plotOutput("vo2_ml_min_plot")),
