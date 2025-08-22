@@ -62,10 +62,10 @@ server <- function(input, output) {
       if (is.null(mat) || any(is.na(mat[1, 2:3]))) {
       return(NA)
       }
-      paste0(
-      formatC(mat[1, 2], width = 6, format = "f", digits = 2, flag = "0"),
-      " - ",
-      formatC(mat[1, 3], width = 6, format = "f", digits = 2, flag = "0")
+      paste(
+      formatC(mat[1, 2], width = 6, format = "f", digits = 2, flag = "#"),
+      "-",
+      formatC(mat[1, 3], width = 6, format = "f", digits = 2, flag = "#")
       )
     }
 
@@ -88,7 +88,7 @@ server <- function(input, output) {
       CI_Girl = ci_female,
       check.names = FALSE
     )
-  })
+  }, align = "lccrc")
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO2 ml/min", plotOutput("vo2_ml_min_plot")),
