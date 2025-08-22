@@ -5,7 +5,7 @@ source("models.R")
 server <- function(input, output) {
   output$results_table <- renderTable({
     group <- get(input$group)
-    # Calculate for both sexes: 1 = Male, 0 = Female
+    # Calculate for both sexes: 1 = Boy, 0 = Girl
     person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
     person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
 
@@ -74,10 +74,10 @@ server <- function(input, output) {
 
     data.frame(
       Metric = metrics,
-      Value_Male = value_male,
-      CI_Male = ci_male,
-      Value_Female = value_female,
-      CI_Female = ci_female,
+      Value_Boy = value_male,
+      CI_Boy = ci_male,
+      Value_Girl = value_female,
+      CI_Girl = ci_female,
       check.names = FALSE
     )
   })
@@ -106,7 +106,7 @@ server <- function(input, output) {
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = c("blue", "red")
     )
-    axis(1, at = 1:2, labels = c("Male", "Female"))
+    axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
       angle = 90, code = 3, length = 0.1, col = c("blue", "red")
@@ -131,7 +131,7 @@ server <- function(input, output) {
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = c("blue", "red")
     )
-    axis(1, at = 1:2, labels = c("Male", "Female"))
+    axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
       angle = 90, code = 3, length = 0.1, col = c("blue", "red")
