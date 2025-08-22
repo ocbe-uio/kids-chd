@@ -15,7 +15,7 @@ simple <- group(
     ve_vco2_slope = numeric(),
     breathing_frequency = numeric()
   ),
-  sigma_beta_hat = list( # from Supplement 4; remove software and hospital
+  sigma_beta_hat = list( # from Supplement 4
     vo2_ml_min = matrix(
       c(
         2.11e-07, -0.00001263, -1.46e-08, -9.02e-07, -1.49e-07, 5.55e-06,
