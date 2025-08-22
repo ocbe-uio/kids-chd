@@ -14,10 +14,7 @@ ui <- fluidPage(
     ),
     # Step 2: selecting covariates
     h2("Select covariates"),
-    radioButtons(
-      "sex", "Sex",
-      choiceNames = list("Male", "Female"), choiceValues = list(1L, 0L)
-    ),
+  # Sex selection removed; results will be shown for both genders
     numericInput(
       "height", "Height (cm)",
       value = 100L, min = 0L, step = 1L, max = 200L
