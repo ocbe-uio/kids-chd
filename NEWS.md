@@ -1,6 +1,7 @@
 # (under development)
 
 * Calculation of confidence intervals (issue #11)
+* Sex is automatically calculated (issue #13)
 
 # Deployment v0.0.0.9003
 
