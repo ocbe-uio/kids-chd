@@ -43,7 +43,7 @@ create_y_hat_ci <- function() {
     nrow = n_genders,
     ncol = 3L,
     dimnames = list(
-      c("Selected genger", "Other gender"),
+      c("Selected gender", "Other gender"),
       c("Point estimate", "Lower CI", "Upper CI")
     )
   )
