@@ -40,38 +40,24 @@ simple <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    Y_HAT_CI <- create_y_hat_ci()
-    for (i in 1:2) {
-      # Loop through genders
-      x <- c(
+    x <- create_x(person, function(person, sex) {
+      c(
         "height" = person$height,
         "log_bmi" = log(person$bmi),
         "height_sex" = person$height * person$sex
       )
-      Y_HAT_CI[i, ] <- fill_y_hat_ci(
-        x, .self$beta_hat$vo2_ml_min, .self$sigma_beta_hat$vo2_ml_min, exp,
-        .self$haukeland_vyntus, .self$grid
-      )
-      person$sex <- ifelse(person$sex == 1, 0, 1)
-    }
-    Y_HAT_CI
+    })
+    y_hat_ci(x, "vo2_ml_min", .self, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
-    Y_HAT_CI <- create_y_hat_ci()
-    for (i in 1:2) {
-      # Loop through genders
-      x <- c(
+    x <- create_x(person, function(person, sex) {
+      c(
         "height" = person$height,
         "bmi" = person$bmi,
         "height_sex" = person$height * person$sex
       )
-      Y_HAT_CI[i, ] <- fill_y_hat_ci(
-        x, .self$beta_hat$vo2_ml_kg_min, .self$sigma_beta_hat$vo2_ml_kg_min, identity,
-        .self$haukeland_vyntus, .self$grid
-      )
-      person$sex <- ifelse(person$sex == 1, 0, 1)
-    }
-    Y_HAT_CI
+    })
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
     x <- data.frame("height" = person$height)

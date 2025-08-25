@@ -36,25 +36,29 @@ expand_matrix <- function(mx, times) {
   kronecker(rep(1, times), as.matrix(mx))
 }
 
-create_y_hat_ci <- function() {
-  n_genders <- 2L
-  matrix(
-    data = NA,
-    nrow = n_genders,
-    ncol = 3L,
-    dimnames = list(
-      c("Selected gender", "Other gender"),
-      c("Point estimate", "Lower CI", "Upper CI")
-    )
+y_hat_ci <- function(x, metric, metric_data, transf) {
+  beta_hat <- metric_data$beta_hat[[metric]]
+  sigma_beta_hat <- metric_data$sigma_beta_hat[[metric]]
+  weights <- metric_data$haukeland_vyntus
+  grid <- metric_data$grid
+  mat <- apply(x, 2,
+    function (x) {
+      # Expand x
+      x_across_configs <- as.data.frame(cbind(t(x), grid, "intercept" = 1))
+      y_hat_list <- y(x_across_configs, beta_hat, weights, grid, transf)
+      ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf)
+
+      # Return vector
+      cbind(y_hat_list$detransformed_avg, ci)
+    }
   )
+  t(mat)
 }
 
-fill_y_hat_ci <- function(x, beta_hat, sigma_beta_hat, transf, weights, grid) {
-  # Expand x
-  x_across_configs <- cbind(t(x), grid, "intercept" = 1)
-  y_hat_list <- y(as.data.frame(x_across_configs), beta_hat, weights, grid, transf)
-  ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf)
-
-  # Return vector
-  cbind(y_hat_list$detransformed_avg, ci)
+create_x <- function(person, x_function) {
+  vapply(
+    X = c(person$sex, 1 - person$sex),
+    FUN = function (sex) x_function(person, sex),
+    FUN.VALUE = numeric(length(x_function(person, sex)))
+  )
 }
