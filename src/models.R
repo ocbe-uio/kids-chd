@@ -40,34 +40,26 @@ simple <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    x <- vapply(
-      c(person$sex, 1 - person$sex),
-      function(sex) {
-        c(
-          "height" = person$height,
-          "log_bmi" = log(person$bmi),
-          "height_sex" = person$height * sex
-        )
-      },
-      numeric(3L)
-    )
+    x <- create_x(person, function(person, sex) {
+      c(
+        "height" = person$height,
+        "log_bmi" = log(person$bmi),
+        "height_sex" = person$height * person$sex
+      )
+    })
     fill_y_hat_ci(
       x, .self$beta_hat$vo2_ml_min, .self$sigma_beta_hat$vo2_ml_min, exp,
       .self$haukeland_vyntus, .self$grid
     )
   },
   vo2_ml_kg_min = function(.self, person) {
-    x <- vapply(
-      c(person$sex, 1 - person$sex),
-      function(sex) {
-        c(
-          "height" = person$height,
-          "bmi" = person$bmi,
-          "height_sex" = person$height * person$sex
-        )
-      },
-      numeric(3L)
-    )
+    x <- create_x(person, function(person, sex) {
+      c(
+        "height" = person$height,
+        "bmi" = person$bmi,
+        "height_sex" = person$height * person$sex
+      )
+    })
     fill_y_hat_ci(
       x, .self$beta_hat$vo2_ml_kg_min, .self$sigma_beta_hat$vo2_ml_kg_min, identity,
       .self$haukeland_vyntus, .self$grid

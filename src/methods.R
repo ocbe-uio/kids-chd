@@ -50,3 +50,11 @@ fill_y_hat_ci <- function(x, beta_hat, sigma_beta_hat, transf, weights, grid) {
   )
   t(mat)
 }
+
+create_x <- function(person, x_function) {
+  vapply(
+    X = c(person$sex, 1 - person$sex),
+    FUN = function (sex) x_function(person, sex),
+    FUN.VALUE = numeric(length(x_function(person, sex)))
+  )
+}
