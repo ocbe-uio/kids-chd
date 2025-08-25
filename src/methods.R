@@ -36,7 +36,7 @@ expand_matrix <- function(mx, times) {
   kronecker(rep(1, times), as.matrix(mx))
 }
 
-fill_y_hat_ci <- function(x, metric, metric_data, transf) {
+y_hat_ci <- function(x, metric, metric_data, transf) {
   beta_hat <- metric_data$beta_hat[[metric]]
   sigma_beta_hat <- metric_data$sigma_beta_hat[[metric]]
   weights <- metric_data$haukeland_vyntus

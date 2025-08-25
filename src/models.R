@@ -47,7 +47,7 @@ simple <- group(
         "height_sex" = person$height * person$sex
       )
     })
-    fill_y_hat_ci(x, "vo2_ml_min", .self, exp)
+    y_hat_ci(x, "vo2_ml_min", .self, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
     x <- create_x(person, function(person, sex) {
@@ -57,7 +57,7 @@ simple <- group(
         "height_sex" = person$height * person$sex
       )
     })
-    fill_y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
     x <- data.frame("height" = person$height)
