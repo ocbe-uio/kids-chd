@@ -44,7 +44,11 @@ simple <- group(
         -1.69e15, 2.70e17
       ),
       nrow = 2, ncol = 2, byrow = TRUE
-    )
+    ),
+    ventilation = matrix(NA, nrow = 5, ncol = 5),
+    oxygen_pulse = matrix(NA, nrow = 6, ncol = 6),
+    ve_vco2_slope = matrix(NA, nrow = 7, ncol = 7),
+    breathing_frequency = matrix(NA, nrow = 4, ncol = 4)
   ),
   vo2_ml_min = function(.self, person) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
@@ -124,6 +128,15 @@ moderate <- group(
     oxygen_pulse = c(0.0125909, 0.4460709, 0.0010929, -0.0851175, 0.0796701, -1.143238),
     ve_vco2_slope = c(0.0003922, -0.0152721, 0.0171314, 0.1956142),
     breathing_frequency = c(-0.037375, -1.778892, 0.0134113, -0.3806323, 16.65239)
+  ),
+  sigma_beta_hat = list(
+    vo2_ml_min = matrix(NA, nrow = 6, ncol = 6),
+    vo2_ml_kg_min = matrix(NA, nrow = 5, ncol = 5),
+    heart_rate = matrix(NA, nrow = 3, ncol = 3),
+    ventilation = matrix(NA, nrow = 5, ncol = 5),
+    oxygen_pulse = matrix(NA, nrow = 6, ncol = 6),
+    ve_vco2_slope = matrix(NA, nrow = 4, ncol = 4),
+    breathing_frequency = matrix(NA, nrow = 5, ncol = 5)
   ),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -222,6 +235,15 @@ fontan <- group(
     oxygen_pulse = c(0.0152299, -0.0158716, 0.0071081, -0.1669066, 0.0745283, -0.6453765),
     ve_vco2_slope = c(-0.0058539, -0.6899319, 0.0041379, 0.1335418, -0.1643959, 4.505025),
     breathing_frequency = c(-0.0044619, 0.0225936, -0.0820773, 4.609728)
+  ),
+  sigma_beta_hat = list(
+    vo2_ml_min = matrix(NA, nrow = 7, ncol = 7),
+    vo2_ml_kg_min = matrix(NA, nrow = 5, ncol = 5),
+    heart_rate = matrix(NA, nrow = 5, ncol = 5),
+    ventilation = matrix(NA, nrow = 4, ncol = 4),
+    oxygen_pulse = matrix(NA, nrow = 6, ncol = 6),
+    ve_vco2_slope = matrix(NA, nrow = 6, ncol = 6),
+    breathing_frequency = matrix(NA, nrow = 4, ncol = 4)
   ),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
