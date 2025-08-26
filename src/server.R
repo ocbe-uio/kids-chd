@@ -21,29 +21,10 @@ server <- function(input, output) {
       list(male = male, female = female)
     }
 
-    if (input$group == "simple") {
-      vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
-      vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
-      oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
-      ve_vco2_slope_results <- get_metric_ci(group$ve_vco2_slope)
-    } else {
-      vo2_ml_min_results <- list(
-        male = matrix(c(group$vo2_ml_min(group, person_male), NA, NA), 1),
-        female = matrix(c(group$vo2_ml_min(group, person_female), NA, NA), 1)
-      )
-      vo2_ml_kg_min_results <- list(
-        male = matrix(c(group$vo2_ml_kg_min(group, person_male), NA, NA), 1),
-        female = matrix(c(group$vo2_ml_kg_min(group, person_female), NA, NA), 1)
-      )
-      oxygen_pulse_results <- list(
-        male = matrix(c(group$oxygen_pulse(group, person_male), NA, NA), 1),
-        female = matrix(c(group$oxygen_pulse(group, person_female), NA, NA), 1)
-      )
-      ve_vco2_slope_results <- list(
-        male = matrix(c(group$ve_vco2_slope(group, person_male), NA, NA), 1),
-        female = matrix(c(group$ve_vco2_slope(group, person_female), NA, NA), 1)
-      )
-    }
+    vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
+    vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
+    oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
+    ve_vco2_slope_results <- get_metric_ci(group$ve_vco2_slope)
 
     metrics <- c(
       "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
@@ -116,9 +97,6 @@ server <- function(input, output) {
   })
 
   output$vo2_ml_min_plot <- renderPlot({
-    if (input$group != "simple") {
-      return(NULL)
-    }
     group <- get(input$group)
     person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
     person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
@@ -128,7 +106,6 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
-
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = c("blue", "red")
@@ -141,9 +118,6 @@ server <- function(input, output) {
   })
 
   output$vo2_ml_kg_min_plot <- renderPlot({
-    if (input$group != "simple") {
-      return(NULL)
-    }
     group <- get(input$group)
     person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
     person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
@@ -153,7 +127,6 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
-
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = c("blue", "red")
@@ -166,9 +139,6 @@ server <- function(input, output) {
   })
 
   output$oxygen_pulse_plot <- renderPlot({
-    if (input$group != "simple") {
-      return(NULL)
-    }
     group <- get(input$group)
     person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
     person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
@@ -178,7 +148,6 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
-
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = c("blue", "red")

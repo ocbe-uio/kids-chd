@@ -201,29 +201,12 @@ moderate <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0136715 * person$height
-        + 0.3949761 * log(person$bmi)
-        + 0.0010347 * person$height * person$sex
-        - 0.0829085 * config["vyntus"]
-        + 0.088169 * config["haukeland"]
-        + 4.069768
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
+    y_hat_ci(x, "vo2_ml_min", .self, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        - 21.99611 * log(person$bmi)
-        + 0.0430605 * person$height * person$sex
-        - 3.504218 * config["vyntus"]
-        + 3.483406 * config["haukeland"]
-        + 99.9302
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(log(person$bmi), person$height * person$sex))
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -248,17 +231,8 @@ moderate <- group(
     weighted.mean(results, .self$haukeland_vyntus)
   },
   oxygen_pulse = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0125909 * person$height
-        + 0.4460709 * log(person$bmi)
-        + 0.0010929 * person$height * person$sex
-        - 0.0851175 * config["vyntus"]
-        + 0.0796701 * config["haukeland"]
-        - 1.143238
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
+    y_hat_ci(x, "oxygen_pulse", .self, exp)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -269,7 +243,8 @@ moderate <- group(
         + 0.1956142
       ) ^ (1 / -0.4)
     })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height))
+    y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4))
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -363,30 +338,12 @@ fontan <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0142453 * person$height
-        + 0.3543394 * log(person$bmi)
-        - 0.8410274 * person$sex
-        + 0.3348171 * log(person$bmi) * person$sex
-        - 0.1212021 * config["vyntus"]
-        + 0.0948334 * config["haukeland"]
-        + 3.929859
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, log(person$bmi), person$sex, log(person$bmi) * person$sex))
+    y_hat_ci(x, "vo2_ml_min", .self, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        - 0.6682767 * person$bmi
-        + 0.0329825 * person$height * person$sex
-        - 4.52337 * config["vyntus"]
-        + 3.745683 * config["haukeland"]
-        + 42.38803
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$bmi, person$height * person$sex))
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -412,30 +369,12 @@ fontan <- group(
     weighted.mean(results, .self$haukeland_vyntus)
   },
   oxygen_pulse = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0152299 * person$height
-        - 0.0158716 * person$bmi
-        + 0.0071081 * person$bmi * person$sex
-        - 0.1669066 * config["vyntus"]
-        + 0.0745283 * config["haukeland"]
-        - 0.6453765
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, person$bmi, person$bmi * person$sex))
+    y_hat_ci(x, "oxygen_pulse", .self, exp)
   },
   ve_vco2_slope = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        - 0.0058539 * person$height
-        - 0.6899319 * person$sex
-        + 0.0041379 * person$height * person$sex
-        + 0.1335418 * config["vyntus"]
-        - 0.1643959 * config["haukeland"]
-        + 4.505025
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, person$sex, person$height * person$sex))
+    y_hat_ci(x, "ve_vco2_slope", .self, exp)
   },
   breathing_frequency = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {

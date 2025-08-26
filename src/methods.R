@@ -37,6 +37,7 @@ expand_matrix <- function(mx, times) {
 }
 
 y_hat_ci <- function(x, metric, metric_data, transf) {
+  x <- matrix(x, ncol = 2L) # Workaround for when x is c()
   beta_hat <- metric_data$beta_hat[[metric]]
   sigma_beta_hat <- metric_data$sigma_beta_hat[[metric]]
   weights <- metric_data$haukeland_vyntus
@@ -56,7 +57,6 @@ y_hat_ci <- function(x, metric, metric_data, transf) {
 }
 
 create_x <- function(person, sex, x_expr) {
-  # Capture the expression
   expr <- substitute(x_expr)
   # Build a function of person and sex with expr as the body
   x_function <- eval(bquote(function(person, sex) .(expr)))
