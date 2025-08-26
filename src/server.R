@@ -81,11 +81,11 @@ server <- function(input, output) {
     )
 
     data.frame(
-      Metric = metrics,
-      Value_Boy = value_male,
-      CI_Boy = ci_male,
-      Value_Girl = value_female,
-      CI_Girl = ci_female,
+      "Metric" = metrics,
+      "Value Boy" = value_male,
+      "CI Boy" = ci_male,
+      "Value Girl" = value_female,
+      "CI Girl" = ci_female,
       check.names = FALSE
     )
   }, align = "lccrc")
