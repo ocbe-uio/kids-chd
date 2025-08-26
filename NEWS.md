@@ -1,7 +1,8 @@
 # (under development)
 
-* Calculation of confidence intervals (issue #11)
+* Calculation of confidence intervals (issue #9)
 * Sex is automatically calculated (issue #13)
+* Production of CI plots (issue #10)
 
 # Deployment v0.0.0.9003
 
