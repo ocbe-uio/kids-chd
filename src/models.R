@@ -66,7 +66,7 @@ simple <- group(
       ),
       nrow = 6, ncol = 6, byrow = TRUE
     ),
-    ve_vco2_slope = matrix(NA, nrow = 7, ncol = 7),
+    ve_vco2_slope = matrix(NA, nrow = 7, ncol = 7), # CIs impossible due to the use of multiple imputation.
     breathing_frequency = matrix(
       c(
         6.20e-07, -5.14e-08, -4.42e-07, -9.21e-05,
@@ -188,7 +188,7 @@ moderate <- group(
       ),
       nrow = 6, ncol = 6, byrow = TRUE
     ),
-    ve_vco2_slope = matrix(NA, nrow = 4, ncol = 4),
+    ve_vco2_slope = matrix(NA, nrow = 4, ncol = 4),   # CIs impossible due to the use of multiple imputation.
     breathing_frequency = matrix(
       c(
         0.00002034, 0.00308449, -0.00002022, 0.00004208, -0.0031175,
@@ -351,7 +351,7 @@ fontan <- group(
       ),
       nrow = 6, ncol = 6, byrow = TRUE
     ),
-    ve_vco2_slope = matrix(NA, nrow = 6, ncol = 6),
+    ve_vco2_slope = matrix(NA, nrow = 6, ncol = 6),   # CIs impossible due to the use of multiple imputation.
     breathing_frequency = matrix(
       c(
         3.25e-07, -9.17e-07, 3.64e-06, -4.93e-05,
