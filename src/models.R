@@ -41,21 +41,13 @@ simple <- group(
   ),
   vo2_ml_min = function(.self, person) {
     x <- create_x(person, function(person, sex) {
-      c(
-        "height" = person$height,
-        "log_bmi" = log(person$bmi),
-        "height_sex" = person$height * person$sex
-      )
+      c(person$height, log(person$bmi), person$height * person$sex)
     })
     y_hat_ci(x, "vo2_ml_min", .self, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
     x <- create_x(person, function(person, sex) {
-      c(
-        "height" = person$height,
-        "bmi" = person$bmi,
-        "height_sex" = person$height * person$sex
-      )
+      c(person$height, person$bmi, person$height * person$sex)
     })
     y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
