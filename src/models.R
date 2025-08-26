@@ -10,10 +10,10 @@ simple <- group(
       0.0983195, -1.152879, 0.0423992, -7.601633, 4.73933, 45.77055
     ),
     heart_rate = c(9168804, 5.13e9),
-    ventilation = numeric(),
-    oxygen_pulse = numeric(),
-    ve_vco2_slope = numeric(),
-    breathing_frequency = numeric()
+    ventilation = c(0.0109834, -3642.842, -0.4839596, 0.0038111, 2.581131),
+    oxygen_pulse = c(0.0146831, -42.58742, 0.0009018, -0.1793433, 0.1046776, 0.2350272),
+    ve_vco2_slope = c(0.0005124, 0.0170638, 0.0294384, -0.0001712, -0.0143388, 0.0126451, 0.1285197),
+    breathing_frequency = c(-0.0114363, 0.0007431, -0.1421088, 6.693345)
   ),
   sigma_beta_hat = list( # from Supplement 4
     vo2_ml_min = matrix(
@@ -37,6 +37,13 @@ simple <- group(
         -0.03344335, 0.0006148, 0.00142169, 0.24078036, -0.17410341, 5.2525623
       ),
       nrow = 6, ncol = 6, byrow = TRUE
+    ),
+    heart_rate = matrix(
+      c(
+        1.07e13, -1.69e15,
+        -1.69e15, 2.70e17
+      ),
+      nrow = 2, ncol = 2, byrow = TRUE
     )
   ),
   vo2_ml_min = function(.self, person) {
@@ -109,6 +116,15 @@ moderate <- group(
   haukeland_vyntus = c(0.2938, 0.0563, 0.6439, 0.0060),
   haukeland = 0.3501,
   vyntus = 0.0623,
+  beta_hat = list(
+    vo2_ml_min = c(0.0136715, 0.3949761, 0.0010347, -0.0829085, 0.088169, 4.069768),
+    vo2_ml_kg_min = c(-21.99611, 0.0430605, -3.504218, 3.483406, 99.9302),
+    heart_rate = c(9.9e8, -2.86e9, 1.4e11),
+    ventilation = c(0.0118031, 0.3617417, -0.3458141, 0.003166, 1.202455),
+    oxygen_pulse = c(0.0125909, 0.4460709, 0.0010929, -0.0851175, 0.0796701, -1.143238),
+    ve_vco2_slope = c(0.0003922, -0.0152721, 0.0171314, 0.1956142),
+    breathing_frequency = c(-0.037375, -1.778892, 0.0134113, -0.3806323, 16.65239)
+  ),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
@@ -198,6 +214,15 @@ fontan <- group(
   haukeland_vyntus = c(0.1697, 0.0397, 0.7834, 0.0072),
   haukeland = 0.2094, # TODO: check why coding here is different (config 2 is Haukeland)
   vyntus = 0.0469,
+  beta_hat = list(
+    vo2_ml_min = c(0.0142453, 0.3543394, -0.8410274, 0.3348171, -0.1212021, 0.0948334, 3.929859),
+    vo2_ml_kg_min = c(-0.6682767, 0.0329825, -4.52337, 3.745683, 42.38803),
+    heart_rate = c(-144400.5, -3.81e7, 2076971, 1.24e7, 9.75e7),
+    ventilation = c(0.0131873, 0.3613543, 0.0007153, 0.9744558),
+    oxygen_pulse = c(0.0152299, -0.0158716, 0.0071081, -0.1669066, 0.0745283, -0.6453765),
+    ve_vco2_slope = c(-0.0058539, -0.6899319, 0.0041379, 0.1335418, -0.1643959, 4.505025),
+    breathing_frequency = c(-0.0044619, 0.0225936, -0.0820773, 4.609728)
+  ),
   vo2_ml_min = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
       exp(
