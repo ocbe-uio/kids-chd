@@ -104,17 +104,8 @@ simple <- group(
     weighted.mean(results, .self$haukeland_vyntus)
   },
   oxygen_pulse = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0146831 * person$height
-        - 42.58742 * (person$bmi ^ -1.7)
-        + 0.0009018 * person$height * person$sex
-        - 0.1793433 * config["vyntus"]
-        + 0.1046776 * config["haukeland"]
-        + 0.2350272
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, person$bmi ^ -1.7, person$height * person$sex))
+    y_hat_ci(x, "oxygen_pulse", .self, exp)
   },
   ve_vco2_slope = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {

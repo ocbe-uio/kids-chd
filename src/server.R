@@ -24,6 +24,7 @@ server <- function(input, output) {
     if (input$group == "simple") {
       vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
       vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
+      oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
     } else {
       vo2_ml_min_results <- list(
         male = matrix(c(group$vo2_ml_min(group, person_male), NA, NA), 1),
@@ -32,6 +33,10 @@ server <- function(input, output) {
       vo2_ml_kg_min_results <- list(
         male = matrix(c(group$vo2_ml_kg_min(group, person_male), NA, NA), 1),
         female = matrix(c(group$vo2_ml_kg_min(group, person_female), NA, NA), 1)
+      )
+      oxygen_pulse_results <- list(
+        male = matrix(c(group$oxygen_pulse(group, person_male), NA, NA), 1),
+        female = matrix(c(group$oxygen_pulse(group, person_female), NA, NA), 1)
       )
     }
 
@@ -45,7 +50,7 @@ server <- function(input, output) {
       vo2_ml_kg_min_results$male[1, 1],
       group$heart_rate(group, person_male),
       group$ventilation(group, person_male),
-      group$oxygen_pulse(group, person_male),
+      oxygen_pulse_results$male[1, 1],
       group$ve_vco2_slope(group, person_male),
       group$breathing_frequency(group, person_male)
     )
@@ -54,7 +59,7 @@ server <- function(input, output) {
       vo2_ml_kg_min_results$female[1, 1],
       group$heart_rate(group, person_female),
       group$ventilation(group, person_female),
-      group$oxygen_pulse(group, person_female),
+      oxygen_pulse_results$female[1, 1],
       group$ve_vco2_slope(group, person_female),
       group$breathing_frequency(group, person_female)
     )
@@ -72,12 +77,20 @@ server <- function(input, output) {
     ci_male <- c(
       format_ci(vo2_ml_min_results$male),
       format_ci(vo2_ml_kg_min_results$male),
-      rep(NA, 5)
+      NA,
+      NA,
+      format_ci(oxygen_pulse_results$male),
+      NA,
+      NA
     )
     ci_female <- c(
       format_ci(vo2_ml_min_results$female),
       format_ci(vo2_ml_kg_min_results$female),
-      rep(NA, 5)
+      NA,
+      NA,
+      format_ci(oxygen_pulse_results$female),
+      NA,
+      NA
     )
 
     data.frame(
