@@ -108,18 +108,8 @@ simple <- group(
     y_hat_ci(x, "oxygen_pulse", .self, exp)
   },
   ve_vco2_slope = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        + 0.0005124 * person$height
-        + 0.0170638 * log(person$bmi)
-        + 0.0294384 * person$sex
-        - 0.0001712 * person$height * person$sex
-        - 0.0143388 * config["vyntus"]
-        + 0.0126451 * config["haukeland"]
-        + 0.1285197
-      ) ^ (1 / -0.4)
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, log(person$bmi), person$sex, person$height * person$sex))
+    y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4))
   },
   breathing_frequency = function(.self, person) {
     results = apply(expand.grid(0:1), 1, function(config) {

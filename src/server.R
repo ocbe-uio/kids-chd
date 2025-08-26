@@ -25,6 +25,7 @@ server <- function(input, output) {
       vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
       vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
       oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
+      ve_vco2_slope_results <- get_metric_ci(group$ve_vco2_slope)
     } else {
       vo2_ml_min_results <- list(
         male = matrix(c(group$vo2_ml_min(group, person_male), NA, NA), 1),
@@ -37,6 +38,10 @@ server <- function(input, output) {
       oxygen_pulse_results <- list(
         male = matrix(c(group$oxygen_pulse(group, person_male), NA, NA), 1),
         female = matrix(c(group$oxygen_pulse(group, person_female), NA, NA), 1)
+      )
+      ve_vco2_slope_results <- list(
+        male = matrix(c(group$ve_vco2_slope(group, person_male), NA, NA), 1),
+        female = matrix(c(group$ve_vco2_slope(group, person_female), NA, NA), 1)
       )
     }
 
@@ -51,7 +56,7 @@ server <- function(input, output) {
       group$heart_rate(group, person_male),
       group$ventilation(group, person_male),
       oxygen_pulse_results$male[1, 1],
-      group$ve_vco2_slope(group, person_male),
+      ve_vco2_slope_results$male[1, 1],
       group$breathing_frequency(group, person_male)
     )
     value_female <- c(
@@ -60,7 +65,7 @@ server <- function(input, output) {
       group$heart_rate(group, person_female),
       group$ventilation(group, person_female),
       oxygen_pulse_results$female[1, 1],
-      group$ve_vco2_slope(group, person_female),
+      ve_vco2_slope_results$female[1, 1],
       group$breathing_frequency(group, person_female)
     )
     format_ci <- function(mat) {
