@@ -55,10 +55,14 @@ y_hat_ci <- function(x, metric, metric_data, transf) {
   t(mat)
 }
 
-create_x <- function(person, x_function) {
+create_x <- function(person, sex, x_expr) {
+  # Capture the expression
+  expr <- substitute(x_expr)
+  # Build a function of person and sex with expr as the body
+  x_function <- eval(bquote(function(person, sex) .(expr)))
   vapply(
     X = c(person$sex, 1 - person$sex),
-    FUN = function (sex) x_function(person, sex),
+    FUN = function(sex) x_function(person, sex),
     FUN.VALUE = numeric(length(x_function(person, sex)))
   )
 }

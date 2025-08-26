@@ -40,15 +40,11 @@ simple <- group(
     )
   ),
   vo2_ml_min = function(.self, person) {
-    x <- create_x(person, function(person, sex) {
-      c(person$height, log(person$bmi), person$height * person$sex)
-    })
+    x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
     y_hat_ci(x, "vo2_ml_min", .self, exp)
   },
   vo2_ml_kg_min = function(.self, person) {
-    x <- create_x(person, function(person, sex) {
-      c(person$height, person$bmi, person$height * person$sex)
-    })
+    x <- create_x(person, sex, c(person$height, person$bmi, person$height * person$sex))
     y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
