@@ -9,11 +9,6 @@ y.data.frame <- function(x, beta_hat, weights, grid, transf) {
   # configurations on the columns
   y_transformed <- as.matrix(x) %*% beta_hat
   y_detransformed <- transf(y_transformed)
-  if (all(c("vyntus", "haukeland") %in% colnames(x))) {
-    # x is already expanded, no need to expand here
-  } else {
-    y_detransformed <- expand_matrix(as.matrix(y_detransformed), nrow(grid))
-  }
   list(
     "transformed" = y_transformed,
     "detransformed_avg" = weights %*% y_detransformed
@@ -46,6 +41,13 @@ y_hat_ci <- function(x, metric, metric_data, transf) {
     function (x) {
       # Expand x
       x_across_configs <- as.data.frame(cbind(t(x), grid, "intercept" = 1))
+
+      # Drop unused columns (hardcoded)
+      if (metric == "heart_rate") {
+        x_across_configs$haukeland <- NULL
+        x_across_configs$vyntus <- NULL
+      }
+
       y_hat_list <- y(x_across_configs, beta_hat, weights, grid, transf)
       ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf)
 

@@ -86,10 +86,8 @@ simple <- group(
     y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
-    x <- data.frame("height" = person$height)
-    x <- cbind(t(x), 1) # 1 for the intercept
-    transf <- function(x) x ^ (1 / 4.3)
-    y(as.data.frame(x), .self$beta_hat$heart_rate, .self$haukeland_vyntus, .self$grid, transf)$detransformed_avg
+    x <- create_x(person, sex, c(person$height))
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3))
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
