@@ -18,9 +18,10 @@ y.data.frame <- function(x, beta_hat, weights, grid, transf) {
 ci <- function(y_hat, X, sigma_beta_hat, weights, transf) {
   # Calculate the confidence intervals
   sigma_y_hat <- as.matrix(X) %*% sigma_beta_hat %*% t(as.matrix(X))
+  q_norm <- qnorm(0.975)
   ci_transformed <- as.numeric(y_hat$transformed) + cbind(
-    -1.96 * sqrt(diag(sigma_y_hat)),
-    1.96 * sqrt(diag(sigma_y_hat))
+    -q_norm * sqrt(diag(sigma_y_hat)),
+    q_norm * sqrt(diag(sigma_y_hat))
   )
   ci_detransformed <- transf(ci_transformed)
   weights %*% ci_detransformed
