@@ -24,8 +24,10 @@ server <- function(input, output) {
     vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
     vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
     heart_rate_results <- get_metric_ci(group$heart_rate)
+    ventilation_results <- get_metric_ci(group$ventilation)
     oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
     ve_vco2_slope_results <- get_metric_ci(group$ve_vco2_slope)
+    breathing_frequency_results <- get_metric_ci(group$breathing_frequency)
 
     metrics <- c(
       "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
@@ -36,19 +38,19 @@ server <- function(input, output) {
       vo2_ml_min_results$male[1, 1],
       vo2_ml_kg_min_results$male[1, 1],
       heart_rate_results$male[1, 1],
-      group$ventilation(group, person_male),
+      ventilation_results$male[1, 1],
       oxygen_pulse_results$male[1, 1],
       ve_vco2_slope_results$male[1, 1],
-      group$breathing_frequency(group, person_male)
+      breathing_frequency_results$male[1, 1]
     )
     value_female <- c(
       vo2_ml_min_results$female[1, 1],
       vo2_ml_kg_min_results$female[1, 1],
       heart_rate_results$female[1, 1],
-      group$ventilation(group, person_female),
+      ventilation_results$female[1, 1],
       oxygen_pulse_results$female[1, 1],
       ve_vco2_slope_results$female[1, 1],
-      group$breathing_frequency(group, person_female)
+      breathing_frequency_results$female[1, 1]
     )
     format_ci <- function(mat) {
       if (is.null(mat) || any(is.na(mat[1, 2:3]))) {
@@ -65,19 +67,19 @@ server <- function(input, output) {
       format_ci(vo2_ml_min_results$male),
       format_ci(vo2_ml_kg_min_results$male),
       format_ci(heart_rate_results$male),
-      NA,
+      format_ci(ventilation_results$male),
       format_ci(oxygen_pulse_results$male),
       NA,
-      NA
+      format_ci(breathing_frequency_results$male)
     )
     ci_female <- c(
       format_ci(vo2_ml_min_results$female),
       format_ci(vo2_ml_kg_min_results$female),
       format_ci(heart_rate_results$female),
-      NA,
+      format_ci(ventilation_results$female),
       format_ci(oxygen_pulse_results$female),
       NA,
-      NA
+      format_ci(breathing_frequency_results$female)
     )
 
     data.frame(
