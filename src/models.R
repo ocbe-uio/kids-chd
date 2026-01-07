@@ -86,10 +86,8 @@ simple <- group(
     y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
-    x <- data.frame("height" = person$height)
-    x <- cbind(t(x), 1) # 1 for the intercept
-    transf <- function(x) x ^ (1 / 4.3)
-    y(as.data.frame(x), .self$beta_hat$heart_rate, .self$haukeland_vyntus, .self$grid, transf)$detransformed_avg
+    x <- create_x(person, sex, c(person$height))
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"))
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -209,14 +207,8 @@ moderate <- group(
     y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        + 9.9e8 * person$height
-        - 2.86e9 * person$bmi
-        + 1.4e11
-      ) ^ (1 / 5)
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, person$bmi))
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 5), c("haukeland", "vyntus"))
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {
@@ -346,16 +338,8 @@ fontan <- group(
     y_hat_ci(x, "vo2_ml_kg_min", .self, identity)
   },
   heart_rate = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        - 144400.5 * person$height
-        - 3.81e7 * person$sex
-        + 2076971 * person$bmi * person$sex
-        + 1.24e7 * config["vyntus"]
-        + 9.75e7
-      ) ^ (1 / 3.5)
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(person, sex, c(person$height, person$sex, person$bmi * person$sex))
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 3.5), "haukeland")
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {

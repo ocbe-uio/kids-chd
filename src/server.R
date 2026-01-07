@@ -23,6 +23,7 @@ server <- function(input, output) {
 
     vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
     vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
+    heart_rate_results <- get_metric_ci(group$heart_rate)
     oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
     ve_vco2_slope_results <- get_metric_ci(group$ve_vco2_slope)
 
@@ -34,7 +35,7 @@ server <- function(input, output) {
     value_male <- c(
       vo2_ml_min_results$male[1, 1],
       vo2_ml_kg_min_results$male[1, 1],
-      group$heart_rate(group, person_male),
+      heart_rate_results$male[1, 1],
       group$ventilation(group, person_male),
       oxygen_pulse_results$male[1, 1],
       ve_vco2_slope_results$male[1, 1],
@@ -43,7 +44,7 @@ server <- function(input, output) {
     value_female <- c(
       vo2_ml_min_results$female[1, 1],
       vo2_ml_kg_min_results$female[1, 1],
-      group$heart_rate(group, person_female),
+      heart_rate_results$female[1, 1],
       group$ventilation(group, person_female),
       oxygen_pulse_results$female[1, 1],
       ve_vco2_slope_results$female[1, 1],
@@ -63,7 +64,7 @@ server <- function(input, output) {
     ci_male <- c(
       format_ci(vo2_ml_min_results$male),
       format_ci(vo2_ml_kg_min_results$male),
-      NA,
+      format_ci(heart_rate_results$male),
       NA,
       format_ci(oxygen_pulse_results$male),
       NA,
@@ -72,7 +73,7 @@ server <- function(input, output) {
     ci_female <- c(
       format_ci(vo2_ml_min_results$female),
       format_ci(vo2_ml_kg_min_results$female),
-      NA,
+      format_ci(heart_rate_results$female),
       NA,
       format_ci(oxygen_pulse_results$female),
       NA,
