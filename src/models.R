@@ -87,7 +87,7 @@ simple <- group(
   },
   heart_rate = function(.self, person) {
     x <- create_x(person, sex, c(person$height))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3))
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"))
   },
   ventilation = function(.self, person) {
     results = apply(.self$grid, 1, function(config) {

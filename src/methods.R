@@ -31,7 +31,7 @@ expand_matrix <- function(mx, times) {
   kronecker(rep(1, times), as.matrix(mx))
 }
 
-y_hat_ci <- function(x, metric, metric_data, transf) {
+y_hat_ci <- function(x, metric, metric_data, transf, drop_cols = NULL) {
   x <- matrix(x, ncol = 2L) # Workaround for when x is c()
   beta_hat <- metric_data$beta_hat[[metric]]
   sigma_beta_hat <- metric_data$sigma_beta_hat[[metric]]
@@ -42,11 +42,8 @@ y_hat_ci <- function(x, metric, metric_data, transf) {
       # Expand x
       x_across_configs <- as.data.frame(cbind(t(x), grid, "intercept" = 1))
 
-      # Drop unused columns (hardcoded)
-      if (metric == "heart_rate") {
-        x_across_configs$haukeland <- NULL
-        x_across_configs$vyntus <- NULL
-      }
+      # Drop unused columns
+      x_across_configs[drop_cols] <- NULL
 
       y_hat_list <- y(x_across_configs, beta_hat, weights, grid, transf)
       ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf)
