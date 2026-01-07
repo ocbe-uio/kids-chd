@@ -24,8 +24,10 @@ server <- function(input, output) {
     vo2_ml_min_results <- get_metric_ci(group$vo2_ml_min)
     vo2_ml_kg_min_results <- get_metric_ci(group$vo2_ml_kg_min)
     heart_rate_results <- get_metric_ci(group$heart_rate)
+    ventilation_results <- get_metric_ci(group$ventilation)
     oxygen_pulse_results <- get_metric_ci(group$oxygen_pulse)
     ve_vco2_slope_results <- get_metric_ci(group$ve_vco2_slope)
+    breathing_frequency_results <- get_metric_ci(group$breathing_frequency)
 
     metrics <- c(
       "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
@@ -36,19 +38,19 @@ server <- function(input, output) {
       vo2_ml_min_results$male[1, 1],
       vo2_ml_kg_min_results$male[1, 1],
       heart_rate_results$male[1, 1],
-      group$ventilation(group, person_male),
+      ventilation_results$male[1, 1],
       oxygen_pulse_results$male[1, 1],
       ve_vco2_slope_results$male[1, 1],
-      group$breathing_frequency(group, person_male)
+      breathing_frequency_results$male[1, 1]
     )
     value_female <- c(
       vo2_ml_min_results$female[1, 1],
       vo2_ml_kg_min_results$female[1, 1],
       heart_rate_results$female[1, 1],
-      group$ventilation(group, person_female),
+      ventilation_results$female[1, 1],
       oxygen_pulse_results$female[1, 1],
       ve_vco2_slope_results$female[1, 1],
-      group$breathing_frequency(group, person_female)
+      breathing_frequency_results$female[1, 1]
     )
     format_ci <- function(mat) {
       if (is.null(mat) || any(is.na(mat[1, 2:3]))) {
@@ -65,19 +67,19 @@ server <- function(input, output) {
       format_ci(vo2_ml_min_results$male),
       format_ci(vo2_ml_kg_min_results$male),
       format_ci(heart_rate_results$male),
-      NA,
+      format_ci(ventilation_results$male),
       format_ci(oxygen_pulse_results$male),
       NA,
-      NA
+      format_ci(breathing_frequency_results$male)
     )
     ci_female <- c(
       format_ci(vo2_ml_min_results$female),
       format_ci(vo2_ml_kg_min_results$female),
       format_ci(heart_rate_results$female),
-      NA,
+      format_ci(ventilation_results$female),
       format_ci(oxygen_pulse_results$female),
       NA,
-      NA
+      format_ci(breathing_frequency_results$female)
     )
 
     data.frame(
@@ -93,7 +95,11 @@ server <- function(input, output) {
     tabsetPanel(
       tabPanel("VO2 ml/min", plotOutput("vo2_ml_min_plot")),
       tabPanel("VO2 ml/kg/min", plotOutput("vo2_ml_kg_min_plot")),
-      tabPanel("Oxygen pulse", plotOutput("oxygen_pulse_plot"))
+      tabPanel("Oxygen pulse", plotOutput("oxygen_pulse_plot")),
+      tabPanel("Heart rate", plotOutput("heart_rate_plot")),
+      tabPanel("Ventilation", plotOutput("ventilation_plot")),
+      tabPanel("VE/VCO2 slope", plotOutput("ve_vco2_slope_plot")),
+      tabPanel("Breathing frequency", plotOutput("breathing_frequency_plot"))
     )
   })
 
@@ -152,6 +158,86 @@ server <- function(input, output) {
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = c("blue", "red")
+    )
+    axis(1, at = 1:2, labels = c("Boy", "Girl"))
+    arrows(
+      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
+      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+    )
+  })
+
+  output$heart_rate_plot <- renderPlot({
+    group <- get(input$group)
+    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
+    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
+    results_male <- group$heart_rate(group, person_male)
+    results_female <- group$heart_rate(group, person_female)
+    point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    lower_limits <- c(results_male[1, 2], results_female[1, 2])
+    upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    plot(
+      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
+      xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = c("blue", "red")
+    )
+    axis(1, at = 1:2, labels = c("Boy", "Girl"))
+    arrows(
+      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
+      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+    )
+  })
+
+  output$ventilation_plot <- renderPlot({
+    group <- get(input$group)
+    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
+    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
+    results_male <- group$ventilation(group, person_male)
+    results_female <- group$ventilation(group, person_female)
+    point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    lower_limits <- c(results_male[1, 2], results_female[1, 2])
+    upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    plot(
+      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
+      xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = c("blue", "red")
+    )
+    axis(1, at = 1:2, labels = c("Boy", "Girl"))
+    arrows(
+      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
+      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+    )
+  })
+
+  output$ve_vco2_slope_plot <- renderPlot({
+    group <- get(input$group)
+    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
+    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
+    results_male <- group$ve_vco2_slope(group, person_male)
+    results_female <- group$ve_vco2_slope(group, person_female)
+    point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    lower_limits <- c(results_male[1, 2], results_female[1, 2])
+    upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    plot(
+      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
+      xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = c("blue", "red")
+    )
+    axis(1, at = 1:2, labels = c("Boy", "Girl"))
+    arrows(
+      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
+      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+    )
+  })
+
+  output$breathing_frequency_plot <- renderPlot({
+    group <- get(input$group)
+    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
+    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
+    results_male <- group$breathing_frequency(group, person_male)
+    results_female <- group$breathing_frequency(group, person_female)
+    point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    lower_limits <- c(results_male[1, 2], results_female[1, 2])
+    upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    plot(
+      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
+      xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = c("blue", "red")
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(

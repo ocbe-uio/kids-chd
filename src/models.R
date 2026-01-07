@@ -90,16 +90,11 @@ simple <- group(
     y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"))
   },
   ventilation = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0109834 * person$height
-        - 3642.842 * (person$bmi ^ -3.6)
-        - 0.4839596 * person$sex
-        + 0.0038111 * person$height * person$sex
-        + 2.581131
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(
+      person, sex,
+      c(person$height, person$bmi ^ -3.6, person$sex, person$height * person$sex)
+    )
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"))
   },
   oxygen_pulse = function(.self, person) {
     x <- create_x(person, sex, c(person$height, person$bmi ^ -1.7, person$height * person$sex))
@@ -110,15 +105,8 @@ simple <- group(
     y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4))
   },
   breathing_frequency = function(.self, person) {
-    results = apply(expand.grid(0:1), 1, function(config) {
-      (
-        - 0.0114363 * person$height
-        + 0.0007431 * person$height * person$sex
-        - 0.1421088 * config
-        + 6.693345
-      ) ^ (1 / 0.4)
-    })
-    weighted.mean(results, .self$haukeland)
+    x <- create_x(person, sex, c(person$height, person$height * person$sex))
+    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.4), c("vyntus"))
   }
 )
 
@@ -211,44 +199,26 @@ moderate <- group(
     y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 5), c("haukeland", "vyntus"))
   },
   ventilation = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0118031 * person$height
-        + 0.3617417 * log(person$bmi)
-        - 0.3458141 * person$sex
-        + 0.003166 * person$height * person$sex
-        + 1.202455
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(
+      person, sex,
+      c(person$height, log(person$bmi), person$sex, person$height * person$sex)
+    )
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"))
   },
   oxygen_pulse = function(.self, person) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
     y_hat_ci(x, "oxygen_pulse", .self, exp)
   },
   ve_vco2_slope = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        + 0.0003922 * person$height
-        - 0.0152721 * config["vyntus"]
-        + 0.0171314 * config["haukeland"]
-        + 0.1956142
-      ) ^ (1 / -0.4)
-    })
     x <- create_x(person, sex, c(person$height))
     y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4))
   },
   breathing_frequency = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      (
-        - 0.037375 * person$height
-        - 1.778892 * person$sex
-        + 0.0134113 * person$height * person$sex
-        - 0.3806323 * config["haukeland"]
-        + 16.65239
-        ) ^ (1 / 0.6)
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(
+      person, sex,
+      c(person$height, person$sex, person$height * person$sex)
+    )
+    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.6), c("vyntus"))
   }
 )
 
@@ -342,15 +312,11 @@ fontan <- group(
     y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 3.5), "haukeland")
   },
   ventilation = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        + 0.0131873 * person$height
-        + 0.3613543 * log(person$bmi)
-        + 0.0007153 * person$height * person$sex
-        + 0.9744558
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(
+      person, sex,
+      c(person$height, log(person$bmi), person$height * person$sex)
+    )
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"))
   },
   oxygen_pulse = function(.self, person) {
     x <- create_x(person, sex, c(person$height, person$bmi, person$bmi * person$sex))
@@ -361,14 +327,10 @@ fontan <- group(
     y_hat_ci(x, "ve_vco2_slope", .self, exp)
   },
   breathing_frequency = function(.self, person) {
-    results = apply(.self$grid, 1, function(config) {
-      exp(
-        - 0.0044619 * person$height
-        + 0.0225936 * log(person$bmi) * person$sex
-        - 0.0820773 * config["haukeland"]
-        + 4.609728
-      )
-    })
-    weighted.mean(results, .self$haukeland_vyntus)
+    x <- create_x(
+      person, sex,
+      c(person$height, log(person$bmi) * person$sex)
+    )
+    y_hat_ci(x, "breathing_frequency", .self, exp, c("vyntus"))
   }
 )
