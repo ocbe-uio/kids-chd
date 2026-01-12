@@ -95,9 +95,9 @@ server <- function(input, output) {
     tabsetPanel(
       tabPanel("VO2 ml/min", plotOutput("vo2_ml_min_plot")),
       tabPanel("VO2 ml/kg/min", plotOutput("vo2_ml_kg_min_plot")),
-      tabPanel("Oxygen pulse", plotOutput("oxygen_pulse_plot")),
       tabPanel("Heart rate", plotOutput("heart_rate_plot")),
       tabPanel("Ventilation", plotOutput("ventilation_plot")),
+      tabPanel("Oxygen pulse", plotOutput("oxygen_pulse_plot")),
       tabPanel("VE/VCO2 slope", plotOutput("ve_vco2_slope_plot")),
       tabPanel("Breathing frequency", plotOutput("breathing_frequency_plot"))
     )
