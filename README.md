@@ -35,7 +35,6 @@ Results are automatically calculated for both male and female patients, with con
 ## Prerequisites
 
 - R (version 3.5 or higher recommended)
-- RStudio (optional, but recommended)
 - Required R packages:
   - `shiny`
   - `rsconnect` (for deployment)
@@ -55,9 +54,9 @@ Results are automatically calculated for both male and female patients, with con
 
 ## Usage
 
-### Running Locally
+### Testing
 
-To run the application locally for testing:
+To test the application locally on your own machine:
 
 ```bash
 make test
@@ -68,6 +67,8 @@ Or directly with R:
 ```R
 shiny::shinyAppDir('src', options=list(launch.browser=TRUE))
 ```
+
+This will launch the Shiny app in your default browser for local use and testing.
 
 ### Deployment
 
@@ -91,9 +92,6 @@ rsconnect::deployApp('src', appName='kids-chd')
 ├── Makefile            # Build automation (test and deploy commands)
 ├── NEWS.md             # Version history and changelog
 ├── README.md           # This file
-├── R/                  # R utility functions
-│   ├── example.R
-│   └── example-module.R
 ├── src/                # Shiny application source code
 │   ├── classes.R       # Class definitions (group, person)
 │   ├── methods.R       # Calculation methods
@@ -110,44 +108,16 @@ The application uses statistical models with pre-calculated coefficients (`beta_
 1. Creates person objects for both male and female patients
 2. Applies the appropriate statistical model based on the diagnostic group
 3. Calculates predicted endpoints with confidence intervals
-4. Displays results in an interactive table with visualization
+4. Displays results with visualization
 
 ## Development
 
-### Recent Updates
-
 See [NEWS.md](NEWS.md) for detailed version history and recent changes.
 
-Key recent features:
-- Calculation of confidence intervals
-- Automatic sex-based calculations
-- CI plots generation
-- Code refactoring and bug fixes
-
-### Testing
-
-The application can be tested locally using:
-
-```bash
-make test
-```
-
-This will launch the Shiny app in your default browser.
-
 ## Contributing
+
+This project was developed as part of OCBE's [advisory services](https://www.med.uio.no/imb/english/research/centres/ocbe/advising/about/index.html).
 
 This is an academic/research project maintained by OCBE-UIO (Oslo Centre for Biostatistics and Epidemiology, University of Oslo).
 
 For questions, issues, or contributions, please open an issue on the [GitHub repository](https://github.com/ocbe-uio/kids-chd).
-
-## License
-
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
-
-## Citation
-
-If you use this tool in your research, please cite appropriately and acknowledge the Oslo Centre for Biostatistics and Epidemiology (OCBE), University of Oslo.
-
-## Disclaimer
-
-This tool is intended for research and educational purposes. Clinical decisions should not be made based solely on the output of this application. Always consult with qualified healthcare professionals for medical advice and patient care decisions.
