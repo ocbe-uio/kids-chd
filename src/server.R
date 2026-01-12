@@ -213,17 +213,11 @@ server <- function(input, output) {
     results_male <- group$ve_vco2_slope(group, person_male)
     results_female <- group$ve_vco2_slope(group, person_female)
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
-    lower_limits <- c(results_male[1, 2], results_female[1, 2])
-    upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
-      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
+      x = 1:2, y = point_estimates,
       xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = c("blue", "red")
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
-    arrows(
-      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
-    )
   })
 
   output$breathing_frequency_plot <- renderPlot({
