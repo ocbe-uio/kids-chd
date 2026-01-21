@@ -2,11 +2,11 @@ source("classes.R")
 source("methods.R")
 source("models.R")
 
-# Define color variables for boys and girls
-color_boy_faded <- rgb(0.68, 0.85, 0.9, 0.3) # baby-blue faded
-color_girl_faded <- rgb(1, 0.75, 0.8, 0.3)  # baby-pink faded
-color_boy_strong <- rgb(0.68, 0.85, 0.9, 1) # baby-blue strong
-color_girl_strong <- rgb(1, 0.75, 0.8, 1)  # baby-pink strong
+# Further increase the intensity of the colors for boys and girls
+color_boy_faded <- rgb(0.2, 0.6, 0.9, 0.4) # even brighter baby-blue faded
+color_boy_strong <- rgb(0.2, 0.6, 0.9, 1) # even brighter baby-blue strong
+color_girl_faded <- rgb(1, 0.3, 0.6, 0.4)  # even brighter baby-pink faded
+color_girl_strong <- rgb(1, 0.3, 0.6, 1)  # even brighter baby-pink strong
 
 server <- function(input, output) {
   output$results_table <- renderTable({
