@@ -125,6 +125,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -146,6 +147,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -166,6 +168,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -186,6 +189,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -204,6 +208,7 @@ server <- function(input, output) {
     results_male <- group$ve_vco2_slope(group, person_male)
     results_female <- group$ve_vco2_slope(group, person_female)
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates,
       xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -220,6 +225,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -257,6 +263,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(1:3, t(y_est), type = "c", pch = 16, lty = 1, col = strong_col,
             xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE))
     axis(1, at = 1:3, labels = group_labels)
@@ -291,6 +298,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(heights, t(y_est), type = "c", lty = 1, col = strong_col,
             xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
@@ -326,6 +334,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(bmis, t(y_est), type = "c", lty = 1, col = strong_col,
             xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
