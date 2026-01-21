@@ -37,8 +37,8 @@ server <- function(input, output) {
     breathing_frequency_results <- get_metric_ci(group$breathing_frequency)
 
     metrics <- c(
-      "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
-      "Oxygen pulse", "VE/VCO2 slope", "Breathing frequency"
+      "VO2 ml/min (VO₂)", "VO2 ml/kg/min (VO₂/kg)", "Heart rate (HR)", "Ventilation (VE)",
+      "Oxygen pulse (O₂ pulse)", "VE/VCO2 slope (VE/VCO₂)", "Breathing frequency (fR)"
     )
 
     value_male <- c(
@@ -105,12 +105,12 @@ server <- function(input, output) {
         h4("By height (cm)"), plotOutput("vo2_ml_min_plot_height"),
         h4("By BMI (kg/m²)"), plotOutput("vo2_ml_min_plot_bmi")
       ),
-      tabPanel("VO2 ml/kg/min", plotOutput("vo2_ml_kg_min_plot")),
-      tabPanel("Heart rate", plotOutput("heart_rate_plot")),
-      tabPanel("Ventilation", plotOutput("ventilation_plot")),
-      tabPanel("Oxygen pulse", plotOutput("oxygen_pulse_plot")),
-      tabPanel("VE/VCO2 slope", plotOutput("ve_vco2_slope_plot")),
-      tabPanel("Breathing frequency", plotOutput("breathing_frequency_plot"))
+      tabPanel("VO₂/kg", plotOutput("vo2_ml_kg_min_plot")),
+      tabPanel("HR", plotOutput("heart_rate_plot")),
+      tabPanel("VE", plotOutput("ventilation_plot")),
+      tabPanel("O₂ pulse", plotOutput("oxygen_pulse_plot")),
+      tabPanel("VE/VCO₂", plotOutput("ve_vco2_slope_plot")),
+      tabPanel("fR", plotOutput("breathing_frequency_plot"))
     )
   })
 
