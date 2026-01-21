@@ -126,14 +126,14 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = strong_col
+      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
-    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
+    legend("topright", legend = c("Girl", "Boy"), col = rev(strong_col), pch = 16, lty = 1)
   })
 
   output$vo2_ml_kg_min_plot <- renderPlot({
@@ -148,12 +148,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = strong_col
+      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
   })
 
@@ -169,12 +169,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = strong_col
+      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
   })
 
@@ -189,12 +189,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = strong_col
+      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
   })
 
@@ -209,12 +209,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = strong_col
+      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
   })
 
@@ -227,7 +227,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     plot(
       x = 1:2, y = point_estimates,
-      xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
   })
@@ -243,12 +243,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = strong_col
+      xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = rev(strong_col)
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = strong_col
+      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
   })
 
