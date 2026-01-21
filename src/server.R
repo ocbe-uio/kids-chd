@@ -94,7 +94,6 @@ server <- function(input, output) {
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO2 ml/min",
-        h4("By sex"), plotOutput("vo2_ml_min_plot_sex"),
         h4("By diagnostic group"), plotOutput("vo2_ml_min_plot_group"),
         h4("By height (cm)"), plotOutput("vo2_ml_min_plot_height"),
         h4("By BMI (kg/m²)"), plotOutput("vo2_ml_min_plot_bmi")
@@ -260,18 +259,6 @@ server <- function(input, output) {
     )
   }
 
-  # By sex (existing logic, but with new output ID)
-  output$vo2_ml_min_plot_sex <- renderPlot({
-    group <- get(input$group)
-    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
-    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
-    results_male <- group$vo2_ml_min(group, person_male)
-    results_female <- group$vo2_ml_min(group, person_female)
-    point_estimates <- c(results_male[1, 1], results_female[1, 1])
-    lower_limits <- c(results_male[1, 2], results_female[1, 2])
-    upper_limits <- c(results_male[1, 3], results_female[1, 3])
-    plot_vo2_ml_min(1:2, point_estimates, lower_limits, upper_limits, xlab = "Sex", ylab = "VO2 ml/min", x_axis_labels = c("Boy", "Girl"), col = c("blue", "red"))
-  })
 
   # By diagnostic group
   output$vo2_ml_min_plot_group <- renderPlot({
