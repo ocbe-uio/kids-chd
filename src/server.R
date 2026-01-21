@@ -7,6 +7,7 @@ color_boy_faded <- rgb(0.2, 0.6, 0.9, 0.4) # even brighter baby-blue faded
 color_boy_strong <- rgb(0.2, 0.6, 0.9, 1) # even brighter baby-blue strong
 color_girl_faded <- rgb(1, 0.3, 0.6, 0.4)  # even brighter baby-pink faded
 color_girl_strong <- rgb(1, 0.3, 0.6, 1)  # even brighter baby-pink strong
+strong_col <- c(color_girl_strong, color_boy_strong)
 
 server <- function(input, output) {
   output$results_table <- renderTable({
@@ -260,7 +261,6 @@ server <- function(input, output) {
     bmi <- input$bmi
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
     faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
-    strong_col <- c(color_girl_strong, color_boy_strong)     # [girl, boy]
     for (sex in 0:1) {
       for (i in seq_along(groups)) {
         g <- get(groups[i])
@@ -295,7 +295,6 @@ server <- function(input, output) {
     heights <- 50:150
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
     faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
-    strong_col <- c(color_girl_strong, color_boy_strong)     # [girl, boy]
     highlight <- which(heights == input$height)
     for (sex in 0:1) {
       for (i in seq_along(heights)) {
@@ -331,7 +330,6 @@ server <- function(input, output) {
     bmis <- seq(10, 30, by = 0.1)
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
     faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
-    strong_col <- c(color_girl_strong, color_boy_strong)     # [girl, boy]
     highlight <- which(abs(bmis - input$bmi) < 1e-8)
     for (sex in 0:1) {
       for (i in seq_along(bmis)) {
