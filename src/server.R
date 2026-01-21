@@ -1,13 +1,7 @@
 source("classes.R")
 source("methods.R")
 source("models.R")
-
-# Further increase the intensity of the colors for boys and girls
-color_boy_faded <- rgb(0.2, 0.6, 0.9, 0.4) # even brighter baby-blue faded
-color_boy_strong <- rgb(0.2, 0.6, 0.9, 1) # even brighter baby-blue strong
-color_girl_faded <- rgb(1, 0.3, 0.6, 0.4)  # even brighter baby-pink faded
-color_girl_strong <- rgb(1, 0.3, 0.6, 1)  # even brighter baby-pink strong
-strong_col <- c(color_girl_strong, color_boy_strong)
+source("plotting.R")
 
 server <- function(input, output) {
   output$results_table <- renderTable({
@@ -37,8 +31,8 @@ server <- function(input, output) {
     breathing_frequency_results <- get_metric_ci(group$breathing_frequency)
 
     metrics <- c(
-      "VO2 ml/min", "VO2 ml/kg/min", "Heart rate", "Ventilation",
-      "Oxygen pulse", "VE/VCO2 slope", "Breathing frequency"
+      "VO2 ml/min (VO₂)", "VO2 ml/kg/min (VO₂/kg)", "Heart rate (HR)", "Ventilation (VE)",
+      "Oxygen pulse (O₂ pulse)", "VE/VCO2 slope (VE/VCO₂)", "Breathing frequency (fR)"
     )
 
     value_male <- c(
@@ -105,12 +99,13 @@ server <- function(input, output) {
         h4("By height (cm)"), plotOutput("vo2_ml_min_plot_height"),
         h4("By BMI (kg/m²)"), plotOutput("vo2_ml_min_plot_bmi")
       ),
-      tabPanel("VO2 ml/kg/min", plotOutput("vo2_ml_kg_min_plot")),
-      tabPanel("Heart rate", plotOutput("heart_rate_plot")),
-      tabPanel("Ventilation", plotOutput("ventilation_plot")),
-      tabPanel("Oxygen pulse", plotOutput("oxygen_pulse_plot")),
-      tabPanel("VE/VCO2 slope", plotOutput("ve_vco2_slope_plot")),
-      tabPanel("Breathing frequency", plotOutput("breathing_frequency_plot"))
+      tabPanel("VO₂/kg", plotOutput("vo2_ml_kg_min_plot")),
+      tabPanel("HR", plotOutput("heart_rate_plot")),
+      tabPanel("VE", plotOutput("ventilation_plot")),
+      tabPanel("O₂ pulse", plotOutput("oxygen_pulse_plot")),
+      tabPanel("VE/VCO₂", plotOutput("ve_vco2_slope_plot")),
+      tabPanel("fR", plotOutput("breathing_frequency_plot")),
+      type = "pills"
     )
   })
 
@@ -124,6 +119,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -145,6 +141,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -165,6 +162,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -185,6 +183,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -203,6 +202,7 @@ server <- function(input, output) {
     results_male <- group$ve_vco2_slope(group, person_male)
     results_female <- group$ve_vco2_slope(group, person_female)
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates,
       xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -219,6 +219,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     lower_limits <- c(results_male[1, 2], results_female[1, 2])
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
       xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = rev(strong_col)
@@ -256,6 +257,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(1:3, t(y_est), type = "c", pch = 16, lty = 1, col = strong_col,
             xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE))
     axis(1, at = 1:3, labels = group_labels)
@@ -290,6 +292,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(heights, t(y_est), type = "c", lty = 1, col = strong_col,
             xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
@@ -325,6 +328,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
+    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(bmis, t(y_est), type = "c", lty = 1, col = strong_col,
             xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
