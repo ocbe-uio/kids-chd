@@ -114,28 +114,6 @@ server <- function(input, output) {
     )
   })
 
-  output$vo2_ml_min_plot <- renderPlot({
-    group <- get(input$group)
-    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
-    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
-    results_male <- group$vo2_ml_min(group, person_male)
-    results_female <- group$vo2_ml_min(group, person_female)
-    # Assume results_* is a matrix with 1 row, 3 columns: estimate, lower, upper
-    point_estimates <- c(results_male[1, 1], results_female[1, 1])
-    lower_limits <- c(results_male[1, 2], results_female[1, 2])
-    upper_limits <- c(results_male[1, 3], results_female[1, 3])
-    plot(
-      x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = rev(strong_col)
-    )
-    axis(1, at = 1:2, labels = c("Boy", "Girl"))
-    arrows(
-      x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = rev(strong_col)
-    )
-    legend("topright", legend = c("Girl", "Boy"), col = rev(strong_col), pch = 16, lty = 1)
-  })
-
   output$vo2_ml_kg_min_plot <- renderPlot({
     group <- get(input$group)
     person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
