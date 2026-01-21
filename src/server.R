@@ -349,7 +349,7 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_bmi <- renderPlot({
     group <- get(input$group)
     height <- input$height
-    bmis <- seq(10, 30, by = 0.5)
+    bmis <- seq(10, 30, by = 0.1)
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
     faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
     strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
