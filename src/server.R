@@ -1,13 +1,7 @@
 source("classes.R")
 source("methods.R")
 source("models.R")
-
-# Further increase the intensity of the colors for boys and girls
-color_boy_faded <- rgb(0.2, 0.6, 0.9, 0.4) # even brighter baby-blue faded
-color_boy_strong <- rgb(0.2, 0.6, 0.9, 1) # even brighter baby-blue strong
-color_girl_faded <- rgb(1, 0.3, 0.6, 0.4)  # even brighter baby-pink faded
-color_girl_strong <- rgb(1, 0.3, 0.6, 1)  # even brighter baby-pink strong
-strong_col <- c(color_girl_strong, color_boy_strong)
+source("plotting.R")
 
 server <- function(input, output) {
   output$results_table <- renderTable({
