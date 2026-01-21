@@ -277,10 +277,15 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_group <- renderPlot({
     groups <- c("simple", "moderate", "fontan")
     group_labels <- c("Simple", "Moderate", "Fontan")
-    sex <- 1 # e.g. Boy; could also plot both sexes if desired
+    sex <- 1
     height <- input$height
     bmi <- input$bmi
     y_est <- y_lower <- y_upper <- numeric(length(groups))
+    highlight <- match(input$group, groups)
+    faded_col <- rgb(0.2, 0.2, 1, 0.3)
+    strong_col <- rgb(0.2, 0.2, 1, 1)
+    col_vec <- rep(faded_col, length(groups))
+    if (!is.na(highlight)) col_vec[highlight] <- strong_col
     for (i in seq_along(groups)) {
       g <- get(groups[i])
       p <- person(sex = sex, height = height, bmi = bmi)
@@ -289,16 +294,21 @@ server <- function(input, output) {
       y_lower[i] <- res[1, 2]
       y_upper[i] <- res[1, 3]
     }
-    plot_vo2_ml_min(1:3, y_est, y_lower, y_upper, xlab = "Diagnostic group", ylab = "VO2 ml/min", x_axis_labels = group_labels, col = "blue")
+    plot_vo2_ml_min(1:3, y_est, y_lower, y_upper, xlab = "Diagnostic group", ylab = "VO2 ml/min", x_axis_labels = group_labels, col = col_vec)
   })
 
   # By height (cm)
   output$vo2_ml_min_plot_height <- renderPlot({
     group <- get(input$group)
-    sex <- 1 # e.g. Boy
+    sex <- 1
     bmi <- input$bmi
     heights <- 50:150
     y_est <- y_lower <- y_upper <- numeric(length(heights))
+    highlight <- which(heights == input$height)
+    faded_col <- rgb(0.2, 0.2, 1, 0.3)
+    strong_col <- rgb(0.2, 0.2, 1, 1)
+    col_vec <- rep(faded_col, length(heights))
+    if (length(highlight) == 1) col_vec[highlight] <- strong_col
     for (i in seq_along(heights)) {
       p <- person(sex = sex, height = heights[i], bmi = bmi)
       res <- group$vo2_ml_min(group, p)
@@ -306,16 +316,21 @@ server <- function(input, output) {
       y_lower[i] <- res[1, 2]
       y_upper[i] <- res[1, 3]
     }
-    plot_vo2_ml_min(heights, y_est, y_lower, y_upper, xlab = "Height (cm)", ylab = "VO2 ml/min", col = "blue")
+    plot_vo2_ml_min(heights, y_est, y_lower, y_upper, xlab = "Height (cm)", ylab = "VO2 ml/min", col = col_vec)
   })
 
   # By BMI (kg/m²)
   output$vo2_ml_min_plot_bmi <- renderPlot({
     group <- get(input$group)
-    sex <- 1 # e.g. Boy
+    sex <- 1
     height <- input$height
     bmis <- seq(10, 30, by = 0.5)
     y_est <- y_lower <- y_upper <- numeric(length(bmis))
+    highlight <- which(abs(bmis - input$bmi) < 1e-8)
+    faded_col <- rgb(0.2, 0.2, 1, 0.3)
+    strong_col <- rgb(0.2, 0.2, 1, 1)
+    col_vec <- rep(faded_col, length(bmis))
+    if (length(highlight) == 1) col_vec[highlight] <- strong_col
     for (i in seq_along(bmis)) {
       p <- person(sex = sex, height = height, bmi = bmis[i])
       res <- group$vo2_ml_min(group, p)
@@ -323,6 +338,6 @@ server <- function(input, output) {
       y_lower[i] <- res[1, 2]
       y_upper[i] <- res[1, 3]
     }
-    plot_vo2_ml_min(bmis, y_est, y_lower, y_upper, xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", col = "blue")
+    plot_vo2_ml_min(bmis, y_est, y_lower, y_upper, xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", col = col_vec)
   })
 }
