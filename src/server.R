@@ -293,7 +293,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
-    matplot(1:3, t(y_est), type = "b", pch = 16, lty = 1, col = strong_col,
+    matplot(1:3, t(y_est), type = "c", pch = 16, lty = 1, col = strong_col,
             xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE))
     axis(1, at = 1:3, labels = group_labels)
     for (sex in 0:1) {
