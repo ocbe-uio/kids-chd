@@ -110,7 +110,8 @@ server <- function(input, output) {
       tabPanel("VE", plotOutput("ventilation_plot")),
       tabPanel("O₂ pulse", plotOutput("oxygen_pulse_plot")),
       tabPanel("VE/VCO₂", plotOutput("ve_vco2_slope_plot")),
-      tabPanel("fR", plotOutput("breathing_frequency_plot"))
+      tabPanel("fR", plotOutput("breathing_frequency_plot")),
+      type = "pills"
     )
   })
 
