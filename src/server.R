@@ -93,7 +93,12 @@ server <- function(input, output) {
   }, align = "lccrc")
   output$confidence_intervals <- renderUI({
     tabsetPanel(
-      tabPanel("VO2 ml/min", plotOutput("vo2_ml_min_plot")),
+      tabPanel("VO2 ml/min",
+        h4("By sex"), plotOutput("vo2_ml_min_plot_sex"),
+        h4("By diagnostic group"), plotOutput("vo2_ml_min_plot_group"),
+        h4("By height (cm)"), plotOutput("vo2_ml_min_plot_height"),
+        h4("By BMI (kg/m²)"), plotOutput("vo2_ml_min_plot_bmi")
+      ),
       tabPanel("VO2 ml/kg/min", plotOutput("vo2_ml_kg_min_plot")),
       tabPanel("Heart rate", plotOutput("heart_rate_plot")),
       tabPanel("Ventilation", plotOutput("ventilation_plot")),
@@ -238,5 +243,86 @@ server <- function(input, output) {
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
       angle = 90, code = 3, length = 0.1, col = c("blue", "red")
     )
+  })
+
+  # Helper for plotting VO2 ml/min with error bars
+  plot_vo2_ml_min <- function(x_vals, y_est, y_lower, y_upper, xlab, ylab, x_axis_labels = NULL, col = NULL, pch = 16) {
+    plot(
+      x = x_vals, y = y_est, ylim = range(y_lower, y_upper),
+      xlab = xlab, ylab = ylab, xaxt = if (is.null(x_axis_labels)) "s" else "n", pch = pch, col = col
+    )
+    if (!is.null(x_axis_labels)) {
+      axis(1, at = x_vals, labels = x_axis_labels)
+    }
+    arrows(
+      x0 = x_vals, y0 = y_lower, x1 = x_vals, y1 = y_upper,
+      angle = 90, code = 3, length = 0.07, col = col
+    )
+  }
+
+  # By sex (existing logic, but with new output ID)
+  output$vo2_ml_min_plot_sex <- renderPlot({
+    group <- get(input$group)
+    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
+    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
+    results_male <- group$vo2_ml_min(group, person_male)
+    results_female <- group$vo2_ml_min(group, person_female)
+    point_estimates <- c(results_male[1, 1], results_female[1, 1])
+    lower_limits <- c(results_male[1, 2], results_female[1, 2])
+    upper_limits <- c(results_male[1, 3], results_female[1, 3])
+    plot_vo2_ml_min(1:2, point_estimates, lower_limits, upper_limits, xlab = "Sex", ylab = "VO2 ml/min", x_axis_labels = c("Boy", "Girl"), col = c("blue", "red"))
+  })
+
+  # By diagnostic group
+  output$vo2_ml_min_plot_group <- renderPlot({
+    groups <- c("simple", "moderate", "fontan")
+    group_labels <- c("Simple", "Moderate", "Fontan")
+    sex <- 1 # e.g. Boy; could also plot both sexes if desired
+    height <- input$height
+    bmi <- input$bmi
+    y_est <- y_lower <- y_upper <- numeric(length(groups))
+    for (i in seq_along(groups)) {
+      g <- get(groups[i])
+      p <- person(sex = sex, height = height, bmi = bmi)
+      res <- g$vo2_ml_min(g, p)
+      y_est[i] <- res[1, 1]
+      y_lower[i] <- res[1, 2]
+      y_upper[i] <- res[1, 3]
+    }
+    plot_vo2_ml_min(1:3, y_est, y_lower, y_upper, xlab = "Diagnostic group", ylab = "VO2 ml/min", x_axis_labels = group_labels, col = "blue")
+  })
+
+  # By height (cm)
+  output$vo2_ml_min_plot_height <- renderPlot({
+    group <- get(input$group)
+    sex <- 1 # e.g. Boy
+    bmi <- input$bmi
+    heights <- 50:150
+    y_est <- y_lower <- y_upper <- numeric(length(heights))
+    for (i in seq_along(heights)) {
+      p <- person(sex = sex, height = heights[i], bmi = bmi)
+      res <- group$vo2_ml_min(group, p)
+      y_est[i] <- res[1, 1]
+      y_lower[i] <- res[1, 2]
+      y_upper[i] <- res[1, 3]
+    }
+    plot_vo2_ml_min(heights, y_est, y_lower, y_upper, xlab = "Height (cm)", ylab = "VO2 ml/min", col = "blue")
+  })
+
+  # By BMI (kg/m²)
+  output$vo2_ml_min_plot_bmi <- renderPlot({
+    group <- get(input$group)
+    sex <- 1 # e.g. Boy
+    height <- input$height
+    bmis <- seq(10, 30, by = 0.5)
+    y_est <- y_lower <- y_upper <- numeric(length(bmis))
+    for (i in seq_along(bmis)) {
+      p <- person(sex = sex, height = height, bmi = bmis[i])
+      res <- group$vo2_ml_min(group, p)
+      y_est[i] <- res[1, 1]
+      y_lower[i] <- res[1, 2]
+      y_upper[i] <- res[1, 3]
+    }
+    plot_vo2_ml_min(bmis, y_est, y_lower, y_upper, xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", col = "blue")
   })
 }
