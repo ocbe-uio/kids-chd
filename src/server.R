@@ -277,67 +277,107 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_group <- renderPlot({
     groups <- c("simple", "moderate", "fontan")
     group_labels <- c("Simple", "Moderate", "Fontan")
-    sex <- 1
     height <- input$height
     bmi <- input$bmi
-    y_est <- y_lower <- y_upper <- numeric(length(groups))
-    highlight <- match(input$group, groups)
-    faded_col <- rgb(0.2, 0.2, 1, 0.3)
-    strong_col <- rgb(0.2, 0.2, 1, 1)
-    col_vec <- rep(faded_col, length(groups))
-    if (!is.na(highlight)) col_vec[highlight] <- strong_col
-    for (i in seq_along(groups)) {
-      g <- get(groups[i])
-      p <- person(sex = sex, height = height, bmi = bmi)
-      res <- g$vo2_ml_min(g, p)
-      y_est[i] <- res[1, 1]
-      y_lower[i] <- res[1, 2]
-      y_upper[i] <- res[1, 3]
+    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
+    faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
+    strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
+    for (sex in 0:1) {
+      for (i in seq_along(groups)) {
+        g <- get(groups[i])
+        p <- person(sex = sex, height = height, bmi = bmi)
+        y_est[sex+1, i] <- g$vo2_ml_min(g, p)[1, 1]
+        y_lower[sex+1, i] <- g$vo2_ml_min(g, p)[1, 2]
+        y_upper[sex+1, i] <- g$vo2_ml_min(g, p)[1, 3]
+      }
     }
-    plot_vo2_ml_min(1:3, y_est, y_lower, y_upper, xlab = "Diagnostic group", ylab = "VO2 ml/min", x_axis_labels = group_labels, col = col_vec)
+    highlight <- match(input$group, groups)
+    col_mat <- matrix(NA, nrow = 2, ncol = length(groups))
+    col_mat[1, ] <- faded_col[1] # girls row
+    col_mat[2, ] <- faded_col[2] # boys row
+    if (!is.na(highlight)) {
+      col_mat[1, highlight] <- strong_col[1]
+      col_mat[2, highlight] <- strong_col[2]
+    }
+    matplot(1:3, t(y_est), type = "b", pch = 16, lty = 1, col = c("red", "blue"),
+            xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE))
+    axis(1, at = 1:3, labels = group_labels)
+    for (sex in 0:1) {
+      arrows(1:3, y_lower[sex+1,], 1:3, y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = col_mat[sex+1,], lwd = ifelse(1:3 == highlight, 2, 1))
+      points(1:3, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:3 == highlight, 1.3, 1))
+    }
+    legend("topright", legend = c("Girl", "Boy"), col = c("red", "blue"), pch = 16, lty = 1)
   })
 
   # By height (cm)
   output$vo2_ml_min_plot_height <- renderPlot({
     group <- get(input$group)
-    sex <- 1
     bmi <- input$bmi
     heights <- 50:150
-    y_est <- y_lower <- y_upper <- numeric(length(heights))
+    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
+    faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
+    strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
     highlight <- which(heights == input$height)
-    faded_col <- rgb(0.2, 0.2, 1, 0.3)
-    strong_col <- rgb(0.2, 0.2, 1, 1)
-    col_vec <- rep(faded_col, length(heights))
-    if (length(highlight) == 1) col_vec[highlight] <- strong_col
-    for (i in seq_along(heights)) {
-      p <- person(sex = sex, height = heights[i], bmi = bmi)
-      res <- group$vo2_ml_min(group, p)
-      y_est[i] <- res[1, 1]
-      y_lower[i] <- res[1, 2]
-      y_upper[i] <- res[1, 3]
+    for (sex in 0:1) {
+      for (i in seq_along(heights)) {
+        p <- person(sex = sex, height = heights[i], bmi = bmi)
+        res <- group$vo2_ml_min(group, p)
+        y_est[sex+1, i] <- res[1, 1]
+        y_lower[sex+1, i] <- res[1, 2]
+        y_upper[sex+1, i] <- res[1, 3]
+      }
     }
-    plot_vo2_ml_min(heights, y_est, y_lower, y_upper, xlab = "Height (cm)", ylab = "VO2 ml/min", col = col_vec)
+    col_mat <- matrix(NA, nrow = 2, ncol = length(heights))
+    col_mat[1, ] <- faded_col[1]
+    col_mat[2, ] <- faded_col[2]
+    if (length(highlight) == 1) {
+      col_mat[1, highlight] <- strong_col[1]
+      col_mat[2, highlight] <- strong_col[2]
+    }
+    matplot(heights, t(y_est), type = "l", lty = 1, col = c("red", "blue"),
+            xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
+    for (sex in 0:1) {
+      for (i in seq_along(heights)) {
+        arrows(heights[i], y_lower[sex+1, i], heights[i], y_upper[sex+1, i], angle = 90, code = 3, length = 0.07, col = col_mat[sex+1, i], lwd = ifelse(i == highlight, 2, 1))
+      }
+      points(heights, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:length(heights) == highlight, 1.3, 1))
+    }
+    legend("topright", legend = c("Girl", "Boy"), col = c("red", "blue"), pch = 16, lty = 1)
   })
 
   # By BMI (kg/m²)
   output$vo2_ml_min_plot_bmi <- renderPlot({
     group <- get(input$group)
-    sex <- 1
     height <- input$height
     bmis <- seq(10, 30, by = 0.5)
-    y_est <- y_lower <- y_upper <- numeric(length(bmis))
+    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
+    faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
+    strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
     highlight <- which(abs(bmis - input$bmi) < 1e-8)
-    faded_col <- rgb(0.2, 0.2, 1, 0.3)
-    strong_col <- rgb(0.2, 0.2, 1, 1)
-    col_vec <- rep(faded_col, length(bmis))
-    if (length(highlight) == 1) col_vec[highlight] <- strong_col
-    for (i in seq_along(bmis)) {
-      p <- person(sex = sex, height = height, bmi = bmis[i])
-      res <- group$vo2_ml_min(group, p)
-      y_est[i] <- res[1, 1]
-      y_lower[i] <- res[1, 2]
-      y_upper[i] <- res[1, 3]
+    for (sex in 0:1) {
+      for (i in seq_along(bmis)) {
+        p <- person(sex = sex, height = height, bmi = bmis[i])
+        res <- group$vo2_ml_min(group, p)
+        y_est[sex+1, i] <- res[1, 1]
+        y_lower[sex+1, i] <- res[1, 2]
+        y_upper[sex+1, i] <- res[1, 3]
+      }
     }
-    plot_vo2_ml_min(bmis, y_est, y_lower, y_upper, xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", col = col_vec)
+    col_mat <- matrix(NA, nrow = 2, ncol = length(bmis))
+    col_mat[1, ] <- faded_col[1]
+    col_mat[2, ] <- faded_col[2]
+    if (length(highlight) == 1) {
+      col_mat[1, highlight] <- strong_col[1]
+      col_mat[2, highlight] <- strong_col[2]
+    }
+    matplot(bmis, t(y_est), type = "l", lty = 1, col = c("red", "blue"),
+            xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
+    for (sex in 0:1) {
+      for (i in seq_along(bmis)) {
+        arrows(bmis[i], y_lower[sex+1, i], bmis[i], y_upper[sex+1, i], angle = 90, code = 3, length = 0.07, col = col_mat[sex+1, i], lwd = ifelse(i == highlight, 2, 1))
+      }
+      points(bmis, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:length(bmis) == highlight, 1.3, 1))
+    }
+    legend("topright", legend = c("Girl", "Boy"), col = c("red", "blue"), pch = 16, lty = 1)
   })
 }
