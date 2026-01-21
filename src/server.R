@@ -265,7 +265,7 @@ server <- function(input, output) {
       arrows(1:3, y_lower[sex+1,], 1:3, y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = col_mat[sex+1,], lwd = ifelse(1:3 == highlight, 2, 1))
       points(1:3, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:3 == highlight, 1.3, 1))
     }
-    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
+    legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), pch = 16, lty = 1)
   })
 
   # By height (cm)
@@ -301,7 +301,7 @@ server <- function(input, output) {
       }
       points(heights, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:length(heights) == highlight, 1.3, 1))
     }
-    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
+    legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), pch = 16, lty = 1)
   })
 
   # By BMI (kg/m²)
@@ -337,6 +337,6 @@ server <- function(input, output) {
       }
       points(bmis, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:length(bmis) == highlight, 1.3, 1))
     }
-    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
+    legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), pch = 16, lty = 1)
   })
 }
