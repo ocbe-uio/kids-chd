@@ -2,6 +2,12 @@ source("classes.R")
 source("methods.R")
 source("models.R")
 
+# Define color variables for boys and girls
+color_boy_faded <- rgb(0.68, 0.85, 0.9, 0.3) # baby-blue faded
+color_girl_faded <- rgb(1, 0.75, 0.8, 0.3)  # baby-pink faded
+color_boy_strong <- rgb(0.68, 0.85, 0.9, 1) # baby-blue strong
+color_girl_strong <- rgb(1, 0.75, 0.8, 1)  # baby-pink strong
+
 server <- function(input, output) {
   output$results_table <- renderTable({
     group <- get(input$group)
@@ -119,13 +125,14 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "VO2 ml/min", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+      angle = 90, code = 3, length = 0.1, col = strong_col
     )
+    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
   })
 
   output$vo2_ml_kg_min_plot <- renderPlot({
@@ -140,12 +147,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "VO2 ml/kg/min", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+      angle = 90, code = 3, length = 0.1, col = strong_col
     )
   })
 
@@ -161,12 +168,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "Oxygen pulse", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+      angle = 90, code = 3, length = 0.1, col = strong_col
     )
   })
 
@@ -181,12 +188,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "Heart rate", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+      angle = 90, code = 3, length = 0.1, col = strong_col
     )
   })
 
@@ -201,12 +208,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "Ventilation", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+      angle = 90, code = 3, length = 0.1, col = strong_col
     )
   })
 
@@ -219,7 +226,7 @@ server <- function(input, output) {
     point_estimates <- c(results_male[1, 1], results_female[1, 1])
     plot(
       x = 1:2, y = point_estimates,
-      xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "VE/VCO2 slope", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
   })
@@ -235,12 +242,12 @@ server <- function(input, output) {
     upper_limits <- c(results_male[1, 3], results_female[1, 3])
     plot(
       x = 1:2, y = point_estimates, ylim = range(lower_limits, upper_limits),
-      xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = c("blue", "red")
+      xlab = "Sex", ylab = "Breathing frequency", xaxt = "n", pch = 16, col = strong_col
     )
     axis(1, at = 1:2, labels = c("Boy", "Girl"))
     arrows(
       x0 = 1:2, y0 = lower_limits, x1 = 1:2, y1 = upper_limits,
-      angle = 90, code = 3, length = 0.1, col = c("blue", "red")
+      angle = 90, code = 3, length = 0.1, col = strong_col
     )
   })
 
@@ -267,8 +274,8 @@ server <- function(input, output) {
     height <- input$height
     bmi <- input$bmi
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
-    faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
-    strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
+    faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
+    strong_col <- c(color_girl_strong, color_boy_strong)     # [girl, boy]
     for (sex in 0:1) {
       for (i in seq_along(groups)) {
         g <- get(groups[i])
@@ -286,14 +293,14 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
-    matplot(1:3, t(y_est), type = "b", pch = 16, lty = 1, col = c("red", "blue"),
+    matplot(1:3, t(y_est), type = "b", pch = 16, lty = 1, col = strong_col,
             xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE))
     axis(1, at = 1:3, labels = group_labels)
     for (sex in 0:1) {
       arrows(1:3, y_lower[sex+1,], 1:3, y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = col_mat[sex+1,], lwd = ifelse(1:3 == highlight, 2, 1))
       points(1:3, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:3 == highlight, 1.3, 1))
     }
-    legend("topright", legend = c("Girl", "Boy"), col = c("red", "blue"), pch = 16, lty = 1)
+    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
   })
 
   # By height (cm)
@@ -302,8 +309,8 @@ server <- function(input, output) {
     bmi <- input$bmi
     heights <- 50:150
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
-    faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
-    strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
+    faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
+    strong_col <- c(color_girl_strong, color_boy_strong)     # [girl, boy]
     highlight <- which(heights == input$height)
     for (sex in 0:1) {
       for (i in seq_along(heights)) {
@@ -321,7 +328,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
-    matplot(heights, t(y_est), type = "c", lty = 1, col = c("red", "blue"),
+    matplot(heights, t(y_est), type = "c", lty = 1, col = strong_col,
             xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
       for (i in seq_along(heights)) {
@@ -329,7 +336,7 @@ server <- function(input, output) {
       }
       points(heights, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:length(heights) == highlight, 1.3, 1))
     }
-    legend("topright", legend = c("Girl", "Boy"), col = c("red", "blue"), pch = 16, lty = 1)
+    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
   })
 
   # By BMI (kg/m²)
@@ -338,8 +345,8 @@ server <- function(input, output) {
     height <- input$height
     bmis <- seq(10, 30, by = 0.1)
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
-    faded_col <- c(rgb(1, 0.2, 0.2, 0.3), rgb(0.2, 0.2, 1, 0.3)) # [girl, boy]
-    strong_col <- c(rgb(1, 0.2, 0.2, 1), rgb(0.2, 0.2, 1, 1))     # [girl, boy]
+    faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
+    strong_col <- c(color_girl_strong, color_boy_strong)     # [girl, boy]
     highlight <- which(abs(bmis - input$bmi) < 1e-8)
     for (sex in 0:1) {
       for (i in seq_along(bmis)) {
@@ -357,7 +364,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
-    matplot(bmis, t(y_est), type = "c", lty = 1, col = c("red", "blue"),
+    matplot(bmis, t(y_est), type = "c", lty = 1, col = strong_col,
             xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
       for (i in seq_along(bmis)) {
@@ -365,6 +372,6 @@ server <- function(input, output) {
       }
       points(bmis, y_est[sex+1,], pch = 16, col = col_mat[sex+1,], cex = ifelse(1:length(bmis) == highlight, 1.3, 1))
     }
-    legend("topright", legend = c("Girl", "Boy"), col = c("red", "blue"), pch = 16, lty = 1)
+    legend("topright", legend = c("Girl", "Boy"), col = strong_col, pch = 16, lty = 1)
   })
 }
