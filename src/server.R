@@ -321,7 +321,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
-    matplot(heights, t(y_est), type = "l", lty = 1, col = c("red", "blue"),
+    matplot(heights, t(y_est), type = "c", lty = 1, col = c("red", "blue"),
             xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
       for (i in seq_along(heights)) {
@@ -357,7 +357,7 @@ server <- function(input, output) {
       col_mat[1, highlight] <- strong_col[1]
       col_mat[2, highlight] <- strong_col[2]
     }
-    matplot(bmis, t(y_est), type = "l", lty = 1, col = c("red", "blue"),
+    matplot(bmis, t(y_est), type = "c", lty = 1, col = c("red", "blue"),
             xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
     for (sex in 0:1) {
       for (i in seq_along(bmis)) {
