@@ -308,7 +308,7 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_bmi <- renderPlot({
     group <- get(input$group)
     height <- input$height
-    bmis <- seq(10, 30, by = 0.1)
+    bmis <- seq(5, 35, by = 0.1)
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
     faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
     highlight <- which(abs(bmis - input$bmi) < 1e-8)
