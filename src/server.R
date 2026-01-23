@@ -35,20 +35,20 @@ server <- function(input, output) {
       "Oxygen pulse (O₂ pulse)", "VE/VCO2 slope (VE/VCO₂)", "Breathing frequency (fR)"
     )
 
-    # Format values: 1 decimal for HR and VO2 ml/min, 2 decimals for others
+    # Format values with 2 decimals for proper decimal alignment when right-aligned
     value_male <- c(
-      sprintf("%.1f", vo2_ml_min_results$male[1, 1]),
+      sprintf("%.2f", vo2_ml_min_results$male[1, 1]),
       sprintf("%.2f", vo2_ml_kg_min_results$male[1, 1]),
-      sprintf("%.1f", heart_rate_results$male[1, 1]),
+      sprintf("%.2f", heart_rate_results$male[1, 1]),
       sprintf("%.2f", ventilation_results$male[1, 1]),
       sprintf("%.2f", oxygen_pulse_results$male[1, 1]),
       sprintf("%.2f", ve_vco2_slope_results$male[1, 1]),
       sprintf("%.2f", breathing_frequency_results$male[1, 1])
     )
     value_female <- c(
-      sprintf("%.1f", vo2_ml_min_results$female[1, 1]),
+      sprintf("%.2f", vo2_ml_min_results$female[1, 1]),
       sprintf("%.2f", vo2_ml_kg_min_results$female[1, 1]),
-      sprintf("%.1f", heart_rate_results$female[1, 1]),
+      sprintf("%.2f", heart_rate_results$female[1, 1]),
       sprintf("%.2f", ventilation_results$female[1, 1]),
       sprintf("%.2f", oxygen_pulse_results$female[1, 1]),
       sprintf("%.2f", ve_vco2_slope_results$female[1, 1]),
@@ -67,18 +67,18 @@ server <- function(input, output) {
     }
 
     ci_male <- c(
-      format_ci(vo2_ml_min_results$male, digits = 1),
+      format_ci(vo2_ml_min_results$male, digits = 2),
       format_ci(vo2_ml_kg_min_results$male, digits = 2),
-      format_ci(heart_rate_results$male, digits = 1),
+      format_ci(heart_rate_results$male, digits = 2),
       format_ci(ventilation_results$male, digits = 2),
       format_ci(oxygen_pulse_results$male, digits = 2),
       NA,
       format_ci(breathing_frequency_results$male, digits = 2)
     )
     ci_female <- c(
-      format_ci(vo2_ml_min_results$female, digits = 1),
+      format_ci(vo2_ml_min_results$female, digits = 2),
       format_ci(vo2_ml_kg_min_results$female, digits = 2),
-      format_ci(heart_rate_results$female, digits = 1),
+      format_ci(heart_rate_results$female, digits = 2),
       format_ci(ventilation_results$female, digits = 2),
       format_ci(oxygen_pulse_results$female, digits = 2),
       NA,
@@ -93,7 +93,7 @@ server <- function(input, output) {
       "CI Girl" = ci_female,
       check.names = FALSE
     )
-  }, align = "l.c.c")
+  }, align = "lrcrc")
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO2 ml/min",
