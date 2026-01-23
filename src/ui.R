@@ -1,5 +1,5 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9022"),
+  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9023"),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
