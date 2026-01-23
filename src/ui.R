@@ -19,7 +19,7 @@ ui <- fluidPage(
     # Sex selection removed; results will be shown for both genders
     numericInput(
       "height", "Height (cm)",
-      value = 100L, min = 0L, step = 1L, max = 200L
+      value = 100L, min = 0L, step = 1L, max = 210L
     ),
     numericInput(
       "bmi", "BMI (kg/m²)",
