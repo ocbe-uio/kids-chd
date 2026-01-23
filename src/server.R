@@ -35,7 +35,8 @@ server <- function(input, output) {
       "Oxygen pulse (O₂ pulse)", "VE/VCO2 slope (VE/VCO₂)", "Breathing frequency (fR)"
     )
 
-    # Format values with 2 decimals for proper decimal alignment when right-aligned
+    # Format values with 2 decimals for proper decimal alignment
+    # (all values use same precision so decimals align when right-aligned)
     value_male <- c(
       sprintf("%.2f", vo2_ml_min_results$male[1, 1]),
       sprintf("%.2f", vo2_ml_kg_min_results$male[1, 1]),
