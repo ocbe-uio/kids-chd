@@ -23,7 +23,7 @@ ui <- fluidPage(
     ),
     numericInput(
       "bmi", "BMI (kg/m²)",
-      value = 25.0, min = 0.1, step = 0.1, max = 50.0
+      value = 20.0, min = 0.1, step = 0.1, max = 50.0
     ),
     actionButton("submit", "Calculate endpoints")
   ),
