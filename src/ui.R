@@ -1,5 +1,5 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9020"),
+  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9021"),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
@@ -19,7 +19,7 @@ ui <- fluidPage(
     # Sex selection removed; results will be shown for both genders
     numericInput(
       "height", "Height (cm)",
-      value = 100L, min = 0L, step = 1L, max = 210L
+      value = 150L, min = 0L, step = 1L, max = 210L
     ),
     numericInput(
       "bmi", "BMI (kg/m²)",
