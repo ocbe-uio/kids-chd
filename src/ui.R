@@ -19,11 +19,11 @@ ui <- fluidPage(
     # Sex selection removed; results will be shown for both genders
     numericInput(
       "height", "Height (cm)",
-      value = 100L, min = 0L, step = 1L, max = 210L
+      value = 155L, min = 0L, step = 1L, max = 210L
     ),
     numericInput(
       "bmi", "BMI (kg/m²)",
-      value = 20.0, min = 0.1, step = 0.1, max = 50.0
+      value = 25.0, min = 0.1, step = 0.1, max = 50.0
     ),
     actionButton("submit", "Calculate endpoints")
   ),
