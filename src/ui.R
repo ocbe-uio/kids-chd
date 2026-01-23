@@ -4,7 +4,7 @@ ui <- fluidPage(
     #results_table td:nth-child(2),
     #results_table td:nth-child(4) {
       font-variant-numeric: tabular-nums;
-      font-family: 'Courier New', monospace;
+      font-family: 'Courier New', 'Liberation Mono', 'Consolas', monospace;
     }
   ")),
   sidebarPanel(
