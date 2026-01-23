@@ -272,7 +272,7 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_height <- renderPlot({
     group <- get(input$group)
     bmi <- input$bmi
-    heights <- 50:150
+    heights <- 100:210
     y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
     faded_col <- c(color_girl_faded, color_boy_faded) # [girl, boy]
     highlight <- which(heights == input$height)
