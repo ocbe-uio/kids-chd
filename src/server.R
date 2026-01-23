@@ -37,22 +37,22 @@ server <- function(input, output) {
 
     # Format values: 1 decimal for HR and VO2 ml/min, 2 decimals for others
     value_male <- c(
-      round(vo2_ml_min_results$male[1, 1], 1),
-      round(vo2_ml_kg_min_results$male[1, 1], 2),
-      round(heart_rate_results$male[1, 1], 1),
-      round(ventilation_results$male[1, 1], 2),
-      round(oxygen_pulse_results$male[1, 1], 2),
-      round(ve_vco2_slope_results$male[1, 1], 2),
-      round(breathing_frequency_results$male[1, 1], 2)
+      sprintf("%.1f", vo2_ml_min_results$male[1, 1]),
+      sprintf("%.2f", vo2_ml_kg_min_results$male[1, 1]),
+      sprintf("%.1f", heart_rate_results$male[1, 1]),
+      sprintf("%.2f", ventilation_results$male[1, 1]),
+      sprintf("%.2f", oxygen_pulse_results$male[1, 1]),
+      sprintf("%.2f", ve_vco2_slope_results$male[1, 1]),
+      sprintf("%.2f", breathing_frequency_results$male[1, 1])
     )
     value_female <- c(
-      round(vo2_ml_min_results$female[1, 1], 1),
-      round(vo2_ml_kg_min_results$female[1, 1], 2),
-      round(heart_rate_results$female[1, 1], 1),
-      round(ventilation_results$female[1, 1], 2),
-      round(oxygen_pulse_results$female[1, 1], 2),
-      round(ve_vco2_slope_results$female[1, 1], 2),
-      round(breathing_frequency_results$female[1, 1], 2)
+      sprintf("%.1f", vo2_ml_min_results$female[1, 1]),
+      sprintf("%.2f", vo2_ml_kg_min_results$female[1, 1]),
+      sprintf("%.1f", heart_rate_results$female[1, 1]),
+      sprintf("%.2f", ventilation_results$female[1, 1]),
+      sprintf("%.2f", oxygen_pulse_results$female[1, 1]),
+      sprintf("%.2f", ve_vco2_slope_results$female[1, 1]),
+      sprintf("%.2f", breathing_frequency_results$female[1, 1])
     )
     # Format confidence intervals with appropriate precision
     format_ci <- function(mat, digits = 2) {
