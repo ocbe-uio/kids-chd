@@ -35,52 +35,54 @@ server <- function(input, output) {
       "Oxygen pulse (O₂ pulse)", "VE/VCO2 slope (VE/VCO₂)", "Breathing frequency (fR)"
     )
 
+    # Format values: 1 decimal for HR and VO2 ml/min, 2 decimals for others
     value_male <- c(
-      vo2_ml_min_results$male[1, 1],
-      vo2_ml_kg_min_results$male[1, 1],
-      heart_rate_results$male[1, 1],
-      ventilation_results$male[1, 1],
-      oxygen_pulse_results$male[1, 1],
-      ve_vco2_slope_results$male[1, 1],
-      breathing_frequency_results$male[1, 1]
+      round(vo2_ml_min_results$male[1, 1], 1),
+      round(vo2_ml_kg_min_results$male[1, 1], 2),
+      round(heart_rate_results$male[1, 1], 1),
+      round(ventilation_results$male[1, 1], 2),
+      round(oxygen_pulse_results$male[1, 1], 2),
+      round(ve_vco2_slope_results$male[1, 1], 2),
+      round(breathing_frequency_results$male[1, 1], 2)
     )
     value_female <- c(
-      vo2_ml_min_results$female[1, 1],
-      vo2_ml_kg_min_results$female[1, 1],
-      heart_rate_results$female[1, 1],
-      ventilation_results$female[1, 1],
-      oxygen_pulse_results$female[1, 1],
-      ve_vco2_slope_results$female[1, 1],
-      breathing_frequency_results$female[1, 1]
+      round(vo2_ml_min_results$female[1, 1], 1),
+      round(vo2_ml_kg_min_results$female[1, 1], 2),
+      round(heart_rate_results$female[1, 1], 1),
+      round(ventilation_results$female[1, 1], 2),
+      round(oxygen_pulse_results$female[1, 1], 2),
+      round(ve_vco2_slope_results$female[1, 1], 2),
+      round(breathing_frequency_results$female[1, 1], 2)
     )
-    format_ci <- function(mat) {
+    # Format confidence intervals with appropriate precision
+    format_ci <- function(mat, digits = 2) {
       if (is.null(mat) || any(is.na(mat[1, 2:3]))) {
       return(NA)
       }
       paste(
-      formatC(mat[1, 2], width = 6, format = "f", digits = 2, flag = "#"),
+      formatC(mat[1, 2], width = 6, format = "f", digits = digits, flag = "#"),
       "-",
-      formatC(mat[1, 3], width = 6, format = "f", digits = 2, flag = "#")
+      formatC(mat[1, 3], width = 6, format = "f", digits = digits, flag = "#")
       )
     }
 
     ci_male <- c(
-      format_ci(vo2_ml_min_results$male),
-      format_ci(vo2_ml_kg_min_results$male),
-      format_ci(heart_rate_results$male),
-      format_ci(ventilation_results$male),
-      format_ci(oxygen_pulse_results$male),
+      format_ci(vo2_ml_min_results$male, digits = 1),
+      format_ci(vo2_ml_kg_min_results$male, digits = 2),
+      format_ci(heart_rate_results$male, digits = 1),
+      format_ci(ventilation_results$male, digits = 2),
+      format_ci(oxygen_pulse_results$male, digits = 2),
       NA,
-      format_ci(breathing_frequency_results$male)
+      format_ci(breathing_frequency_results$male, digits = 2)
     )
     ci_female <- c(
-      format_ci(vo2_ml_min_results$female),
-      format_ci(vo2_ml_kg_min_results$female),
-      format_ci(heart_rate_results$female),
-      format_ci(ventilation_results$female),
-      format_ci(oxygen_pulse_results$female),
+      format_ci(vo2_ml_min_results$female, digits = 1),
+      format_ci(vo2_ml_kg_min_results$female, digits = 2),
+      format_ci(heart_rate_results$female, digits = 1),
+      format_ci(ventilation_results$female, digits = 2),
+      format_ci(oxygen_pulse_results$female, digits = 2),
       NA,
-      format_ci(breathing_frequency_results$female)
+      format_ci(breathing_frequency_results$female, digits = 2)
     )
 
     data.frame(
