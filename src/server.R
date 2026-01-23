@@ -93,7 +93,7 @@ server <- function(input, output) {
       "CI Girl" = ci_female,
       check.names = FALSE
     )
-  }, align = "lrrrc")
+  }, align = "l.c.c")
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO2 ml/min",
