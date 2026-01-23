@@ -1,5 +1,12 @@
 ui <- fluidPage(
   titlePanel("Kids with Congenital Heart Defects - v0.0.0.9023"),
+  tags$style(HTML("
+    #results_table td:nth-child(2),
+    #results_table td:nth-child(4) {
+      font-variant-numeric: tabular-nums;
+      font-family: 'Courier New', monospace;
+    }
+  ")),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
