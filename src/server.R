@@ -114,23 +114,28 @@ server <- function(input, output) {
       ),
       tabPanel("HR",
         plotOutput("heart_rate_plot_group"),
-        plotOutput("heart_rate_plot_height")
+        plotOutput("heart_rate_plot_height"),
+        plotOutput("heart_rate_plot_bmi")
       ),
       tabPanel("VE",
         plotOutput("ventilation_plot_group"),
-        plotOutput("ventilation_plot_height")
+        plotOutput("ventilation_plot_height"),
+        plotOutput("ventilation_plot_bmi")
       ),
       tabPanel("O₂ pulse",
         plotOutput("oxygen_pulse_plot_group"),
-        plotOutput("oxygen_pulse_plot_height")
+        plotOutput("oxygen_pulse_plot_height"),
+        plotOutput("oxygen_pulse_plot_bmi")
       ),
       tabPanel("VE/VCO₂",
         plotOutput("ve_vco2_slope_plot_group"),
-        plotOutput("ve_vco2_slope_plot_height")
+        plotOutput("ve_vco2_slope_plot_height"),
+        plotOutput("ve_vco2_slope_plot_bmi")
       ),
       tabPanel("BF",
         plotOutput("breathing_frequency_plot_group"),
-        plotOutput("breathing_frequency_plot_height")
+        plotOutput("breathing_frequency_plot_height"),
+        plotOutput("breathing_frequency_plot_bmi")
       ),
       type = "pills"
     )
@@ -290,7 +295,8 @@ server <- function(input, output) {
         ylab = "VE/VCO2 slope",
         main = "VE/VCO2 slope by height",
         group_label = group_names[input$group],
-        show_ci = FALSE
+        show_ci = FALSE,
+        legend_pos = "topright"
       )
     })
 
@@ -306,79 +312,86 @@ server <- function(input, output) {
       )
     })
 
+
   # By BMI (kg/m²) (VO2/kg)
   output$vo2_ml_kg_min_plot_bmi <- renderPlot({
-    group <- get(input$group)
-    height <- input$height
-    bmis <- seq(5, 35, by = 0.1)
-    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
-    for (sex in 0:1) {
-      for (i in seq_along(bmis)) {
-        p <- person(sex = sex, height = height, bmi = bmis[i])
-        res <- group$vo2_ml_kg_min(group, p)
-        y_est[sex+1, i] <- res[1, 1]
-        y_lower[sex+1, i] <- res[1, 2]
-        y_upper[sex+1, i] <- res[1, 3]
-      }
-    }
-    group_label <- group_names[input$group]
-    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-    matplot(bmis, t(y_est), type = "n", lty = 1, col = strong_col,
-            xlab = "BMI (kg/m²)", ylab = "VO2 ml/kg/min", ylim = range(y_lower, y_upper, na.rm = TRUE),
-            main = "VO2/kg by BMI")
-    faded_col <- c(color_girl_faded, color_boy_faded)
-    for (sex in 0:1) {
-      polygon(c(bmis, rev(bmis)),
-              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
-              col = faded_col[sex+1], border = NA)
-    }
-    matlines(bmis, t(y_est), lty = 1, col = strong_col, lwd = 2)
-    matlines(bmis, t(y_lower), lty = 2, col = strong_col)
-    matlines(bmis, t(y_upper), lty = 2, col = strong_col)
-    legend("bottomright",
-           legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "",
-                     sprintf("Group: %s", group_label),
-                     sprintf("Height: %.0f cm", height)),
-           col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
-           lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
+      ylab = "VO2 ml/kg/min",
+      main = "VO2/kg by BMI",
+      group_label = group_names[input$group]
+    )
   })
 
   # By BMI (kg/m²)
   output$vo2_ml_min_plot_bmi <- renderPlot({
-    group <- get(input$group)
-    height <- input$height
-    bmis <- seq(5, 35, by = 0.1)
-    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
-    for (sex in 0:1) {
-      for (i in seq_along(bmis)) {
-        p <- person(sex = sex, height = height, bmi = bmis[i])
-        res <- group$vo2_ml_min(group, p)
-        y_est[sex+1, i] <- res[1, 1]
-        y_lower[sex+1, i] <- res[1, 2]
-        y_upper[sex+1, i] <- res[1, 3]
-      }
-    }
-    # Get group label for legend
-    group_label <- group_names[input$group]
-
-    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-          matplot(bmis, t(y_est), type = "n", lty = 1, col = strong_col,
-            xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE),
-            main = "VO2 by BMI")
-          faded_col <- c(color_girl_faded, color_boy_faded)
-          for (sex in 0:1) {
-            polygon(c(bmis, rev(bmis)),
-              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
-              col = faded_col[sex+1], border = NA)
-          }
-          matlines(bmis, t(y_est), lty = 1, col = strong_col, lwd = 2)
-          matlines(bmis, t(y_lower), lty = 2, col = strong_col)
-          matlines(bmis, t(y_upper), lty = 2, col = strong_col)
-              legend("bottomright",
-                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "",
-                          sprintf("Group: %s", group_label),
-                          sprintf("Height: %.0f cm", height)),
-                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
-                lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$vo2_ml_min(g, p),
+      ylab = "VO2 ml/min",
+      main = "VO2 by BMI",
+      group_label = group_names[input$group],
+      legend_pos = "bottomleft"
+    )
   })
+
+  output$heart_rate_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$heart_rate(g, p),
+      ylab = "Heart rate (BPM)",
+      main = "Heart rate by BMI",
+      group_label = group_names[input$group]
+    )
+  })
+
+  output$ventilation_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$ventilation(g, p),
+      ylab = "Ventilation (L/min)",
+      main = "Ventilation by BMI",
+      group_label = group_names[input$group]
+    )
+  })
+
+  output$oxygen_pulse_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$oxygen_pulse(g, p),
+      ylab = "Oxygen pulse (mL/beat)",
+      main = "Oxygen pulse by BMI",
+      group_label = group_names[input$group]
+    )
+  })
+
+  output$ve_vco2_slope_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$ve_vco2_slope(g, p),
+      ylab = "VE/VCO2 slope",
+      main = "VE/VCO2 slope by BMI",
+      group_label = group_names[input$group],
+      show_ci = FALSE
+    )
+  })
+
+  output$breathing_frequency_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$breathing_frequency(g, p),
+      ylab = "Breathing frequency (breaths/min)",
+      main = "Breathing frequency by BMI",
+      group_label = group_names[input$group]
+    )
+  })
+
 }
