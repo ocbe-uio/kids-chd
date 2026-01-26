@@ -1,3 +1,119 @@
+# Generic helper for plotting a metric by BMI (for both sexes, with CIs)
+plot_metric_by_bmi <- function(
+  group, height, metric_fun, ylab, main,
+  bmis = seq(5, 35, by = 0.1),
+  group_label = NULL,
+  show_ci = TRUE,
+  legend_pos = "topleft"
+) {
+  y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
+  for (sex in 0:1) {
+    for (i in seq_along(bmis)) {
+      p <- person(sex = sex, height = height, bmi = bmis[i])
+      res <- metric_fun(group, p)
+      y_est[sex+1, i] <- res[1, 1]
+      if (show_ci) {
+        y_lower[sex+1, i] <- res[1, 2]
+        y_upper[sex+1, i] <- res[1, 3]
+      }
+    }
+  }
+  faded_col <- c(color_girl_faded, color_boy_faded)
+  par(bg = panel_bg)
+  if (show_ci) {
+    ylim <- range(y_lower, y_upper, na.rm = TRUE)
+  } else {
+    ylim <- range(y_est, na.rm = TRUE)
+  }
+  matplot(bmis, t(y_est), type = "n", lty = 1, col = strong_col,
+          xlab = "BMI (kg/m²)", ylab = ylab, ylim = ylim,
+          main = main)
+  if (show_ci) {
+    for (sex in 0:1) {
+      polygon(c(bmis, rev(bmis)),
+              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
+              col = faded_col[sex+1], border = NA)
+    }
+  }
+  matlines(bmis, t(y_est), lty = 1, col = strong_col, lwd = 2)
+  if (show_ci) {
+    matlines(bmis, t(y_lower), lty = 2, col = strong_col)
+    matlines(bmis, t(y_upper), lty = 2, col = strong_col)
+  }
+  legend_labels <- c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "")
+  legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
+  legend_lty <- c(1, 2, 1, 2, NA)
+  legend_lwd <- rep(2, 5)
+  legend_extra <- c()
+  if (!is.null(group_label)) legend_extra <- c(sprintf("Group: %s", group_label))
+  legend_extra <- c(legend_extra, sprintf("Height: %.0f cm", height))
+  legend(
+    legend_pos,
+    legend = c(legend_labels, legend_extra),
+    col = c(legend_cols, rep(NA, length(legend_extra))),
+    lty = c(legend_lty, rep(NA, length(legend_extra))),
+    lwd = c(legend_lwd, rep(NA, length(legend_extra))),
+    seg.len = 3
+  )
+}
+## Generic helper for plotting a metric by height (for both sexes, with CIs)
+plot_metric_by_height <- function(
+  group, bmi, metric_fun, ylab, main,
+  heights = 100:210,
+  group_label = NULL,
+  show_ci = TRUE,
+  legend_pos = "topleft"
+) {
+  y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
+  for (sex in 0:1) {
+    for (i in seq_along(heights)) {
+      p <- person(sex = sex, height = heights[i], bmi = bmi)
+      res <- metric_fun(group, p)
+      y_est[sex+1, i] <- res[1, 1]
+      if (show_ci) {
+        y_lower[sex+1, i] <- res[1, 2]
+        y_upper[sex+1, i] <- res[1, 3]
+      }
+    }
+  }
+  faded_col <- c(color_girl_faded, color_boy_faded)
+  par(bg = panel_bg)
+  if (show_ci) {
+    ylim <- range(y_lower, y_upper, na.rm = TRUE)
+  } else {
+    ylim <- range(y_est, na.rm = TRUE)
+  }
+  matplot(heights, t(y_est), type = "n", lty = 1, col = strong_col,
+          xlab = "Height (cm)", ylab = ylab, ylim = ylim,
+          main = main)
+  if (show_ci) {
+    for (sex in 0:1) {
+      polygon(c(heights, rev(heights)),
+              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
+              col = faded_col[sex+1], border = NA)
+    }
+  }
+  matlines(heights, t(y_est), lty = 1, col = strong_col, lwd = 2)
+  if (show_ci) {
+    matlines(heights, t(y_lower), lty = 2, col = strong_col)
+    matlines(heights, t(y_upper), lty = 2, col = strong_col)
+  }
+  legend_labels <- c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "")
+  legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
+  legend_lty <- c(1, 2, 1, 2, NA)
+  legend_lwd <- rep(2, 5)
+  legend_extra <- c()
+  if (!is.null(group_label)) legend_extra <- c(sprintf("Group: %s", group_label))
+  legend_extra <- c(legend_extra, sprintf("BMI: %.1f kg/m²", bmi))
+  legend(
+    legend_pos,
+    legend = c(legend_labels, legend_extra),
+    col = c(legend_cols, rep(NA, length(legend_extra))),
+    lty = c(legend_lty, rep(NA, length(legend_extra))),
+    lwd = c(legend_lwd, rep(NA, length(legend_extra))),
+    seg.len = 3
+  )
+}
 # Generic helper for plotting group-based metrics (e.g., VO2, VO2/kg)
 plot_metric_by_group <- function(
   height, bmi, metric_fun, ylab, main,
