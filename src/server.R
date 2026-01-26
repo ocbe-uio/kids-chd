@@ -99,6 +99,7 @@ server <- function(input, output) {
       check.names = FALSE
     )
   }, align = "lccrc")
+
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO₂",
@@ -120,36 +121,25 @@ server <- function(input, output) {
     )
   })
 
-
-  # By diagnostic group (VO2/kg)
+  # Plots by diagnostic group
   output$vo2_ml_kg_min_plot_group <- renderPlot({
-    groups <- c("simple", "moderate", "fontan")
-    group_labels <- c("Simple", "Moderate", "Fontan")
-    height <- input$height
-    bmi <- input$bmi
-    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
-    for (sex in 0:1) {
-      for (i in seq_along(groups)) {
-        g <- get(groups[i])
-        p <- person(sex = sex, height = height, bmi = bmi)
-        y_est[sex+1, i] <- g$vo2_ml_kg_min(g, p)[1, 1]
-        y_lower[sex+1, i] <- g$vo2_ml_kg_min(g, p)[1, 2]
-        y_upper[sex+1, i] <- g$vo2_ml_kg_min(g, p)[1, 3]
-      }
-    }
-    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-    matplot(1:3, t(y_est), type = "p", pch = 16, lty = 1, col = strong_col,
-            xlab = "Diagnostic group", ylab = "VO2 ml/kg/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE),
-            main = "VO2/kg by group")
-    axis(1, at = 1:3, labels = group_labels)
-    for (sex in 0:1) {
-      arrows(1:3, y_lower[sex+1,], 1:3, y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = strong_col[sex+1], lwd = 1)
-      points(1:3, y_est[sex+1,], pch = 16, col = strong_col[sex+1], cex = 1)
-    }
-    legend("topright", legend = c("Boy", "Girl", "",
-                                   sprintf("Height: %.0f cm", height),
-                                   sprintf("BMI: %.1f kg/m²", bmi)),
-           col = c(rev(strong_col), NA, NA, NA), pch = c(16, 16, NA, NA, NA), lty = c(1, 1, NA, NA, NA))
+    plot_metric_by_group(
+      height = input$height,
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$vo2_ml_min(g, p),
+      ylab = "VO2 ml/min",
+      main = "VO2 by group"
+    )
+  })
+
+  output$vo2_ml_kg_min_plot_group <- renderPlot({
+    plot_metric_by_group(
+      height = input$height,
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
+      ylab = "VO2 ml/kg/min",
+      main = "VO2/kg by group"
+    )
   })
 
   # By height (cm) (VO2/kg)
@@ -325,7 +315,6 @@ server <- function(input, output) {
       angle = 90, code = 3, length = 0.1, col = rev(strong_col)
     )
   })
-
 
   # By diagnostic group
   output$vo2_ml_min_plot_group <- renderPlot({
