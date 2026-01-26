@@ -132,7 +132,7 @@ server <- function(input, output) {
   })
 
   # Plots by diagnostic group
-  output$vo2_ml_kg_min_plot_group <- renderPlot({
+  output$vo2_ml_min_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
       bmi = input$bmi,
@@ -143,6 +143,7 @@ server <- function(input, output) {
     )
   })
 
+  # VO2/kg by group
   output$vo2_ml_kg_min_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
