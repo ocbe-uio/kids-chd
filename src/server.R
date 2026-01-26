@@ -4,6 +4,9 @@ source("models.R")
 source("plotting.R")
 
 server <- function(input, output) {
+  # Mapping of group IDs to display names (used in multiple plots)
+  group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
+  
   output$results_table <- renderTable({
     group <- get(input$group)
     # Calculate for both sexes: 1 = Boy, 0 = Girl
@@ -99,9 +102,9 @@ server <- function(input, output) {
   output$confidence_intervals <- renderUI({
     tabsetPanel(
       tabPanel("VO₂",
-        h4("By diagnostic group"), plotOutput("vo2_ml_min_plot_group"),
-        h4("By height (cm)"), plotOutput("vo2_ml_min_plot_height"),
-        h4("By BMI (kg/m²)"), plotOutput("vo2_ml_min_plot_bmi")
+        plotOutput("vo2_ml_min_plot_group"),
+        plotOutput("vo2_ml_min_plot_height"),
+        plotOutput("vo2_ml_min_plot_bmi")
       ),
       tabPanel("VO₂/kg", plotOutput("vo2_ml_kg_min_plot")),
       tabPanel("HR", plotOutput("heart_rate_plot")),
@@ -254,13 +257,17 @@ server <- function(input, output) {
     }
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
     matplot(1:3, t(y_est), type = "p", pch = 16, lty = 1, col = strong_col,
-            xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE))
+            xlab = "Diagnostic group", ylab = "VO2 ml/min", xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE),
+            main = "VO2 by group")
     axis(1, at = 1:3, labels = group_labels)
     for (sex in 0:1) {
       arrows(1:3, y_lower[sex+1,], 1:3, y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = strong_col[sex+1], lwd = 1)
       points(1:3, y_est[sex+1,], pch = 16, col = strong_col[sex+1], cex = 1)
     }
-    legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), pch = 16, lty = 1)
+    legend("topright", legend = c("Boy", "Girl", "", 
+                                   sprintf("Height: %.0f cm", height),
+                                   sprintf("BMI: %.1f kg/m²", bmi)), 
+           col = c(rev(strong_col), NA, NA, NA), pch = c(16, 16, NA, NA, NA), lty = c(1, 1, NA, NA, NA))
   })
 
   # By height (cm)
@@ -278,9 +285,13 @@ server <- function(input, output) {
         y_upper[sex+1, i] <- res[1, 3]
       }
     }
+    # Get group label for legend
+    group_label <- group_names[input$group]
+    
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
           matplot(heights, t(y_est), type = "n", lty = 1, col = strong_col,
-            xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
+            xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE),
+            main = "VO2 by height")
           faded_col <- c(color_girl_faded, color_boy_faded)
           for (sex in 0:1) {
             polygon(c(heights, rev(heights)),
@@ -290,10 +301,12 @@ server <- function(input, output) {
           matlines(heights, t(y_est), lty = 1, col = strong_col, lwd = 2)
           matlines(heights, t(y_lower), lty = 2, col = strong_col)
           matlines(heights, t(y_upper), lty = 2, col = strong_col)
-              legend("topright",
-                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)"),
-                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1]),
-                lty = c(1, 2, 1, 2), lwd = 2, seg.len = 3)
+              legend("bottomright",
+                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "",
+                          sprintf("Group: %s", group_label),
+                          sprintf("BMI: %.1f kg/m²", bmi)),
+                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
+                lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
   })
 
   # By BMI (kg/m²)
@@ -311,9 +324,13 @@ server <- function(input, output) {
         y_upper[sex+1, i] <- res[1, 3]
       }
     }
+    # Get group label for legend
+    group_label <- group_names[input$group]
+    
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
           matplot(bmis, t(y_est), type = "n", lty = 1, col = strong_col,
-            xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
+            xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE),
+            main = "VO2 by BMI")
           faded_col <- c(color_girl_faded, color_boy_faded)
           for (sex in 0:1) {
             polygon(c(bmis, rev(bmis)),
@@ -323,9 +340,11 @@ server <- function(input, output) {
           matlines(bmis, t(y_est), lty = 1, col = strong_col, lwd = 2)
           matlines(bmis, t(y_lower), lty = 2, col = strong_col)
           matlines(bmis, t(y_upper), lty = 2, col = strong_col)
-              legend("topright",
-                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)"),
-                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1]),
-                lty = c(1, 2, 1, 2), lwd = 2, seg.len = 3)
+              legend("bottomright",
+                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "",
+                          sprintf("Group: %s", group_label),
+                          sprintf("Height: %.0f cm", height)),
+                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
+                lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
   })
 }
