@@ -279,11 +279,18 @@ server <- function(input, output) {
       }
     }
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-      matplot(heights, t(y_est), type = "l", lty = 1, col = strong_col,
-              xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
-      matlines(heights, t(y_lower), lty = 2, col = strong_col)
-      matlines(heights, t(y_upper), lty = 2, col = strong_col)
-      legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), lty = 1, lwd = 2)
+          matplot(heights, t(y_est), type = "n", lty = 1, col = strong_col,
+            xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
+          faded_col <- c(color_girl_faded, color_boy_faded)
+          for (sex in 0:1) {
+            polygon(c(heights, rev(heights)),
+              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
+              col = faded_col[sex+1], border = NA)
+          }
+          matlines(heights, t(y_est), lty = 1, col = strong_col, lwd = 2)
+          matlines(heights, t(y_lower), lty = 2, col = strong_col)
+          matlines(heights, t(y_upper), lty = 2, col = strong_col)
+          legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), lty = 1, lwd = 2)
   })
 
   # By BMI (kg/m²)
@@ -302,10 +309,17 @@ server <- function(input, output) {
       }
     }
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-      matplot(bmis, t(y_est), type = "l", lty = 1, col = strong_col,
-              xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
-      matlines(bmis, t(y_lower), lty = 2, col = strong_col)
-      matlines(bmis, t(y_upper), lty = 2, col = strong_col)
-      legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), lty = 1, lwd = 2)
+          matplot(bmis, t(y_est), type = "n", lty = 1, col = strong_col,
+            xlab = "BMI (kg/m²)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE))
+          faded_col <- c(color_girl_faded, color_boy_faded)
+          for (sex in 0:1) {
+            polygon(c(bmis, rev(bmis)),
+              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
+              col = faded_col[sex+1], border = NA)
+          }
+          matlines(bmis, t(y_est), lty = 1, col = strong_col, lwd = 2)
+          matlines(bmis, t(y_lower), lty = 2, col = strong_col)
+          matlines(bmis, t(y_upper), lty = 2, col = strong_col)
+          legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), lty = 1, lwd = 2)
   })
 }
