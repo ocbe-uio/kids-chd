@@ -31,8 +31,10 @@ server <- function(input, output) {
     breathing_frequency_results <- get_metric_ci(group$breathing_frequency)
 
     metrics <- c(
-      "VO2 ml/min (VO₂)", "VO2 ml/kg/min (VO₂/kg)", "Heart rate (HR)", "Ventilation (VE)",
-      "Oxygen pulse (O₂ pulse)", "VE/VCO2 slope (VE/VCO₂)", "Breathing frequency (fR)"
+      "Absolute VO₂ (mL/min)", "VO₂ relative to body mass (mL/kg/min)",
+      "Heart rate (BPM)", "Minute ventilation (L/min)",
+      "Oxygen pulse (mL/beat)", "Ventilatory efficiency (VE/VCO₂ slope)",
+      "Breathing frequency (breaths/min)"
     )
 
     # Format values: 1 decimal for HR and VO2 ml/min, 2 decimals for others
@@ -96,7 +98,7 @@ server <- function(input, output) {
   }, align = "lccrc")
   output$confidence_intervals <- renderUI({
     tabsetPanel(
-      tabPanel("VO2 ml/min",
+      tabPanel("VO₂",
         h4("By diagnostic group"), plotOutput("vo2_ml_min_plot_group"),
         h4("By height (cm)"), plotOutput("vo2_ml_min_plot_height"),
         h4("By BMI (kg/m²)"), plotOutput("vo2_ml_min_plot_bmi")
@@ -106,7 +108,7 @@ server <- function(input, output) {
       tabPanel("VE", plotOutput("ventilation_plot")),
       tabPanel("O₂ pulse", plotOutput("oxygen_pulse_plot")),
       tabPanel("VE/VCO₂", plotOutput("ve_vco2_slope_plot")),
-      tabPanel("fR", plotOutput("breathing_frequency_plot")),
+      tabPanel("BF", plotOutput("breathing_frequency_plot")),
       type = "pills"
     )
   })
