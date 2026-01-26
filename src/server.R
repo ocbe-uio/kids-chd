@@ -4,6 +4,9 @@ source("models.R")
 source("plotting.R")
 
 server <- function(input, output) {
+  # Mapping of group IDs to display names (used in multiple plots)
+  group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
+  
   output$results_table <- renderTable({
     group <- get(input$group)
     # Calculate for both sexes: 1 = Boy, 0 = Girl
@@ -283,7 +286,6 @@ server <- function(input, output) {
       }
     }
     # Get group label for legend
-    group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
     group_label <- group_names[input$group]
     
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
@@ -323,7 +325,6 @@ server <- function(input, output) {
       }
     }
     # Get group label for legend
-    group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
     group_label <- group_names[input$group]
     
     par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
