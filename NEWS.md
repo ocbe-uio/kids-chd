@@ -3,6 +3,7 @@
 * Calculation of confidence intervals (issue #9)
 * Sex is automatically calculated (issue #13)
 * Production of CI plots (issue #10)
+* Improved metric labels (issue #17)
 
 # Deployment v0.0.0.9003
 
