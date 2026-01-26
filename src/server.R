@@ -216,41 +216,28 @@ server <- function(input, output) {
     )
   })
 
-  # By height (cm) (VO2/kg)
+  # VO2 by height
+  output$vo2_ml_min_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$vo2_ml_min(g, p),
+      ylab = "VO2 ml/min",
+      main = "VO2 by height",
+      group_label = group_names[input$group]
+    )
+  })
+
+  # VO2/kg by height
   output$vo2_ml_kg_min_plot_height <- renderPlot({
-    group <- get(input$group)
-    bmi <- input$bmi
-    heights <- 100:210
-    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
-    for (sex in 0:1) {
-      for (i in seq_along(heights)) {
-        p <- person(sex = sex, height = heights[i], bmi = bmi)
-        res <- group$vo2_ml_kg_min(group, p)
-        y_est[sex+1, i] <- res[1, 1]
-        y_lower[sex+1, i] <- res[1, 2]
-        y_upper[sex+1, i] <- res[1, 3]
-      }
-    }
-    group_label <- group_names[input$group]
-    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-    matplot(heights, t(y_est), type = "n", lty = 1, col = strong_col,
-            xlab = "Height (cm)", ylab = "VO2 ml/kg/min", ylim = range(y_lower, y_upper, na.rm = TRUE),
-            main = "VO2/kg by height")
-    faded_col <- c(color_girl_faded, color_boy_faded)
-    for (sex in 0:1) {
-      polygon(c(heights, rev(heights)),
-              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
-              col = faded_col[sex+1], border = NA)
-    }
-    matlines(heights, t(y_est), lty = 1, col = strong_col, lwd = 2)
-    matlines(heights, t(y_lower), lty = 2, col = strong_col)
-    matlines(heights, t(y_upper), lty = 2, col = strong_col)
-    legend("bottomright",
-           legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "",
-                     sprintf("Group: %s", group_label),
-                     sprintf("BMI: %.1f kg/m²", bmi)),
-           col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
-           lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
+      ylab = "VO2 ml/kg/min",
+      main = "VO2/kg by height",
+      group_label = group_names[input$group]
+    )
   })
 
   # By BMI (kg/m²) (VO2/kg)
@@ -288,45 +275,6 @@ server <- function(input, output) {
                      sprintf("Height: %.0f cm", height)),
            col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
            lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
-  })
-
-  # By height (cm)
-  output$vo2_ml_min_plot_height <- renderPlot({
-    group <- get(input$group)
-    bmi <- input$bmi
-    heights <- 100:210
-    y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
-    for (sex in 0:1) {
-      for (i in seq_along(heights)) {
-        p <- person(sex = sex, height = heights[i], bmi = bmi)
-        res <- group$vo2_ml_min(group, p)
-        y_est[sex+1, i] <- res[1, 1]
-        y_lower[sex+1, i] <- res[1, 2]
-        y_upper[sex+1, i] <- res[1, 3]
-      }
-    }
-    # Get group label for legend
-    group_label <- group_names[input$group]
-
-    par(bg = rgb(0.9607843, 0.9607843, 0.9607843))
-          matplot(heights, t(y_est), type = "n", lty = 1, col = strong_col,
-            xlab = "Height (cm)", ylab = "VO2 ml/min", ylim = range(y_lower, y_upper, na.rm = TRUE),
-            main = "VO2 by height")
-          faded_col <- c(color_girl_faded, color_boy_faded)
-          for (sex in 0:1) {
-            polygon(c(heights, rev(heights)),
-              c(y_lower[sex+1,], rev(y_upper[sex+1,])),
-              col = faded_col[sex+1], border = NA)
-          }
-          matlines(heights, t(y_est), lty = 1, col = strong_col, lwd = 2)
-          matlines(heights, t(y_lower), lty = 2, col = strong_col)
-          matlines(heights, t(y_upper), lty = 2, col = strong_col)
-              legend("bottomright",
-                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "",
-                          sprintf("Group: %s", group_label),
-                          sprintf("BMI: %.1f kg/m²", bmi)),
-                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA, NA, NA),
-                lty = c(1, 2, 1, 2, NA, NA, NA), lwd = 2, seg.len = 3)
   })
 
   # By BMI (kg/m²)
