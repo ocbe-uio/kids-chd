@@ -192,7 +192,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$ve_vco2_slope(g, p),
       ylab = "VE/VCO2 slope",
-      main = "VE/VCO2 slope by group"
+      main = "VE/VCO2 slope by group",
+      show_ci = FALSE
     )
   })
 

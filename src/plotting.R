@@ -2,27 +2,42 @@
 plot_metric_by_group <- function(
   height, bmi, metric_fun, ylab, main,
   groups = c("simple", "moderate", "fontan"),
-  group_labels = c("Simple", "Moderate", "Fontan")
+  group_labels = c("Simple", "Moderate", "Fontan"),
+  show_ci = TRUE
   ) {
-  y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
+  y_est <- matrix(NA, nrow = 2, ncol = length(groups))
+  if (show_ci) {
+    y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
+  }
   for (sex in 0:1) {
     for (i in seq_along(groups)) {
       g <- get(groups[i])
       p <- person(sex = sex, height = height, bmi = bmi)
       vals <- metric_fun(g, p)[1, ]
       y_est[sex+1, i] <- vals[1]
-      y_lower[sex+1, i] <- vals[2]
-      y_upper[sex+1, i] <- vals[3]
+      if (show_ci) {
+        y_lower[sex+1, i] <- vals[2]
+        y_upper[sex+1, i] <- vals[3]
+      }
     }
   }
   par(bg = panel_bg)
-  matplot(1:length(groups), t(y_est), type = "p", pch = 16, lty = 1, col = strong_col,
-          xlab = "Diagnostic group", ylab = ylab, xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE),
-          main = main)
-  axis(1, at = 1:length(groups), labels = group_labels)
-  for (sex in 0:1) {
-    arrows(1:length(groups), y_lower[sex+1,], 1:length(groups), y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = strong_col[sex+1], lwd = 1)
-    points(1:length(groups), y_est[sex+1,], pch = 16, col = strong_col[sex+1], cex = 1)
+  if (show_ci) {
+    matplot(1:length(groups), t(y_est), type = "p", pch = 16, lty = 1, col = strong_col,
+            xlab = "Diagnostic group", ylab = ylab, xaxt = "n", ylim = range(y_lower, y_upper, na.rm = TRUE),
+            main = main)
+    axis(1, at = 1:length(groups), labels = group_labels)
+    for (sex in 0:1) {
+      arrows(1:length(groups), y_lower[sex+1,], 1:length(groups), y_upper[sex+1,], angle = 90, code = 3, length = 0.07, col = strong_col[sex+1], lwd = 1)
+      points(1:length(groups), y_est[sex+1,], pch = 16, col = strong_col[sex+1], cex = 1)
+    }
+  } else {
+    matplot(1:length(groups), t(y_est), type = "p", pch = 16, lty = 1, col = strong_col,
+            xlab = "Diagnostic group", ylab = ylab, xaxt = "n", main = main)
+    axis(1, at = 1:length(groups), labels = group_labels)
+    for (sex in 0:1) {
+      points(1:length(groups), y_est[sex+1,], pch = 16, col = strong_col[sex+1], cex = 1)
+    }
   }
   legend("topright", legend = c("Boy", "Girl", "",
                                  sprintf("Height: %.0f cm", height),
