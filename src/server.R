@@ -290,7 +290,10 @@ server <- function(input, output) {
           matlines(heights, t(y_est), lty = 1, col = strong_col, lwd = 2)
           matlines(heights, t(y_lower), lty = 2, col = strong_col)
           matlines(heights, t(y_upper), lty = 2, col = strong_col)
-          legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), lty = 1, lwd = 2)
+              legend("topright",
+                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)"),
+                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1]),
+                lty = c(1, 2, 1, 2), lwd = 2, seg.len = 3)
   })
 
   # By BMI (kg/m²)
@@ -320,6 +323,9 @@ server <- function(input, output) {
           matlines(bmis, t(y_est), lty = 1, col = strong_col, lwd = 2)
           matlines(bmis, t(y_lower), lty = 2, col = strong_col)
           matlines(bmis, t(y_upper), lty = 2, col = strong_col)
-          legend("topright", legend = c("Boy", "Girl"), col = rev(strong_col), lty = 1, lwd = 2)
+              legend("topright",
+                legend = c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)"),
+                col = c(strong_col[2], strong_col[2], strong_col[1], strong_col[1]),
+                lty = c(1, 2, 1, 2), lwd = 2, seg.len = 3)
   })
 }
