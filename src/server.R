@@ -138,7 +138,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$vo2_ml_min(g, p),
       ylab = "VO2 ml/min",
-      main = "VO2 by group"
+      main = "VO2 by group",
+      legend_pos = "topright"
     )
   })
 
@@ -148,7 +149,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
       ylab = "VO2 ml/kg/min",
-      main = "VO2/kg by group"
+      main = "VO2/kg by group",
+      legend_pos = "topright"
     )
   })
 
@@ -159,7 +161,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$heart_rate(g, p),
       ylab = "Heart rate (BPM)",
-      main = "Heart rate by group"
+      main = "Heart rate by group",
+      legend_pos = "bottomleft"
     )
   })
 
@@ -170,7 +173,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$ventilation(g, p),
       ylab = "Ventilation (L/min)",
-      main = "Ventilation by group"
+      main = "Ventilation by group",
+      legend_pos = "topright"
     )
   })
 
@@ -181,7 +185,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$oxygen_pulse(g, p),
       ylab = "Oxygen pulse (mL/beat)",
-      main = "Oxygen pulse by group"
+      main = "Oxygen pulse by group",
+      legend_pos = "topright"
     )
   })
 
@@ -193,7 +198,8 @@ server <- function(input, output) {
       metric_fun = function(g, p) g$ve_vco2_slope(g, p),
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by group",
-      show_ci = FALSE
+      show_ci = FALSE,
+      legend_pos = "topleft"
     )
   })
 
@@ -204,7 +210,8 @@ server <- function(input, output) {
       bmi = input$bmi,
       metric_fun = function(g, p) g$breathing_frequency(g, p),
       ylab = "Breathing frequency (breaths/min)",
-      main = "Breathing frequency by group"
+      main = "Breathing frequency by group",
+      legend_pos = "bottomleft"
     )
   })
 

@@ -3,7 +3,8 @@ plot_metric_by_group <- function(
   height, bmi, metric_fun, ylab, main,
   groups = c("simple", "moderate", "fontan"),
   group_labels = c("Simple", "Moderate", "Fontan"),
-  show_ci = TRUE
+  show_ci = TRUE,
+  legend_pos = "topright"
   ) {
   y_est <- matrix(NA, nrow = 2, ncol = length(groups))
   y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
@@ -35,7 +36,7 @@ plot_metric_by_group <- function(
     )
   }
   legend(
-    "topright",
+    legend_pos,
     legend = c(
       "Boy", "Girl", "",
       sprintf("Height: %.0f cm", height), sprintf("BMI: %.1f kg/m²", bmi)
