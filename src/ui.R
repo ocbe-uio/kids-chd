@@ -42,6 +42,13 @@ ui <- fluidPage(
         HTML("The selected diagnostic group and covariates are highlighted in the plots below."),
         uiOutput("confidence_intervals")
       )
-    )
+    ),
+    # Footer with source code link
+    hr(),
+    HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
+      <a href="https://github.com/ocbe-uio/kids-chd" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
+        View source code on GitHub
+      </a>
+    </p>')
   )
 )
