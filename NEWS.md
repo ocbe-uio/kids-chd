@@ -5,6 +5,10 @@
 * Production of CI plots (issue #10)
 * Improved metric labels (issue #17)
 
+# Deployment v0.0.0.9004
+
+- Removed "CI" labels from legends in VE/VCO2 height and BMI plots when confidence intervals are not displayed
+
 # Deployment v0.0.0.9003
 
 - Fixed calculation when only "haukeland" or "vyntus" is used (issue #12)
