@@ -79,34 +79,34 @@ simple <- group(
   ),
   vo2_ml_min = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
-    y_hat_ci(x, "vo2_ml_min", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "vo2_ml_min", .self, exp, NULL, conf_level)
   },
   vo2_ml_kg_min = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi, person$height * person$sex))
-    y_hat_ci(x, "vo2_ml_kg_min", .self, identity, conf_level = conf_level)
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity, NULL, conf_level)
   },
   heart_rate = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"), conf_level)
   },
   ventilation = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, person$bmi ^ -3.6, person$sex, person$height * person$sex)
     )
-    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level)
   },
   oxygen_pulse = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi ^ -1.7, person$height * person$sex))
-    y_hat_ci(x, "oxygen_pulse", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "oxygen_pulse", .self, exp, NULL, conf_level)
   },
   ve_vco2_slope = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$sex, person$height * person$sex))
-    y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4), conf_level = conf_level)
+    y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4), NULL, conf_level)
   },
   breathing_frequency = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$height * person$sex))
-    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.4), c("vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.4), c("vyntus"), conf_level)
   }
 )
 
@@ -188,37 +188,37 @@ moderate <- group(
   ),
   vo2_ml_min = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
-    y_hat_ci(x, "vo2_ml_min", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "vo2_ml_min", .self, exp, NULL, conf_level)
   },
   vo2_ml_kg_min = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(log(person$bmi), person$height * person$sex))
-    y_hat_ci(x, "vo2_ml_kg_min", .self, identity, conf_level = conf_level)
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity, NULL, conf_level)
   },
   heart_rate = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 5), c("haukeland", "vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 5), c("haukeland", "vyntus"), conf_level)
   },
   ventilation = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, log(person$bmi), person$sex, person$height * person$sex)
     )
-    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level)
   },
   oxygen_pulse = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
-    y_hat_ci(x, "oxygen_pulse", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "oxygen_pulse", .self, exp, NULL, conf_level)
   },
   ve_vco2_slope = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height))
-    y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4), conf_level = conf_level)
+    y_hat_ci(x, "ve_vco2_slope", .self, function(x) x ^ (1 / -0.4), NULL, conf_level)
   },
   breathing_frequency = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, person$sex, person$height * person$sex)
     )
-    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.6), c("vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.6), c("vyntus"), conf_level)
   }
 )
 
@@ -301,36 +301,36 @@ fontan <- group(
   ),
   vo2_ml_min = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$sex, log(person$bmi) * person$sex))
-    y_hat_ci(x, "vo2_ml_min", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "vo2_ml_min", .self, exp, NULL, conf_level)
   },
   vo2_ml_kg_min = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$bmi, person$height * person$sex))
-    y_hat_ci(x, "vo2_ml_kg_min", .self, identity, conf_level = conf_level)
+    y_hat_ci(x, "vo2_ml_kg_min", .self, identity, NULL, conf_level)
   },
   heart_rate = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$sex, person$bmi * person$sex))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 3.5), "haukeland", conf_level = conf_level)
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 3.5), "haukeland", conf_level)
   },
   ventilation = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, log(person$bmi), person$height * person$sex)
     )
-    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level)
   },
   oxygen_pulse = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi, person$bmi * person$sex))
-    y_hat_ci(x, "oxygen_pulse", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "oxygen_pulse", .self, exp, NULL, conf_level)
   },
   ve_vco2_slope = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$sex, person$height * person$sex))
-    y_hat_ci(x, "ve_vco2_slope", .self, exp, conf_level = conf_level)
+    y_hat_ci(x, "ve_vco2_slope", .self, exp, NULL, conf_level)
   },
   breathing_frequency = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, log(person$bmi) * person$sex)
     )
-    y_hat_ci(x, "breathing_frequency", .self, exp, c("vyntus"), conf_level = conf_level)
+    y_hat_ci(x, "breathing_frequency", .self, exp, c("vyntus"), conf_level)
   }
 )
