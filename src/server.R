@@ -100,7 +100,7 @@ server <- function(input, output) {
     )
   }, align = "lccrc")
 
-  output$confidence_intervals <- renderUI({
+  output$plots <- renderUI({
     tabsetPanel(
       tabPanel("VO₂",
         plotOutput("vo2_ml_min_plot_group"),

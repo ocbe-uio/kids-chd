@@ -40,7 +40,7 @@ ui <- fluidPage(
         tableOutput("results_table"),
         h2("Plots"),
         HTML("The selected diagnostic group and covariates are highlighted in the plots below."),
-        uiOutput("confidence_intervals")
+        uiOutput("plots")
       )
     ),
     # Footer with source code link
