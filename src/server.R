@@ -141,7 +141,7 @@ server <- function(input, output) {
     )
   })
 
-  # Plots by diagnostic group
+  # VO2 plots
   output$vo2_ml_min_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
@@ -152,8 +152,29 @@ server <- function(input, output) {
       legend_pos = "topright"
     )
   })
+  output$vo2_ml_min_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$vo2_ml_min(g, p),
+      ylab = "VO2 ml/min",
+      main = "VO2 by height",
+      group_label = group_names[input$group]
+    )
+  })
+  output$vo2_ml_min_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$vo2_ml_min(g, p),
+      ylab = "VO2 ml/min",
+      main = "VO2 by BMI",
+      group_label = group_names[input$group],
+      legend_pos = "topleft"
+    )
+  })
 
-  # VO2/kg by group
+  # VO2/kg plots
   output$vo2_ml_kg_min_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
@@ -164,8 +185,29 @@ server <- function(input, output) {
       legend_pos = "topright"
     )
   })
+  output$vo2_ml_kg_min_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
+      ylab = "VO2 ml/kg/min",
+      main = "VO2/kg by height",
+      group_label = group_names[input$group]
+    )
+  })
+  output$vo2_ml_kg_min_plot_bmi <- renderPlot({
+    plot_metric_by_bmi(
+      group = get(input$group),
+      height = input$height,
+      metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
+      ylab = "VO2 ml/kg/min",
+      main = "VO2/kg by BMI",
+      group_label = group_names[input$group],
+      legend_pos = "bottomleft"
+    )
+  })
 
-  # Heart rate by group
+  # Heart rate plots
   output$heart_rate_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
@@ -176,168 +218,16 @@ server <- function(input, output) {
       legend_pos = "bottomleft"
     )
   })
-
-  # Ventilation by group
-  output$ventilation_plot_group <- renderPlot({
-    plot_metric_by_group(
-      height = input$height,
-      bmi = input$bmi,
-      metric_fun = function(g, p) g$ventilation(g, p),
-      ylab = "Ventilation (L/min)",
-      main = "Ventilation by group",
-      legend_pos = "topright"
-    )
-  })
-
-  # Oxygen pulse by group
-  output$oxygen_pulse_plot_group <- renderPlot({
-    plot_metric_by_group(
-      height = input$height,
-      bmi = input$bmi,
-      metric_fun = function(g, p) g$oxygen_pulse(g, p),
-      ylab = "Oxygen pulse (mL/beat)",
-      main = "Oxygen pulse by group",
-      legend_pos = "topright"
-    )
-  })
-
-  # VE/VCO2 slope by group
-  output$ve_vco2_slope_plot_group <- renderPlot({
-    plot_metric_by_group(
-      height = input$height,
-      bmi = input$bmi,
-      metric_fun = function(g, p) g$ve_vco2_slope(g, p),
-      ylab = "VE/VCO2 slope",
-      main = "VE/VCO2 slope by group",
-      show_ci = FALSE,
-      legend_pos = "topleft"
-    )
-  })
-
-  # Breathing frequency by group
-  output$breathing_frequency_plot_group <- renderPlot({
-    plot_metric_by_group(
-      height = input$height,
-      bmi = input$bmi,
-      metric_fun = function(g, p) g$breathing_frequency(g, p),
-      ylab = "Breathing frequency (breaths/min)",
-      main = "Breathing frequency by group",
-      legend_pos = "bottomleft"
-    )
-  })
-
-    # VO2 by height
-    output$vo2_ml_min_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$vo2_ml_min(g, p),
-        ylab = "VO2 ml/min",
-        main = "VO2 by height",
-        group_label = group_names[input$group]
-      )
-    })
-
-    # VO2/kg by height
-    output$vo2_ml_kg_min_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
-        ylab = "VO2 ml/kg/min",
-        main = "VO2/kg by height",
-        group_label = group_names[input$group]
-      )
-    })
-
-    # Heart rate by height
-    output$heart_rate_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$heart_rate(g, p),
-        ylab = "Heart rate (BPM)",
-        main = "Heart rate by height",
-        group_label = group_names[input$group]
-      )
-    })
-
-    # Ventilation by height
-    output$ventilation_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$ventilation(g, p),
-        ylab = "Ventilation (L/min)",
-        main = "Ventilation by height",
-        group_label = group_names[input$group]
-      )
-    })
-
-    # Oxygen pulse by height
-    output$oxygen_pulse_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$oxygen_pulse(g, p),
-        ylab = "Oxygen pulse (mL/beat)",
-        main = "Oxygen pulse by height",
-        group_label = group_names[input$group]
-      )
-    })
-
-    # VE/VCO2 slope by height (no CI)
-    output$ve_vco2_slope_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$ve_vco2_slope(g, p),
-        ylab = "VE/VCO2 slope",
-        main = "VE/VCO2 slope by height",
-        group_label = group_names[input$group],
-        show_ci = FALSE,
-        legend_pos = "topright"
-      )
-    })
-
-    # Breathing frequency by height
-    output$breathing_frequency_plot_height <- renderPlot({
-      plot_metric_by_height(
-        group = get(input$group),
-        bmi = input$bmi,
-        metric_fun = function(g, p) g$breathing_frequency(g, p),
-        ylab = "Breathing frequency (breaths/min)",
-        main = "Breathing frequency by height",
-        group_label = group_names[input$group]
-      )
-    })
-
-
-  # By BMI (kg/m²) (VO2/kg)
-  output$vo2_ml_kg_min_plot_bmi <- renderPlot({
-    plot_metric_by_bmi(
+  output$heart_rate_plot_height <- renderPlot({
+    plot_metric_by_height(
       group = get(input$group),
-      height = input$height,
-      metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
-      ylab = "VO2 ml/kg/min",
-      main = "VO2/kg by BMI",
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$heart_rate(g, p),
+      ylab = "Heart rate (BPM)",
+      main = "Heart rate by height",
       group_label = group_names[input$group]
     )
   })
-
-  # By BMI (kg/m²)
-  output$vo2_ml_min_plot_bmi <- renderPlot({
-    plot_metric_by_bmi(
-      group = get(input$group),
-      height = input$height,
-      metric_fun = function(g, p) g$vo2_ml_min(g, p),
-      ylab = "VO2 ml/min",
-      main = "VO2 by BMI",
-      group_label = group_names[input$group],
-      legend_pos = "bottomleft"
-    )
-  })
-
   output$heart_rate_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
       group = get(input$group),
@@ -349,6 +239,27 @@ server <- function(input, output) {
     )
   })
 
+  # Ventilation plots
+  output$ventilation_plot_group <- renderPlot({
+    plot_metric_by_group(
+      height = input$height,
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$ventilation(g, p),
+      ylab = "Ventilation (L/min)",
+      main = "Ventilation by group",
+      legend_pos = "bottomleft"
+    )
+  })
+  output$ventilation_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$ventilation(g, p),
+      ylab = "Ventilation (L/min)",
+      main = "Ventilation by height",
+      group_label = group_names[input$group]
+    )
+  })
   output$ventilation_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
       group = get(input$group),
@@ -356,10 +267,32 @@ server <- function(input, output) {
       metric_fun = function(g, p) g$ventilation(g, p),
       ylab = "Ventilation (L/min)",
       main = "Ventilation by BMI",
-      group_label = group_names[input$group]
+      group_label = group_names[input$group],
+      legend_pos = "bottomright"
     )
   })
 
+  # Oxygen pulse plots
+  output$oxygen_pulse_plot_group <- renderPlot({
+    plot_metric_by_group(
+      height = input$height,
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$oxygen_pulse(g, p),
+      ylab = "Oxygen pulse (mL/beat)",
+      main = "Oxygen pulse by group",
+      legend_pos = "topright"
+    )
+  })
+  output$oxygen_pulse_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$oxygen_pulse(g, p),
+      ylab = "Oxygen pulse (mL/beat)",
+      main = "Oxygen pulse by height",
+      group_label = group_names[input$group]
+    )
+  })
   output$oxygen_pulse_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
       group = get(input$group),
@@ -371,6 +304,30 @@ server <- function(input, output) {
     )
   })
 
+  # VE/VCO2 slope plots
+  output$ve_vco2_slope_plot_group <- renderPlot({
+    plot_metric_by_group(
+      height = input$height,
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$ve_vco2_slope(g, p),
+      ylab = "VE/VCO2 slope",
+      main = "VE/VCO2 slope by group",
+      show_ci = FALSE,
+      legend_pos = "topleft"
+    )
+  })
+  output$ve_vco2_slope_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$ve_vco2_slope(g, p),
+      ylab = "VE/VCO2 slope",
+      main = "VE/VCO2 slope by height",
+      group_label = group_names[input$group],
+      show_ci = FALSE,
+      legend_pos = "topright"
+    )
+  })
   output$ve_vco2_slope_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
       group = get(input$group),
@@ -379,10 +336,33 @@ server <- function(input, output) {
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by BMI",
       group_label = group_names[input$group],
-      show_ci = FALSE
+      show_ci = FALSE,
+      legend_pos = "topright"
     )
   })
 
+  # Breathing frequency plots
+  output$breathing_frequency_plot_group <- renderPlot({
+    plot_metric_by_group(
+      height = input$height,
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$breathing_frequency(g, p),
+      ylab = "Breathing frequency (breaths/min)",
+      main = "Breathing frequency by group",
+      legend_pos = "bottomleft"
+    )
+  })
+  output$breathing_frequency_plot_height <- renderPlot({
+    plot_metric_by_height(
+      group = get(input$group),
+      bmi = input$bmi,
+      metric_fun = function(g, p) g$breathing_frequency(g, p),
+      ylab = "Breathing frequency (breaths/min)",
+      main = "Breathing frequency by height",
+      group_label = group_names[input$group],
+      legend_pos = "topright"
+    )
+  })
   output$breathing_frequency_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
       group = get(input$group),
