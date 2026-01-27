@@ -41,11 +41,18 @@ plot_metric_by_bmi <- function(
     matlines(bmis, t(y_lower), lty = 2, col = strong_col)
     matlines(bmis, t(y_upper), lty = 2, col = strong_col)
   }
-  ci_label <- sprintf("%.0f%% CI", conf_level * 100)
-  legend_labels <- c("Boy (estimate)", sprintf("Boy (%s)", ci_label), "Girl (estimate)", sprintf("Girl (%s)", ci_label), "")
-  legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
-  legend_lty <- c(1, 2, 1, 2, NA)
-  legend_lwd <- rep(2, 5)
+  if (show_ci) {
+    ci_label <- sprintf("%.0f%% CI", conf_level * 100)
+    legend_labels <- c("Boy (estimate)", sprintf("Boy (%s)", ci_label), "Girl (estimate)", sprintf("Girl (%s)", ci_label), "")
+    legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
+    legend_lty <- c(1, 2, 1, 2, NA)
+    legend_lwd <- rep(2, 5)
+  } else {
+    legend_labels <- c("Boy", "Girl", "")
+    legend_cols <- c(strong_col[2], strong_col[1], NA)
+    legend_lty <- c(1, 1, NA)
+    legend_lwd <- rep(2, 3)
+  }
   legend_extra <- c()
   if (!is.null(group_label)) legend_extra <- c(sprintf("Group: %s", group_label))
   legend_extra <- c(legend_extra, sprintf("Height: %.0f cm", height))
@@ -101,11 +108,18 @@ plot_metric_by_height <- function(
     matlines(heights, t(y_lower), lty = 2, col = strong_col)
     matlines(heights, t(y_upper), lty = 2, col = strong_col)
   }
-  ci_label <- sprintf("%.0f%% CI", conf_level * 100)
-  legend_labels <- c("Boy (estimate)", sprintf("Boy (%s)", ci_label), "Girl (estimate)", sprintf("Girl (%s)", ci_label), "")
-  legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
-  legend_lty <- c(1, 2, 1, 2, NA)
-  legend_lwd <- rep(2, 5)
+  if (show_ci) {
+    ci_label <- sprintf("%.0f%% CI", conf_level * 100)
+    legend_labels <- c("Boy (estimate)", sprintf("Boy (%s)", ci_label), "Girl (estimate)", sprintf("Girl (%s)", ci_label), "")
+    legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
+    legend_lty <- c(1, 2, 1, 2, NA)
+    legend_lwd <- rep(2, 5)
+  } else {
+    legend_labels <- c("Boy", "Girl", "")
+    legend_cols <- c(strong_col[2], strong_col[1], NA)
+    legend_lty <- c(1, 1, NA)
+    legend_lwd <- rep(2, 3)
+  }
   legend_extra <- c()
   if (!is.null(group_label)) legend_extra <- c(sprintf("Group: %s", group_label))
   legend_extra <- c(legend_extra, sprintf("BMI: %.1f kg/m²", bmi))
