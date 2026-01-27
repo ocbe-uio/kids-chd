@@ -170,7 +170,7 @@ server <- function(input, output) {
       ylab = "VO2 ml/min",
       main = "VO2 by BMI",
       group_label = group_names[input$group],
-      legend_pos = "bottomleft"
+      legend_pos = "topleft"
     )
   })
 
@@ -202,7 +202,8 @@ server <- function(input, output) {
       metric_fun = function(g, p) g$vo2_ml_kg_min(g, p),
       ylab = "VO2 ml/kg/min",
       main = "VO2/kg by BMI",
-      group_label = group_names[input$group]
+      group_label = group_names[input$group],
+      legend_pos = "bottomleft"
     )
   })
 
@@ -246,7 +247,7 @@ server <- function(input, output) {
       metric_fun = function(g, p) g$ventilation(g, p),
       ylab = "Ventilation (L/min)",
       main = "Ventilation by group",
-      legend_pos = "topright"
+      legend_pos = "bottomleft"
     )
   })
   output$ventilation_plot_height <- renderPlot({
@@ -266,7 +267,8 @@ server <- function(input, output) {
       metric_fun = function(g, p) g$ventilation(g, p),
       ylab = "Ventilation (L/min)",
       main = "Ventilation by BMI",
-      group_label = group_names[input$group]
+      group_label = group_names[input$group],
+      legend_pos = "bottomright"
     )
   })
 
@@ -334,7 +336,8 @@ server <- function(input, output) {
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by BMI",
       group_label = group_names[input$group],
-      show_ci = FALSE
+      show_ci = FALSE,
+      legend_pos = "topright"
     )
   })
 
@@ -356,7 +359,8 @@ server <- function(input, output) {
       metric_fun = function(g, p) g$breathing_frequency(g, p),
       ylab = "Breathing frequency (breaths/min)",
       main = "Breathing frequency by height",
-      group_label = group_names[input$group]
+      group_label = group_names[input$group],
+      legend_pos = "topright"
     )
   })
   output$breathing_frequency_plot_bmi <- renderPlot({
