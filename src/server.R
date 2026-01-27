@@ -106,7 +106,7 @@ server <- function(input, output) {
       # Reorder columns to match original intent
       df <- df[, c("Metric", "Value Boy", ci_boy_col, "Value Girl", ci_girl_col)]
       df
-  }, align = "lccrc")
+  }, align = "lrcrc")
 
   output$plots <- renderUI({
     tabsetPanel(
