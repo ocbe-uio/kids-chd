@@ -1,5 +1,5 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects - v0.0.0.9029"),
+  titlePanel("Kids with Congenital Heart Defects"),
   sidebarPanel(
     # Step 1: selecting diagnostic group
     h2("Select group"),
@@ -43,12 +43,14 @@ ui <- fluidPage(
         uiOutput("confidence_intervals")
       )
     ),
-    # Footer with source code link
+    # Footer with source code link and version
     hr(),
     HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
       <a href="https://github.com/ocbe-uio/kids-chd" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
         View source code on GitHub
       </a>
+      &nbsp;|&nbsp;
+      version 0.0.0.9029
     </p>')
   )
 )
