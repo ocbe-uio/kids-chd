@@ -91,14 +91,21 @@ server <- function(input, output) {
       format_ci(breathing_frequency_results$female, digits = 2)
     )
 
-    data.frame(
-      "Metric" = metrics,
-      "Value Boy" = value_male,
-      !!sprintf("%d%% CI Boy", input$conf_level) := ci_male,
-      "Value Girl" = value_female,
-      !!sprintf("%d%% CI Girl", input$conf_level) := ci_female,
-      check.names = FALSE
-    )
+      # Create the data frame with fixed columns
+      df <- data.frame(
+        "Metric" = metrics,
+        "Value Boy" = value_male,
+        "Value Girl" = value_female,
+        check.names = FALSE
+      )
+      # Add CI columns with dynamic names
+      ci_boy_col <- sprintf("%d%% CI Boy", input$conf_level)
+      ci_girl_col <- sprintf("%d%% CI Girl", input$conf_level)
+      df[[ci_boy_col]] <- ci_male
+      df[[ci_girl_col]] <- ci_female
+      # Reorder columns to match original intent
+      df <- df[, c("Metric", "Value Boy", ci_boy_col, "Value Girl", ci_girl_col)]
+      df
   }, align = "lccrc")
 
   output$plots <- renderUI({
