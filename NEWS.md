@@ -4,6 +4,7 @@
 * Sex is automatically calculated (issue #13)
 * Production of CI plots (issue #10)
 * Improved metric labels (issue #17)
+* Custom confidence intervals with adjustable slider (90-99%, default 95%)
 
 # Deployment v0.0.0.9003
 
