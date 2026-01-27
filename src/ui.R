@@ -50,7 +50,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      v0.0.0.9029
+      version 0.0.0.9029
     </p>')
   )
 )
