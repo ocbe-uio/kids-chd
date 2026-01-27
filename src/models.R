@@ -87,14 +87,14 @@ simple <- group(
   },
   heart_rate = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"), conf_level)
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 4.3), c("haukeland", "vyntus"), conf_level = conf_level)
   },
   ventilation = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, person$bmi ^ -3.6, person$sex, person$height * person$sex)
     )
-    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level)
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level = conf_level)
   },
   oxygen_pulse = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi ^ -1.7, person$height * person$sex))
@@ -106,7 +106,7 @@ simple <- group(
   },
   breathing_frequency = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$height * person$sex))
-    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.4), c("vyntus"), conf_level)
+    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.4), c("vyntus"), conf_level = conf_level)
   }
 )
 
@@ -196,14 +196,14 @@ moderate <- group(
   },
   heart_rate = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 5), c("haukeland", "vyntus"), conf_level)
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 5), c("haukeland", "vyntus"), conf_level = conf_level)
   },
   ventilation = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, log(person$bmi), person$sex, person$height * person$sex)
     )
-    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level)
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level = conf_level)
   },
   oxygen_pulse = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, log(person$bmi), person$height * person$sex))
@@ -218,7 +218,7 @@ moderate <- group(
       person, sex,
       c(person$height, person$sex, person$height * person$sex)
     )
-    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.6), c("vyntus"), conf_level)
+    y_hat_ci(x, "breathing_frequency", .self, function(x) x ^ (1 / 0.6), c("vyntus"), conf_level = conf_level)
   }
 )
 
@@ -309,14 +309,14 @@ fontan <- group(
   },
   heart_rate = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$sex, person$bmi * person$sex))
-    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 3.5), "haukeland", conf_level)
+    y_hat_ci(x, "heart_rate", .self, function(x) x ^ (1 / 3.5), "haukeland", conf_level = conf_level)
   },
   ventilation = function(.self, person, conf_level = 0.95) {
     x <- create_x(
       person, sex,
       c(person$height, log(person$bmi), person$height * person$sex)
     )
-    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level)
+    y_hat_ci(x, "ventilation", .self, exp, c("haukeland", "vyntus"), conf_level = conf_level)
   },
   oxygen_pulse = function(.self, person, conf_level = 0.95) {
     x <- create_x(person, sex, c(person$height, person$bmi, person$bmi * person$sex))
@@ -331,6 +331,6 @@ fontan <- group(
       person, sex,
       c(person$height, log(person$bmi) * person$sex)
     )
-    y_hat_ci(x, "breathing_frequency", .self, exp, c("vyntus"), conf_level)
+    y_hat_ci(x, "breathing_frequency", .self, exp, c("vyntus"), conf_level = conf_level)
   }
 )
