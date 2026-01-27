@@ -157,7 +157,7 @@ server <- function(input, output) {
       metric_fun = function(g, p, conf_level) g$vo2_ml_min(g, p, conf_level),
       ylab = "VO2 ml/min",
       main = "VO2 by group",
-      legend_pos = "topright",
+      legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
   })
