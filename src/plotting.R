@@ -4,13 +4,14 @@ plot_metric_by_bmi <- function(
   bmis = seq(5, 35, by = 0.1),
   group_label = NULL,
   show_ci = TRUE,
-  legend_pos = "topleft"
+  legend_pos = "topleft",
+  conf_level = 0.95
 ) {
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
   for (sex in 0:1) {
     for (i in seq_along(bmis)) {
       p <- person(sex = sex, height = height, bmi = bmis[i])
-      res <- metric_fun(group, p)
+      res <- metric_fun(group, p, conf_level)
       y_est[sex+1, i] <- res[1, 1]
       if (show_ci) {
         y_lower[sex+1, i] <- res[1, 2]
@@ -41,7 +42,8 @@ plot_metric_by_bmi <- function(
     matlines(bmis, t(y_upper), lty = 2, col = strong_col)
   }
   if (show_ci) {
-    legend_labels <- c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "")
+    ci_label <- sprintf("%.0f%% CI", conf_level * 100)
+    legend_labels <- c("Boy (estimate)", sprintf("Boy (%s)", ci_label), "Girl (estimate)", sprintf("Girl (%s)", ci_label), "")
     legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
     legend_lty <- c(1, 2, 1, 2, NA)
     legend_lwd <- rep(2, 5)
@@ -69,13 +71,14 @@ plot_metric_by_height <- function(
   heights = 100:210,
   group_label = NULL,
   show_ci = TRUE,
-  legend_pos = "topleft"
+  legend_pos = "topleft",
+  conf_level = 0.95
 ) {
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
   for (sex in 0:1) {
     for (i in seq_along(heights)) {
       p <- person(sex = sex, height = heights[i], bmi = bmi)
-      res <- metric_fun(group, p)
+      res <- metric_fun(group, p, conf_level)
       y_est[sex+1, i] <- res[1, 1]
       if (show_ci) {
         y_lower[sex+1, i] <- res[1, 2]
@@ -106,7 +109,8 @@ plot_metric_by_height <- function(
     matlines(heights, t(y_upper), lty = 2, col = strong_col)
   }
   if (show_ci) {
-    legend_labels <- c("Boy (estimate)", "Boy (CI)", "Girl (estimate)", "Girl (CI)", "")
+    ci_label <- sprintf("%.0f%% CI", conf_level * 100)
+    legend_labels <- c("Boy (estimate)", sprintf("Boy (%s)", ci_label), "Girl (estimate)", sprintf("Girl (%s)", ci_label), "")
     legend_cols <- c(strong_col[2], strong_col[2], strong_col[1], strong_col[1], NA)
     legend_lty <- c(1, 2, 1, 2, NA)
     legend_lwd <- rep(2, 5)
@@ -134,7 +138,8 @@ plot_metric_by_group <- function(
   groups = c("simple", "moderate", "fontan"),
   group_labels = c("Simple", "Moderate", "Fontan"),
   show_ci = TRUE,
-  legend_pos = "topright"
+  legend_pos = "topright",
+  conf_level = 0.95
   ) {
   y_est <- matrix(NA, nrow = 2, ncol = length(groups))
   y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
@@ -142,7 +147,7 @@ plot_metric_by_group <- function(
     for (i in seq_along(groups)) {
       g <- get(groups[i])
       p <- person(sex = sex, height = height, bmi = bmi)
-      vals <- metric_fun(g, p)[1, ]
+      vals <- metric_fun(g, p, conf_level)[1, ]
       y_est[sex+1, i] <- vals[1]
       y_range <- range(y_est, na.rm = TRUE)
       if (show_ci) {

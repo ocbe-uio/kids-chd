@@ -25,6 +25,15 @@ ui <- fluidPage(
       "bmi", "BMI (kg/m²)",
       value = 20.0, min = 0.1, step = 0.1, max = 50.0
     ),
+
+    # Step 3: selecting confidence level
+    h2("Select confidence level"),
+    sliderInput(
+      "conf_level", "Confidence level (%)",
+      value = 95L, min = 80L, max = 99L, step = 1L,
+      ticks = FALSE
+    ),
+
     actionButton("submit", "Calculate endpoints")
   ),
 
@@ -50,7 +59,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      version 0.0.0.9031
+      version 0.0.0.9032
     </p>')
   )
 )

@@ -15,10 +15,12 @@ y.data.frame <- function(x, beta_hat, weights, grid, transf) {
   )
 }
 
-ci <- function(y_hat, X, sigma_beta_hat, weights, transf) {
+ci <- function(y_hat, X, sigma_beta_hat, weights, transf, conf_level = 0.95) {
   # Calculate the confidence intervals
+  # conf_level is the confidence level (e.g., 0.95 for 95% CI)
+  # For bilateral CI, we need the quantile at (1 + conf_level) / 2
   sigma_y_hat <- as.matrix(X) %*% sigma_beta_hat %*% t(as.matrix(X))
-  q_norm <- qnorm(0.975)
+  q_norm <- qnorm((1 + conf_level) / 2)
   ci_transformed <- as.numeric(y_hat$transformed) + cbind(
     -q_norm * sqrt(diag(sigma_y_hat)),
     q_norm * sqrt(diag(sigma_y_hat))
@@ -32,7 +34,7 @@ expand_matrix <- function(mx, times) {
   kronecker(rep(1, times), as.matrix(mx))
 }
 
-y_hat_ci <- function(x, metric, metric_data, transf, drop_cols = NULL) {
+y_hat_ci <- function(x, metric, metric_data, transf, drop_cols = NULL, conf_level = 0.95) {
   x <- matrix(x, ncol = 2L) # Workaround for when x is c()
   beta_hat <- metric_data$beta_hat[[metric]]
   sigma_beta_hat <- metric_data$sigma_beta_hat[[metric]]
@@ -47,7 +49,7 @@ y_hat_ci <- function(x, metric, metric_data, transf, drop_cols = NULL) {
       x_across_configs[drop_cols] <- NULL
 
       y_hat_list <- y(x_across_configs, beta_hat, weights, grid, transf)
-      ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf)
+      ci <- ci(y_hat_list, x_across_configs, sigma_beta_hat, weights, transf, conf_level)
 
       # Return vector
       cbind(y_hat_list$detransformed_avg, ci)
