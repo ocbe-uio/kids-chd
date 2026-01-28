@@ -1,7 +1,3 @@
-# Deployment v0.0.0.9004
-
-* Use lowercase "l" for liter units in VO2, ventilation and O2 metric labels
-
 # (under development)
 
 * Calculation of confidence intervals (issue #9)
