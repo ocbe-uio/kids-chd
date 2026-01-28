@@ -14,7 +14,7 @@ This application provides predicted cardiopulmonary endpoints for children with 
 
 - **VO₂** (oxygen consumption) in ml/min and ml/kg/min
 - **Heart rate** (bpm)
-- **Ventilation** (L/min)
+- **Ventilation** (l/min)
 - **Oxygen pulse** (ml/beat)
 - **VE/VCO₂ slope** (ventilatory efficiency)
 - **Breathing frequency** (breaths/min)
