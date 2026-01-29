@@ -38,7 +38,7 @@ ui <- fluidPage(
     h2("Select plot ranges"),
     sliderInput(
       "height_range", "Height range (cm)",
-      value = c(100, 210), min = 50, max = 220, step = 1
+      value = c(100L, 210L), min = 50L, max = 220L, step = 1L
     ),
     sliderInput(
       "bmi_range", "BMI range (kg/m²)",
