@@ -1,8 +1,8 @@
 ui <- fluidPage(
   titlePanel("Kids with Congenital Heart Defects"),
   sidebarPanel(
-    # Step 1: selecting diagnostic group
-    h2("Select group"),
+    # Step 1: selecting diagnostic group and covariates
+    h2("Select covariates"),
     radioButtons(
       "group", "Diagnostic group",
       choiceNames = c(
@@ -12,11 +12,6 @@ ui <- fluidPage(
       ),
       choiceValues = c("simple", "moderate", "fontan")
     ),
-
-    # Step 2: selecting covariates
-    h2("Select covariates"),
-
-    # Sex selection removed; results will be shown for both genders
     numericInput(
       "height", "Height (cm)",
       value = 150L, min = 0L, step = 1L, max = 210L
@@ -26,7 +21,7 @@ ui <- fluidPage(
       value = 20.0, min = 0.1, step = 0.1, max = 50.0
     ),
 
-    # Step 3: selecting confidence level
+    # Step 2: selecting confidence level
     h2("Select confidence level"),
     sliderInput(
       "conf_level", "Confidence level (%)",
