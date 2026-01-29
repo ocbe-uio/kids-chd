@@ -169,6 +169,7 @@ server <- function(input, output) {
       ylab = "VO2 ml/min",
       main = "VO2 by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -180,6 +181,7 @@ server <- function(input, output) {
       ylab = "VO2 ml/min",
       main = "VO2 by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       legend_pos = "topleft",
       conf_level = input$conf_level / 100
     )
@@ -205,6 +207,7 @@ server <- function(input, output) {
       ylab = "VO2 ml/kg/min",
       main = "VO2/kg by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -216,6 +219,7 @@ server <- function(input, output) {
       ylab = "VO2 ml/kg/min",
       main = "VO2/kg by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
@@ -241,6 +245,7 @@ server <- function(input, output) {
       ylab = "Heart rate (BPM)",
       main = "Heart rate by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -252,6 +257,7 @@ server <- function(input, output) {
       ylab = "Heart rate (BPM)",
       main = "Heart rate by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -276,6 +282,7 @@ server <- function(input, output) {
       ylab = "Ventilation (l/min)",
       main = "Ventilation by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -287,6 +294,7 @@ server <- function(input, output) {
       ylab = "Ventilation (l/min)",
       main = "Ventilation by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       legend_pos = "bottomright",
       conf_level = input$conf_level / 100
     )
@@ -312,6 +320,7 @@ server <- function(input, output) {
       ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -323,6 +332,7 @@ server <- function(input, output) {
       ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       conf_level = input$conf_level / 100
     )
   })
@@ -348,6 +358,7 @@ server <- function(input, output) {
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       show_ci = FALSE,
       legend_pos = "topright",
       conf_level = input$conf_level / 100
@@ -361,6 +372,7 @@ server <- function(input, output) {
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       show_ci = FALSE,
       legend_pos = "topright",
       conf_level = input$conf_level / 100
@@ -387,6 +399,7 @@ server <- function(input, output) {
       ylab = "Breathing frequency (breaths/min)",
       main = "Breathing frequency by height",
       group_label = group_names[input$group],
+      height_range = input$height_range,
       legend_pos = "topright",
       conf_level = input$conf_level / 100
     )
@@ -399,6 +412,7 @@ server <- function(input, output) {
       ylab = "Breathing frequency (breaths/min)",
       main = "Breathing frequency by BMI",
       group_label = group_names[input$group],
+      bmi_range = input$bmi_range,
       conf_level = input$conf_level / 100
     )
   })

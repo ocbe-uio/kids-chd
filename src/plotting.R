@@ -1,12 +1,13 @@
 # Generic helper for plotting a metric by BMI (for both sexes, with CIs)
 plot_metric_by_bmi <- function(
   group, height, metric_fun, ylab, main,
-  bmis = seq(5, 35, by = 0.1),
+  bmi_range = c(5, 35),
   group_label = NULL,
   show_ci = TRUE,
   legend_pos = "topleft",
   conf_level = 0.95
 ) {
+  bmis <- seq(bmi_range[1], bmi_range[2], by = 0.1)
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
   for (sex in 0:1) {
     for (i in seq_along(bmis)) {
@@ -68,12 +69,13 @@ plot_metric_by_bmi <- function(
 ## Generic helper for plotting a metric by height (for both sexes, with CIs)
 plot_metric_by_height <- function(
   group, bmi, metric_fun, ylab, main,
-  heights = 100:210,
+  height_range = c(100, 210),
   group_label = NULL,
   show_ci = TRUE,
   legend_pos = "topleft",
   conf_level = 0.95
 ) {
+  heights <- seq(height_range[1], height_range[2], by = 1)
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
   for (sex in 0:1) {
     for (i in seq_along(heights)) {

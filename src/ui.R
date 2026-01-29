@@ -34,6 +34,17 @@ ui <- fluidPage(
       ticks = FALSE
     ),
 
+    # Step 4: selecting plot ranges
+    h2("Select plot ranges"),
+    sliderInput(
+      "height_range", "Height range (cm)",
+      value = c(100L, 210L), min = 50L, max = 220L, step = 1L
+    ),
+    sliderInput(
+      "bmi_range", "BMI range (kg/m²)",
+      value = c(5, 35), min = 2, max = 50, step = 0.5
+    ),
+
     actionButton("submit", "Calculate endpoints")
   ),
 
@@ -59,7 +70,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      version 0.0.0.9034
+      version 0.0.0.9035
     </p>')
   )
 )
