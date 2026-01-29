@@ -35,9 +35,9 @@ server <- function(input, output) {
     breathing_frequency_results <- get_metric_ci(group$breathing_frequency)
 
     metrics <- c(
-      "Absolute VO₂ (mL/min)", "VO₂ relative to body mass (mL/kg/min)",
-      "Heart rate (BPM)", "Minute ventilation (L/min)",
-      "Oxygen pulse (mL/beat)", "Ventilatory efficiency (VE/VCO₂ slope)",
+      "Absolute VO₂ (ml/min)", "VO₂ relative to body mass (ml/kg/min)",
+      "Heart rate (BPM)", "Minute ventilation (l/min)",
+      "Oxygen pulse (ml/beat)", "Ventilatory efficiency (VE/VCO₂ slope)",
       "Breathing frequency (breaths/min)"
     )
 
@@ -262,7 +262,7 @@ server <- function(input, output) {
       height = input$height,
       bmi = input$bmi,
       metric_fun = function(g, p, conf_level) g$ventilation(g, p, conf_level),
-      ylab = "Ventilation (L/min)",
+      ylab = "Ventilation (l/min)",
       main = "Ventilation by group",
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
@@ -273,7 +273,7 @@ server <- function(input, output) {
       group = get(input$group),
       bmi = input$bmi,
       metric_fun = function(g, p, conf_level) g$ventilation(g, p, conf_level),
-      ylab = "Ventilation (L/min)",
+      ylab = "Ventilation (l/min)",
       main = "Ventilation by height",
       group_label = group_names[input$group],
       conf_level = input$conf_level / 100
@@ -284,7 +284,7 @@ server <- function(input, output) {
       group = get(input$group),
       height = input$height,
       metric_fun = function(g, p, conf_level) g$ventilation(g, p, conf_level),
-      ylab = "Ventilation (L/min)",
+      ylab = "Ventilation (l/min)",
       main = "Ventilation by BMI",
       group_label = group_names[input$group],
       legend_pos = "bottomright",
@@ -298,7 +298,7 @@ server <- function(input, output) {
       height = input$height,
       bmi = input$bmi,
       metric_fun = function(g, p, conf_level) g$oxygen_pulse(g, p, conf_level),
-      ylab = "Oxygen pulse (mL/beat)",
+      ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by group",
       legend_pos = "topright",
       conf_level = input$conf_level / 100
@@ -309,7 +309,7 @@ server <- function(input, output) {
       group = get(input$group),
       bmi = input$bmi,
       metric_fun = function(g, p, conf_level) g$oxygen_pulse(g, p, conf_level),
-      ylab = "Oxygen pulse (mL/beat)",
+      ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by height",
       group_label = group_names[input$group],
       conf_level = input$conf_level / 100
@@ -320,7 +320,7 @@ server <- function(input, output) {
       group = get(input$group),
       height = input$height,
       metric_fun = function(g, p, conf_level) g$oxygen_pulse(g, p, conf_level),
-      ylab = "Oxygen pulse (mL/beat)",
+      ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by BMI",
       group_label = group_names[input$group],
       conf_level = input$conf_level / 100
