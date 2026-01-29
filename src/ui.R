@@ -38,11 +38,11 @@ ui <- fluidPage(
     h2("Select plot ranges"),
     sliderInput(
       "height_range", "Height range (cm)",
-      value = c(100L, 210L), min = 50L, max = 220L, step = 1L
+      value = c(150L, 180L), min = 100L, max = 210L, step = 1L
     ),
     sliderInput(
       "bmi_range", "BMI range (kg/m²)",
-      value = c(5, 35), min = 2, max = 50, step = 0.5
+      value = c(18.5, 25), min = 5, max = 35, step = 0.5
     ),
 
     actionButton("submit", "Calculate endpoints")
