@@ -36,7 +36,7 @@ server <- function(input, output) {
 
     metrics <- c(
       "Absolute VO₂ (ml/min)", "VO₂ relative to body mass (ml/kg/min)",
-      "Heart rate (BPM)", "Minute ventilation (l/min)",
+      "Heart rate (BPM)", "Ventilation (l/min)",
       "Oxygen pulse (ml/beat)", "Ventilatory efficiency (VE/VCO₂ slope)",
       "Breathing frequency (breaths/min)"
     )
