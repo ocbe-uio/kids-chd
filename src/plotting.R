@@ -7,7 +7,7 @@ plot_metric_by_bmi <- function(
   legend_pos = "topleft",
   conf_level = 0.95
 ) {
-  bmis <- seq(bmi_range[1], bmi_range[2], by = 0.1)
+  bmis <- seq(bmi_range[1], bmi_range[2], length.out = 200)
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
   for (sex in 0:1) {
     for (i in seq_along(bmis)) {
@@ -75,7 +75,7 @@ plot_metric_by_height <- function(
   legend_pos = "topleft",
   conf_level = 0.95
 ) {
-  heights <- seq(height_range[1], height_range[2], by = 1)
+  heights <- seq(height_range[1], height_range[2], length.out = 200)
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
   for (sex in 0:1) {
     for (i in seq_along(heights)) {
