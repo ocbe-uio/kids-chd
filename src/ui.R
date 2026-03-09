@@ -5,22 +5,28 @@ ui <- fluidPage(
       h2("Select covariates"),
       radioButtons(
         "group", "Diagnostic group",
-        choiceNames = c(
-          "Simple defects",
-          "Moderate complex defects",
+        choiceNames = list(
+          tagList(
+            "Simple defects",
+            tags$span(
+              style = "margin-left: 5px; cursor: pointer;",
+              title = "Atrial and ventricular septal defect, Coarctation of the Aorta, Left Ventricular Outflow Tract Obstruction",
+              "(?)"
+            )
+          ),
+          tagList(
+            "Moderate complex defects",
+            tags$span(
+              style = "margin-left: 5px; cursor: pointer;",
+              title = "Tetralogy of Fallot, Transposition of the Great Arteries",
+              "(?)"
+            )
+          ),
           "Univentricular defects with Fontan circulation"
         ),
-        choiceValues = c("simple", "moderate", "fontan")
+          choiceValues = c("simple", "moderate", "fontan")
       ),
-      div(
-        style = "margin-top: 5px; margin-bottom: 10px; border: 1px solid #bce8f1; padding: 10px; border-radius: 4px; background: #d9edf7; font-size: 0.9em;",
-        tags$ul(
-          style = "margin: 0; padding-left: 18px;",
-          tags$li(HTML("<strong>Simple defects:</strong> Atrial and ventricular septal defect, Coarctation of the Aorta, Left Ventricular Outflow Tract Obstruction")),
-          tags$li(HTML("<strong>Moderate complex defects:</strong> Tetralogy of Fallot, Transposition of the Great Arteries")),
-          tags$li(HTML("<strong>Univentricular defects with a Fontan circulation</strong>"))
-        )
-      ),
+        # Removed explanatory box; tooltips are now in radioButtons
       numericInput(
         "height", "Height (cm)",
         value = 150L, min = 0L, step = 1L, max = 210L
