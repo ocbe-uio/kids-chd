@@ -1,5 +1,38 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects"),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  ),
+  tags$div(
+    class = "app-header",
+    tags$div(
+      class = "app-header-title",
+      tags$h1("Kids with Congenital Heart Defects"),
+      tags$p("Oslo University Hospital, Department of Paediatric Cardiology")
+    ),
+    tags$div(
+      class = "app-header-logos",
+      tags$a(
+        href = "https://oslo-universitetssykehus.no",
+        target = "_blank",
+        rel = "noopener noreferrer",
+        tags$img(
+          src = "https://www.helse-sorost.no/49c8ae/contentassets/3e88e25ed18c497a925a0497575b2c78/ous/bokmal---oslo-universitetssykehus---rgb.png",
+          alt = "Oslo University Hospital logo",
+          title = "Oslo University Hospital"
+        )
+      ),
+      tags$a(
+        href = "https://www.uio.no",
+        target = "_blank",
+        rel = "noopener noreferrer",
+        tags$img(
+          src = "https://www.uio.no/om/designmanual/profilelementer/logo/formell-logo/02_uio_full_logo_no_pos.jpg",
+          alt = "University of Oslo logo",
+          title = "University of Oslo"
+        )
+      )
+    )
+  ),
   sidebarPanel(
       # Step 1: selecting diagnostic group and covariates
       h2("Select covariates"),
