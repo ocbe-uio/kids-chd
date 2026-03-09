@@ -72,7 +72,7 @@ ui <- fluidPage(
       actionButton("submit", "Calculate endpoints"),
 
       # Collapsible options section
-      actionButton("toggle_options", label = "Additional Options ▼"),
+      actionButton("toggle_options", label = "Additional Options ▼", style = "background-color: #e0e0e0; color: #555; border-color: #ccc;"),
       conditionalPanel(
         condition = "input.toggle_options % 2 == 1",
         div(style = "margin-top: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #f9f9f9;",
