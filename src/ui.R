@@ -1,46 +1,50 @@
 ui <- fluidPage(
   titlePanel("Kids with Congenital Heart Defects"),
   sidebarPanel(
-    # Step 1: selecting diagnostic group and covariates
-    h2("Select covariates"),
-    radioButtons(
-      "group", "Diagnostic group",
-      choiceNames = c(
-        "Simple defects",
-        "Moderate complex defects",
-        "Univentricular defects with Fontan circulation"
+      # Step 1: selecting diagnostic group and covariates
+      h2("Select covariates"),
+      radioButtons(
+        "group", "Diagnostic group",
+        choiceNames = c(
+          "Simple defects",
+          "Moderate complex defects",
+          "Univentricular defects with Fontan circulation"
+        ),
+        choiceValues = c("simple", "moderate", "fontan")
       ),
-      choiceValues = c("simple", "moderate", "fontan")
-    ),
-    numericInput(
-      "height", "Height (cm)",
-      value = 150L, min = 0L, step = 1L, max = 210L
-    ),
-    numericInput(
-      "bmi", "BMI (kg/m²)",
-      value = 20.0, min = 0.1, step = 0.1, max = 50.0
-    ),
+      numericInput(
+        "height", "Height (cm)",
+        value = 150L, min = 0L, step = 1L, max = 210L
+      ),
+      numericInput(
+        "bmi", "BMI (kg/m²)",
+        value = 20.0, min = 0.1, step = 0.1, max = 50.0
+      ),
+      actionButton("submit", "Calculate endpoints"),
 
-    actionButton("submit", "Calculate endpoints"),
-
-    # Step 2: selecting confidence level
-    h2("Select confidence level"),
-    sliderInput(
-      "conf_level", "Confidence level (%)",
-      value = 95L, min = 80L, max = 99L, step = 1L,
-      ticks = FALSE
-    ),
-
-    # Step 4: selecting plot ranges
-    h2("Select plot ranges"),
-    sliderInput(
-      "height_range", "Height range (cm)",
-      value = c(150L, 180L), min = 100L, max = 210L, step = 1L
-    ),
-    sliderInput(
-      "bmi_range", "BMI range (kg/m²)",
-      value = c(18.5, 25), min = 5, max = 35, step = 0.5
-    )
+      # Collapsible options section
+      actionButton("toggle_options", label = "Additional Options ▼"),
+      conditionalPanel(
+        condition = "input.toggle_options % 2 == 1",
+        div(style = "margin-top: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #f9f9f9;",
+          h2("Options"),
+          h3("Confidence level"),
+          sliderInput(
+            "conf_level", "Confidence level (%)",
+            value = 95L, min = 80L, max = 99L, step = 1L,
+            ticks = FALSE
+          ),
+          h3("Plot ranges"),
+          sliderInput(
+            "height_range", "Height range (cm)",
+            value = c(150L, 180L), min = 100L, max = 210L, step = 1L
+          ),
+          sliderInput(
+            "bmi_range", "BMI range (kg/m²)",
+            value = c(18.5, 25), min = 5, max = 35, step = 0.5
+          )
+        )
+      )
   ),
 
   mainPanel(
