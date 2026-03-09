@@ -1,5 +1,39 @@
 ui <- fluidPage(
-  titlePanel("Kids with Congenital Heart Defects"),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  ),
+  tags$div(
+    class = "app-header",
+    tags$div(
+      class = "app-header-title",
+      tags$h1("Kids with Congenital Heart Defects"),
+      tags$p("Oslo University Hospital, Department of Paediatric Cardiology")
+    ),
+    tags$div(
+      class = "app-header-logos",
+      tags$a(
+        href = "https://oslo-universitetssykehus.no",
+        target = "_blank",
+        rel = "noopener noreferrer",
+        tags$img(
+          src = "https://www.helse-sorost.no/49c8ae/contentassets/3e88e25ed18c497a925a0497575b2c78/ous/bokmal---oslo-universitetssykehus---rgb.png",
+          alt = "Oslo University Hospital logo",
+          title = "Oslo University Hospital",
+          style = "width: 40%; float: right;"
+        )
+      ),
+      tags$a(
+        href = "https://www.uio.no",
+        target = "_blank",
+        rel = "noopener noreferrer",
+        tags$img(
+          src = "https://www.uio.no/om/designmanual/profilelementer/logo/formell-logo/03_uio_full_logo_no_pos.png",
+          alt = "University of Oslo logo",
+          title = "University of Oslo"
+        )
+      )
+    )
+  ),
   sidebarPanel(
       # Step 1: selecting diagnostic group and covariates
       h2("Select covariates"),
@@ -38,7 +72,7 @@ ui <- fluidPage(
       actionButton("submit", "Calculate endpoints"),
 
       # Collapsible options section
-      actionButton("toggle_options", label = "Additional Options ▼"),
+      actionButton("toggle_options", label = "Additional Options ▼", style = "background-color: #e0e0e0; color: #555; border-color: #ccc;"),
       conditionalPanel(
         condition = "input.toggle_options % 2 == 1",
         div(style = "margin-top: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #f9f9f9;",
@@ -96,7 +130,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      version 0.0.0.9039
+      version 0.0.0.9040
     </p>')
   )
 )
