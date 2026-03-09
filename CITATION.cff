@@ -9,7 +9,7 @@ authors:
     affiliation: "Oslo Centre for Biostatistics and Epidemiology (OCBE), University of Oslo"
 repository-code: "https://github.com/ocbe-uio/kids-chd"
 license: GPL-3.0
-version: 0.0.0.9041
+version: 0.0.0.9042
 abstract: "A Shiny web application for calculating cardiopulmonary exercise test (CPET) endpoints for children with congenital heart defects. The application provides predicted cardiopulmonary endpoints (VO2, heart rate, ventilation, oxygen pulse, VE/VCO2 slope, and breathing frequency) based on diagnostic group, height, and BMI, with confidence intervals."
 keywords:
   - "congenital heart defects"
