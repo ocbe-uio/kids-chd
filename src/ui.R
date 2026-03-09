@@ -1,4 +1,7 @@
+library(shinybusy)
+
 ui <- fluidPage(
+  shinybusy::add_busy_spinner(spin = "fading-circle", timeout = 1000, color = "#337ab7", position = "full-page"),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
