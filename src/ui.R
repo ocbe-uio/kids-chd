@@ -67,13 +67,14 @@ ui <- fluidPage(
       ),
       numericInput(
         "weight", "Weight (kg)",
-        value = 45, min = 1, step = 0.5, max = 250
+        value = 45, min = 1, step = 0.1, max = 100
       ),
       tags$div(
         role = "status",
         "aria-live" = "polite",
         textOutput("calculated_bmi")
       ),
+      tags$br(),
       actionButton("submit", "Calculate endpoints"),
 
       # Collapsible options section
