@@ -18,7 +18,8 @@ ui <- fluidPage(
         tags$img(
           src = "https://www.helse-sorost.no/49c8ae/contentassets/3e88e25ed18c497a925a0497575b2c78/ous/bokmal---oslo-universitetssykehus---rgb.png",
           alt = "Oslo University Hospital logo",
-          title = "Oslo University Hospital"
+          title = "Oslo University Hospital",
+          style = "width: 40%; float: right;"
         )
       ),
       tags$a(
@@ -28,7 +29,7 @@ ui <- fluidPage(
         tags$img(
           src = "https://www.uio.no/om/designmanual/profilelementer/logo/formell-logo/02_uio_full_logo_no_pos.jpg",
           alt = "University of Oslo logo",
-          title = "University of Oslo"
+          title = "University of Oslo",
         )
       )
     )
