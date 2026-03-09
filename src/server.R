@@ -7,12 +7,24 @@ server <- function(input, output) {
   # Mapping of group IDs to display names (used in multiple plots)
   group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
 
+  # Compute BMI from weight and height inputs
+  computed_bmi <- reactive({
+    req(input$weight, input$height)
+    height_m <- input$height / 100
+    req(height_m > 0)
+    input$weight / (height_m^2)
+  })
+
+  output$calculated_bmi <- renderText({
+    sprintf("Calculated BMI: %.1f kg/m²", computed_bmi())
+  })
+
   output$results_table <- renderTable({
     group <- get(input$group)
     conf_level <- input$conf_level / 100  # Convert from percentage to decimal
     # Calculate for both sexes: 1 = Boy, 0 = Girl
-    person_male <- person(sex = 1, height = input$height, bmi = input$bmi)
-    person_female <- person(sex = 0, height = input$height, bmi = input$bmi)
+    person_male <- person(sex = 1, height = input$height, bmi = computed_bmi())
+    person_female <- person(sex = 0, height = input$height, bmi = computed_bmi())
 
     # Helper to get results for both sexes
     get_metric <- function(fun) {
@@ -153,7 +165,7 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$vo2_ml_min(g, p, conf_level),
       ylab = "VO2 ml/min",
       main = "VO2 by group",
@@ -164,7 +176,7 @@ server <- function(input, output) {
   output$vo2_ml_min_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$vo2_ml_min(g, p, conf_level),
       ylab = "VO2 ml/min",
       main = "VO2 by height",
@@ -191,7 +203,7 @@ server <- function(input, output) {
   output$vo2_ml_kg_min_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$vo2_ml_kg_min(g, p, conf_level),
       ylab = "VO2 ml/kg/min",
       main = "VO2/kg by group",
@@ -202,7 +214,7 @@ server <- function(input, output) {
   output$vo2_ml_kg_min_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$vo2_ml_kg_min(g, p, conf_level),
       ylab = "VO2 ml/kg/min",
       main = "VO2/kg by height",
@@ -229,7 +241,7 @@ server <- function(input, output) {
   output$heart_rate_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$heart_rate(g, p, conf_level),
       ylab = "Heart rate (BPM)",
       main = "Heart rate by group",
@@ -240,7 +252,7 @@ server <- function(input, output) {
   output$heart_rate_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$heart_rate(g, p, conf_level),
       ylab = "Heart rate (BPM)",
       main = "Heart rate by height",
@@ -266,7 +278,7 @@ server <- function(input, output) {
   output$ventilation_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$ventilation(g, p, conf_level),
       ylab = "Ventilation (l/min)",
       main = "Ventilation by group",
@@ -277,7 +289,7 @@ server <- function(input, output) {
   output$ventilation_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$ventilation(g, p, conf_level),
       ylab = "Ventilation (l/min)",
       main = "Ventilation by height",
@@ -304,7 +316,7 @@ server <- function(input, output) {
   output$oxygen_pulse_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$oxygen_pulse(g, p, conf_level),
       ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by group",
@@ -315,7 +327,7 @@ server <- function(input, output) {
   output$oxygen_pulse_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$oxygen_pulse(g, p, conf_level),
       ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by height",
@@ -341,7 +353,7 @@ server <- function(input, output) {
   output$ve_vco2_slope_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$ve_vco2_slope(g, p, conf_level),
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by group",
@@ -353,7 +365,7 @@ server <- function(input, output) {
   output$ve_vco2_slope_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$ve_vco2_slope(g, p, conf_level),
       ylab = "VE/VCO2 slope",
       main = "VE/VCO2 slope by height",
@@ -383,7 +395,7 @@ server <- function(input, output) {
   output$breathing_frequency_plot_group <- renderPlot({
     plot_metric_by_group(
       height = input$height,
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$breathing_frequency(g, p, conf_level),
       ylab = "Breathing frequency (breaths/min)",
       main = "Breathing frequency by group",
@@ -394,7 +406,7 @@ server <- function(input, output) {
   output$breathing_frequency_plot_height <- renderPlot({
     plot_metric_by_height(
       group = get(input$group),
-      bmi = input$bmi,
+      bmi = computed_bmi(),
       metric_fun = function(g, p, conf_level) g$breathing_frequency(g, p, conf_level),
       ylab = "Breathing frequency (breaths/min)",
       main = "Breathing frequency by height",
