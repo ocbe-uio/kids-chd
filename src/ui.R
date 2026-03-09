@@ -27,9 +27,9 @@ ui <- fluidPage(
         target = "_blank",
         rel = "noopener noreferrer",
         tags$img(
-          src = "https://www.uio.no/om/designmanual/profilelementer/logo/formell-logo/02_uio_full_logo_no_pos.jpg",
+          src = "https://www.uio.no/om/designmanual/profilelementer/logo/formell-logo/03_uio_full_logo_no_pos.png",
           alt = "University of Oslo logo",
-          title = "University of Oslo",
+          title = "University of Oslo"
         )
       )
     )
