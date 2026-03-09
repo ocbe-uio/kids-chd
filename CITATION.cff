@@ -32,9 +32,9 @@ references:
         given-names: "René"
       - family-names: Edvardsen
         given-names: Elisabeth
-      - family-names: Holmstrøm
+      - family-names: "Holmstrøm"
         given-names: Henrik
-      - family-names: Möller
+      - family-names: "Möller"
         given-names: Thomas
     journal: "European Journal of Pediatrics"
     volume: 184
