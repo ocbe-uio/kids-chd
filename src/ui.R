@@ -1,4 +1,7 @@
+library(shinybusy)
+
 ui <- fluidPage(
+  shinybusy::add_busy_spinner(spin = "fading-circle", timeout = 1000, color = "#337ab7", position = "full-page"),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
@@ -114,7 +117,8 @@ ui <- fluidPage(
         tableOutput("results_table"),
         h2("Plots"),
         HTML("The selected diagnostic group and covariates are highlighted in the plots below."),
-        uiOutput("plots")
+        uiOutput("plots"),
+        downloadButton("download_pdf", "Download PDF Report")
       )
     ),
     # Footer with source code link, version, and reference
@@ -136,7 +140,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      version 0.0.0.9041
+      version 0.0.0.9042
     </p>')
   )
 )
