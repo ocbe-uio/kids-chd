@@ -2,7 +2,6 @@ source("classes.R")
 source("methods.R")
 source("models.R")
 source("plotting.R")
-library(shinyjs)
 
 server <- function(input, output) {
   # Mapping of group IDs to display names (used in multiple plots)
@@ -392,13 +391,8 @@ server <- function(input, output) {
     )
   })
 
-  observe({
-    shinyjs::enable("download_pdf_btn")
-  })
-
   output$download_pdf <- downloadHandler(
     filename = function() {
-      shinyjs::disable("download_pdf_btn")
       paste0("kids-chd-report-", Sys.Date(), ".pdf")
     },
     content = function(file) {
@@ -426,7 +420,6 @@ server <- function(input, output) {
         # that source("classes.R") etc. inside the Rmd resolve correctly.
         knit_root_dir = getwd()
       )
-      shinyjs::enable("download_pdf_btn")
     }
   )
 

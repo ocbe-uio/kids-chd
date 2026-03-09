@@ -154,6 +154,187 @@ names(df)[5] <- paste0(ci_col, " Girl")
 knitr::kable(df, booktabs = TRUE, caption = "Predicted CPET endpoints")
 ```
 
+\newpage
+
+## Plots
+
+```{r plots-vo2, fig.height=9, fig.width=7, fig.cap="Absolute VO\\textsubscript{2} (ml/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_min(g, p, cl),
+  ylab = "VO2 (ml/min)", main = "VO2 by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_min(g, p, cl),
+  ylab = "VO2 (ml/min)", main = "VO2 by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$vo2_ml_min(g, p, cl),
+  ylab = "VO2 (ml/min)", main = "VO2 by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, legend_pos = "topleft",
+  conf_level = conf_level
+)
+```
+
+```{r plots-vo2kg, fig.height=9, fig.width=7, fig.cap="VO\\textsubscript{2} relative to body mass (ml/kg/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_kg_min(g, p, cl),
+  ylab = "VO2/kg (ml/kg/min)", main = "VO2/kg by diagnostic group",
+  legend_pos = "topright", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_kg_min(g, p, cl),
+  ylab = "VO2/kg (ml/kg/min)", main = "VO2/kg by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$vo2_ml_kg_min(g, p, cl),
+  ylab = "VO2/kg (ml/kg/min)", main = "VO2/kg by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, legend_pos = "bottomleft",
+  conf_level = conf_level
+)
+```
+
+```{r plots-hr, fig.height=9, fig.width=7, fig.cap="Heart rate (BPM)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$heart_rate(g, p, cl),
+  ylab = "Heart rate (BPM)", main = "Heart rate by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$heart_rate(g, p, cl),
+  ylab = "Heart rate (BPM)", main = "Heart rate by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$heart_rate(g, p, cl),
+  ylab = "Heart rate (BPM)", main = "Heart rate by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, conf_level = conf_level
+)
+```
+
+```{r plots-ve, fig.height=9, fig.width=7, fig.cap="Ventilation (l/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ventilation(g, p, cl),
+  ylab = "Ventilation (l/min)", main = "Ventilation by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ventilation(g, p, cl),
+  ylab = "Ventilation (l/min)", main = "Ventilation by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$ventilation(g, p, cl),
+  ylab = "Ventilation (l/min)", main = "Ventilation by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, legend_pos = "bottomright",
+  conf_level = conf_level
+)
+```
+
+```{r plots-o2pulse, fig.height=9, fig.width=7, fig.cap="Oxygen pulse (ml/beat)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$oxygen_pulse(g, p, cl),
+  ylab = "Oxygen pulse (ml/beat)", main = "Oxygen pulse by diagnostic group",
+  legend_pos = "topright", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$oxygen_pulse(g, p, cl),
+  ylab = "Oxygen pulse (ml/beat)", main = "Oxygen pulse by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$oxygen_pulse(g, p, cl),
+  ylab = "Oxygen pulse (ml/beat)", main = "Oxygen pulse by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, conf_level = conf_level
+)
+```
+
+```{r plots-vevco2, fig.height=9, fig.width=7, fig.cap="Ventilatory efficiency (VE/VCO\\textsubscript{2} slope)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ve_vco2_slope(g, p, cl),
+  ylab = "VE/VCO2 slope", main = "VE/VCO2 slope by diagnostic group",
+  show_ci = FALSE, legend_pos = "topleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ve_vco2_slope(g, p, cl),
+  ylab = "VE/VCO2 slope", main = "VE/VCO2 slope by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, show_ci = FALSE,
+  legend_pos = "topright", conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$ve_vco2_slope(g, p, cl),
+  ylab = "VE/VCO2 slope", main = "VE/VCO2 slope by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, show_ci = FALSE,
+  legend_pos = "topright", conf_level = conf_level
+)
+```
+
+```{r plots-bf, fig.height=9, fig.width=7, fig.cap="Breathing frequency (breaths/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$breathing_frequency(g, p, cl),
+  ylab = "Breathing freq. (breaths/min)",
+  main = "Breathing frequency by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$breathing_frequency(g, p, cl),
+  ylab = "Breathing freq. (breaths/min)",
+  main = "Breathing frequency by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, legend_pos = "topright",
+  conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$breathing_frequency(g, p, cl),
+  ylab = "Breathing freq. (breaths/min)",
+  main = "Breathing frequency by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, conf_level = conf_level
+)
+```
+
 ---
 
 *Generated by Kids with Congenital Heart Defects app, Oslo University Hospital,
