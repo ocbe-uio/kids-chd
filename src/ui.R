@@ -77,8 +77,16 @@ ui <- fluidPage(
         uiOutput("plots")
       )
     ),
-    # Footer with source code link and version
+    # Footer with source code link, version, and reference
     hr(),
+    HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
+      Reference:
+      <a href="https://pubmed.ncbi.nlm.nih.gov/40569467/" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
+        Reference models for individualized assessment of cardiorespiratory fitness
+        in children and adolescents with congenital heart disease:
+        a retrospective multicentre study.
+      </a>
+    </p>'),
     HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
       <a href="https://github.com/ocbe-uio/kids-chd" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
         View source code on GitHub
