@@ -391,6 +391,38 @@ server <- function(input, output) {
     )
   })
 
+  output$download_pdf <- downloadHandler(
+    filename = function() {
+      paste0("kids-chd-report-", Sys.Date(), ".pdf")
+    },
+    content = function(file) {
+      # Copy the report template to a temp directory so rmarkdown can write
+      # its intermediate files there without polluting the app directory.
+      temp_report <- file.path(tempdir(), "report.Rmd")
+      file.copy("report.Rmd", temp_report, overwrite = TRUE)
+
+      params <- list(
+        group        = input$group,
+        height       = input$height,
+        weight       = input$weight,
+        bmi          = computed_bmi(),
+        conf_level   = input$conf_level,
+        height_range = input$height_range,
+        bmi_range    = input$bmi_range
+      )
+
+      rmarkdown::render(
+        temp_report,
+        output_file  = file,
+        params       = params,
+        envir        = new.env(parent = globalenv()),
+        # Keep the knit root directory pointing at the app's src/ folder so
+        # that source("classes.R") etc. inside the Rmd resolve correctly.
+        knit_root_dir = getwd()
+      )
+    }
+  )
+
   # Breathing frequency plots
   output$breathing_frequency_plot_group <- renderPlot({
     plot_metric_by_group(

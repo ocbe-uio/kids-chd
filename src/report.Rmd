@@ -1,0 +1,347 @@
+---
+title: "Kids with Congenital Heart Defects: Results Report"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  pdf_document:
+    toc: false
+    latex_engine: xelatex
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+params:
+  group: "simple"
+  height: 150
+  weight: 45
+  bmi: 20
+  conf_level: 95
+  height_range: !r c(150, 180)
+  bmi_range: !r c(18.5, 25)
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+source("classes.R")
+source("methods.R")
+source("models.R")
+source("plotting.R")
+
+group_label <- switch(params$group,
+  simple  = "Simple defects (ASD, VSD, CoA, LVOT obstruction)",
+  moderate = "Moderate complex defects (TOF, TGA)",
+  fontan  = "Univentricular defects with Fontan circulation"
+)
+group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
+conf_level <- params$conf_level / 100
+```
+
+## Patient Parameters
+
+```{r params-table}
+knitr::kable(
+  data.frame(
+    Parameter = c(
+      "Diagnostic Group", "Height", "Weight", "BMI", "Confidence Level"
+    ),
+    Value = c(
+      group_label,
+      paste(params$height, "cm"),
+      paste(params$weight, "kg"),
+      sprintf("%.1f kg/m\u00b2", params$bmi),
+      paste0(params$conf_level, "%")
+    )
+  ),
+  col.names = c("Parameter", "Value"),
+  booktabs = TRUE
+)
+```
+
+## Results
+
+The values below are predicted cardiopulmonary exercise test (CPET) endpoints
+for the given diagnostic group and patient covariates. Confidence intervals are
+calculated using a normal approximation.
+
+```{r compute-results}
+grp <- get(params$group)
+
+person_male   <- person(sex = 1, height = params$height, bmi = params$bmi)
+person_female <- person(sex = 0, height = params$height, bmi = params$bmi)
+
+get_ci <- function(fun) {
+  list(
+    male   = fun(grp, person_male,   conf_level),
+    female = fun(grp, person_female, conf_level)
+  )
+}
+
+vo2_ml_min_r     <- get_ci(grp$vo2_ml_min)
+vo2_ml_kg_min_r  <- get_ci(grp$vo2_ml_kg_min)
+heart_rate_r     <- get_ci(grp$heart_rate)
+ventilation_r    <- get_ci(grp$ventilation)
+oxygen_pulse_r   <- get_ci(grp$oxygen_pulse)
+ve_vco2_slope_r  <- get_ci(grp$ve_vco2_slope)
+breathing_freq_r <- get_ci(grp$breathing_frequency)
+
+format_ci <- function(mat, digits = 2) {
+  if (is.null(mat) || any(is.na(mat[1, 2:3]))) return(NA_character_)
+  paste(
+    formatC(mat[1, 2], format = "f", digits = digits),
+    "-",
+    formatC(mat[1, 3], format = "f", digits = digits)
+  )
+}
+
+metrics <- c(
+  "Absolute VO\u2082 (ml/min)",
+  "VO\u2082 relative to body mass (ml/kg/min)",
+  "Heart rate (BPM)",
+  "Ventilation (l/min)",
+  "Oxygen pulse (ml/beat)",
+  "Ventilatory efficiency (VE/VCO\u2082 slope)",
+  "Breathing frequency (breaths/min)"
+)
+
+value_male <- c(
+  sprintf("%.1f", vo2_ml_min_r$male[1, 1]),
+  sprintf("%.2f", vo2_ml_kg_min_r$male[1, 1]),
+  sprintf("%.1f", heart_rate_r$male[1, 1]),
+  sprintf("%.2f", ventilation_r$male[1, 1]),
+  sprintf("%.2f", oxygen_pulse_r$male[1, 1]),
+  sprintf("%.2f", ve_vco2_slope_r$male[1, 1]),
+  sprintf("%.2f", breathing_freq_r$male[1, 1])
+)
+value_female <- c(
+  sprintf("%.1f", vo2_ml_min_r$female[1, 1]),
+  sprintf("%.2f", vo2_ml_kg_min_r$female[1, 1]),
+  sprintf("%.1f", heart_rate_r$female[1, 1]),
+  sprintf("%.2f", ventilation_r$female[1, 1]),
+  sprintf("%.2f", oxygen_pulse_r$female[1, 1]),
+  sprintf("%.2f", ve_vco2_slope_r$female[1, 1]),
+  sprintf("%.2f", breathing_freq_r$female[1, 1])
+)
+ci_male <- c(
+  format_ci(vo2_ml_min_r$male,    1),
+  format_ci(vo2_ml_kg_min_r$male, 2),
+  format_ci(heart_rate_r$male,    1),
+  format_ci(ventilation_r$male,   2),
+  format_ci(oxygen_pulse_r$male,  2),
+  NA_character_,
+  format_ci(breathing_freq_r$male, 2)
+)
+ci_female <- c(
+  format_ci(vo2_ml_min_r$female,    1),
+  format_ci(vo2_ml_kg_min_r$female, 2),
+  format_ci(heart_rate_r$female,    1),
+  format_ci(ventilation_r$female,   2),
+  format_ci(oxygen_pulse_r$female,  2),
+  NA_character_,
+  format_ci(breathing_freq_r$female, 2)
+)
+```
+
+```{r results-table}
+ci_col <- sprintf("%d%% CI", params$conf_level)
+df <- data.frame(
+  Metric      = metrics,
+  "Value Boy" = value_male,
+  CI_Boy      = ci_male,
+  "Value Girl" = value_female,
+  CI_Girl     = ci_female,
+  check.names = FALSE
+)
+names(df)[3] <- paste0(ci_col, " Boy")
+names(df)[5] <- paste0(ci_col, " Girl")
+knitr::kable(df, booktabs = TRUE, caption = "Predicted CPET endpoints")
+```
+
+\newpage
+
+## Plots
+
+```{r plots-vo2, fig.height=9, fig.width=7, fig.cap="Absolute VO\\textsubscript{2} (ml/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_min(g, p, cl),
+  ylab = "VO2 (ml/min)", main = "VO2 by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_min(g, p, cl),
+  ylab = "VO2 (ml/min)", main = "VO2 by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$vo2_ml_min(g, p, cl),
+  ylab = "VO2 (ml/min)", main = "VO2 by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, legend_pos = "topleft",
+  conf_level = conf_level
+)
+```
+
+```{r plots-vo2kg, fig.height=9, fig.width=7, fig.cap="VO\\textsubscript{2} relative to body mass (ml/kg/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_kg_min(g, p, cl),
+  ylab = "VO2/kg (ml/kg/min)", main = "VO2/kg by diagnostic group",
+  legend_pos = "topright", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$vo2_ml_kg_min(g, p, cl),
+  ylab = "VO2/kg (ml/kg/min)", main = "VO2/kg by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$vo2_ml_kg_min(g, p, cl),
+  ylab = "VO2/kg (ml/kg/min)", main = "VO2/kg by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, legend_pos = "bottomleft",
+  conf_level = conf_level
+)
+```
+
+```{r plots-hr, fig.height=9, fig.width=7, fig.cap="Heart rate (BPM)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$heart_rate(g, p, cl),
+  ylab = "Heart rate (BPM)", main = "Heart rate by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$heart_rate(g, p, cl),
+  ylab = "Heart rate (BPM)", main = "Heart rate by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$heart_rate(g, p, cl),
+  ylab = "Heart rate (BPM)", main = "Heart rate by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, conf_level = conf_level
+)
+```
+
+```{r plots-ve, fig.height=9, fig.width=7, fig.cap="Ventilation (l/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ventilation(g, p, cl),
+  ylab = "Ventilation (l/min)", main = "Ventilation by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ventilation(g, p, cl),
+  ylab = "Ventilation (l/min)", main = "Ventilation by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$ventilation(g, p, cl),
+  ylab = "Ventilation (l/min)", main = "Ventilation by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, legend_pos = "bottomright",
+  conf_level = conf_level
+)
+```
+
+```{r plots-o2pulse, fig.height=9, fig.width=7, fig.cap="Oxygen pulse (ml/beat)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$oxygen_pulse(g, p, cl),
+  ylab = "Oxygen pulse (ml/beat)", main = "Oxygen pulse by diagnostic group",
+  legend_pos = "topright", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$oxygen_pulse(g, p, cl),
+  ylab = "Oxygen pulse (ml/beat)", main = "Oxygen pulse by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$oxygen_pulse(g, p, cl),
+  ylab = "Oxygen pulse (ml/beat)", main = "Oxygen pulse by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, conf_level = conf_level
+)
+```
+
+```{r plots-vevco2, fig.height=9, fig.width=7, fig.cap="Ventilatory efficiency (VE/VCO\\textsubscript{2} slope)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ve_vco2_slope(g, p, cl),
+  ylab = "VE/VCO2 slope", main = "VE/VCO2 slope by diagnostic group",
+  show_ci = FALSE, legend_pos = "topleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$ve_vco2_slope(g, p, cl),
+  ylab = "VE/VCO2 slope", main = "VE/VCO2 slope by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, show_ci = FALSE,
+  legend_pos = "topright", conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$ve_vco2_slope(g, p, cl),
+  ylab = "VE/VCO2 slope", main = "VE/VCO2 slope by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, show_ci = FALSE,
+  legend_pos = "topright", conf_level = conf_level
+)
+```
+
+```{r plots-bf, fig.height=9, fig.width=7, fig.cap="Breathing frequency (breaths/min)"}
+par(mfrow = c(3, 1))
+plot_metric_by_group(
+  height = params$height, bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$breathing_frequency(g, p, cl),
+  ylab = "Breathing freq. (breaths/min)",
+  main = "Breathing frequency by diagnostic group",
+  legend_pos = "bottomleft", conf_level = conf_level
+)
+plot_metric_by_height(
+  group = get(params$group), bmi = params$bmi,
+  metric_fun = function(g, p, cl) g$breathing_frequency(g, p, cl),
+  ylab = "Breathing freq. (breaths/min)",
+  main = "Breathing frequency by height",
+  group_label = group_names[params$group],
+  height_range = params$height_range, legend_pos = "topright",
+  conf_level = conf_level
+)
+plot_metric_by_bmi(
+  group = get(params$group), height = params$height,
+  metric_fun = function(g, p, cl) g$breathing_frequency(g, p, cl),
+  ylab = "Breathing freq. (breaths/min)",
+  main = "Breathing frequency by BMI",
+  group_label = group_names[params$group],
+  bmi_range = params$bmi_range, conf_level = conf_level
+)
+```
+
+---
+
+*Generated by Kids with Congenital Heart Defects app, Oslo University Hospital,
+Department of Paediatric Cardiology.*
+
+*Reference: Klungerbo V, Hirth A, Fredriksen PM, Holst R, Edvardsen E,
+Holmstrom H, Moller T. Reference models for individualized assessment of
+cardiorespiratory fitness in children and adolescents with congenital heart
+disease: a retrospective multicentre study. Eur J Pediatr. 2025 Jun
+26;184(7):450. doi: 10.1007/s00431-025-06270-x.*

@@ -112,6 +112,7 @@ ui <- fluidPage(
         HTML("The values below are calculated based on the selected diagnostic group
         and covariates."),
         tableOutput("results_table"),
+        downloadButton("download_pdf", "Download PDF Report"),
         h2("Plots"),
         HTML("The selected diagnostic group and covariates are highlighted in the plots below."),
         uiOutput("plots")
