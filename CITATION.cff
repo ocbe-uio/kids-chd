@@ -18,3 +18,27 @@ keywords:
   - "Shiny"
   - "R"
   - "pediatrics"
+references:
+  - type: article
+    title: "Reference models for individualized assessment of cardiorespiratory fitness in children and adolescents with congenital heart disease: a retrospective multicentre study"
+    authors:
+      - family-names: Klungerbo
+        given-names: Vilde
+      - family-names: Hirth
+        given-names: Andreas
+      - family-names: Fredriksen
+        given-names: "Per Morten"
+      - family-names: Holst
+        given-names: "René"
+      - family-names: Edvardsen
+        given-names: Elisabeth
+      - family-names: Holmstrøm
+        given-names: Henrik
+      - family-names: Möller
+        given-names: Thomas
+    journal: "European Journal of Pediatrics"
+    volume: 184
+    issue: 7
+    start: 450
+    year: 2025
+    doi: 10.1007/s00431-025-06270-x
