@@ -80,12 +80,16 @@ ui <- fluidPage(
     # Footer with source code link, version, and reference
     hr(),
     HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
-      Reference:
       <a href="https://pubmed.ncbi.nlm.nih.gov/40569467/" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
-        Reference models for individualized assessment of cardiorespiratory fitness
-        in children and adolescents with congenital heart disease:
-        a retrospective multicentre study.
+        Reference:
       </a>
+      Klungerbo V, Hirth A, Fredriksen PM, Holst R, Edvardsen E, Holmstrøm H, Möller T.
+      Reference models for individualized assessment of cardiorespiratory fitness
+      in children and adolescents with congenital heart disease:
+      a retrospective multicentre study. Eur J Pediatr. 2025 Jun 26;184(7):450.
+      doi: <a href="https://doi.org/10.1007/s00431-025-06270-x" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
+        10.1007/s00431-025-06270-x
+      </a>. PMID: 40569467; PMCID: PMC12202686.
     </p>'),
     HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
       <a href="https://github.com/ocbe-uio/kids-chd" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
