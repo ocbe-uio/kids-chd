@@ -21,6 +21,8 @@ ui <- fluidPage(
       value = 20.0, min = 0.1, step = 0.1, max = 50.0
     ),
 
+    actionButton("submit", "Calculate endpoints"),
+
     # Step 2: selecting confidence level
     h2("Select confidence level"),
     sliderInput(
@@ -38,9 +40,7 @@ ui <- fluidPage(
     sliderInput(
       "bmi_range", "BMI range (kg/m²)",
       value = c(18.5, 25), min = 5, max = 35, step = 0.5
-    ),
-
-    actionButton("submit", "Calculate endpoints")
+    )
   ),
 
   mainPanel(
