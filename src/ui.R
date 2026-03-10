@@ -123,7 +123,7 @@ ui <- fluidPage(
     ),
     # Footer with source code link, version, and reference
     hr(),
-    HTML('<p style="font-size: 0.85em; color: #666; text-align: center;">
+    HTML('<p style="font-size: 0.85em; color: #666; text-align: left;">
       <a href="https://pubmed.ncbi.nlm.nih.gov/40569467/" target="_blank" rel="noopener noreferrer" style="color: #337ab7; text-decoration: none;">
         Reference:
       </a>
