@@ -88,17 +88,19 @@ rsconnect::deployApp('src', appName='kids-chd')
 
 ```
 .
-├── LICENSE              # GNU GPL v3 license
-├── Makefile            # Build automation (test and deploy commands)
-├── NEWS.md             # Version history and changelog
-├── README.md           # This file
 ├── src/                # Shiny application source code
 │   ├── classes.R       # Class definitions (group, person)
 │   ├── methods.R       # Calculation methods
 │   ├── models.R        # Statistical models for each diagnostic group
+│   ├── plotting.R      # Plotting functions
+│   ├── report.Rmd      # Template for PDF reports
 │   ├── server.R        # Shiny server logic
 │   └── ui.R            # User interface definition
-└── tests/              # Test files
+├── CITATION.cff        # Citation file for the software
+├── LICENSE             # GNU GPL v3 license
+├── Makefile            # Build automation (test and deploy commands)
+├── NEWS.md             # Version history and changelog
+└── README.md           # This file
 ```
 
 ## How It Works
