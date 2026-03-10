@@ -123,3 +123,11 @@ This project was developed as part of OCBE's [advisory services](https://www.med
 This is an academic/research project maintained by OCBE-UIO (Oslo Centre for Biostatistics and Epidemiology, University of Oslo).
 
 For questions, issues, or contributions, please open an issue on the [GitHub repository](https://github.com/ocbe-uio/kids-chd).
+
+## Citation
+
+To cite the methodology used in this project, please use the reference below:
+
+> Klungerbo, V., Hirth, A., Fredriksen, P.M. et al. Reference models for individualized assessment of cardiorespiratory fitness in children and adolescents with congenital heart disease: a retrospective multicentre study. Eur J Pediatr 184, 450 (2025). https://doi.org/10.1007/s00431-025-06270-x
+
+To cite the software itself, see the CITATION.cff file or the "Cite this repository" link to the right of the repo's main page.
