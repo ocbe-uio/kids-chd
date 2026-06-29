@@ -47,7 +47,23 @@ ui <- fluidPage(
             "Simple defects",
             tags$span(
               style = "margin-left: 5px; cursor: pointer;",
-              title = "Atrial and ventricular septal defect, Coarctation of the Aorta, Left Ventricular Outflow Tract Obstruction",
+              title = paste(
+                "Inclusion criteria (Simple):",
+                "ASD (closed): Atrial septum defects of secundum type or sinus venosus type,",
+                "closed by surgical or interventional procedure.",
+                "VSD (closed + small open): Isolated ventricular septal defect without other major congenital",
+                "cardiac malformations. The VSD should have been closed by surgical or interventional procedures.",
+                "In the case of a minor open VSD considered below the closure threshold, there should be no sign",
+                "of volume overload or pulmonary hypertension (Eisenmenger physiology). Concomitant ASD or right",
+                "ventricular outflow tract obstruction is no exclusion criterion if the ASD has been closed and the",
+                "residual RVOTO is of not more than mild degree.",
+                "Aortic stenosis: Left ventricular outflow tract obstruction at the subvalvular, valvular, or",
+                "supravalvular level without other major congenital cardiac malformations and aortic arch pathology.",
+                "Coarctation of the Aorta: Stenosis of the aortic arch either as a hypoplastic arch or distinct",
+                "coarctation. In any case, the obstruction should have been addressed by surgical or interventional",
+                "procedure, or the lesion should be considered below the intervention threshold.",
+                sep = "\n"
+              ),
               "(?)"
             )
           ),
@@ -55,11 +71,30 @@ ui <- fluidPage(
             "Moderate complex defects",
             tags$span(
               style = "margin-left: 5px; cursor: pointer;",
-              title = "Tetralogy of Fallot, Transposition of the Great Arteries",
+              title = paste(
+                "Inclusion criteria (Moderate):",
+                "Tetralogy of Fallot: Typical anatomy surgically corrected.",
+                "Transposition of the Great Arteries: Transposition of the great arteries surgically corrected by",
+                "the arterial switch procedure (Jatene) and not corrected by a Mustard/Senning or Rastelli-type",
+                "procedure.",
+                sep = "\n"
+              ),
               "(?)"
             )
           ),
-          "Univentricular defects with Fontan circulation"
+          tagList(
+            "Univentricular defects with Fontan circulation",
+            tags$span(
+              style = "margin-left: 5px; cursor: pointer;",
+              title = paste(
+                "Inclusion criteria (Univentricular):",
+                "Fontan/TCPC: Functional univentricular circulation of any ventricular morphology without a",
+                "pumping chamber supporting the pulmonary circulation.",
+                sep = "\n"
+              ),
+              "(?)"
+            )
+          )
         ),
           choiceValues = c("simple", "moderate", "fontan")
       ),
