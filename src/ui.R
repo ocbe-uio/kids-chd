@@ -78,7 +78,7 @@ ui <- fluidPage(
           tags$p("Aortic stenosis: Left ventricular outflow tract obstruction at the subvalvular, valvular, or supravalvular level without other major congenital cardiac malformations and aortic arch pathology."),
           tags$p("Coarctation of the Aorta: Stenosis of the aortic arch either as a hypoplastic arch or distinct coarctation. In any case, the obstruction should have been addressed by surgical or interventional procedure, or the lesion should be considered below the intervention threshold."),
           tags$p(tags$strong("Moderate")),
-          tags$p("Tetralogy of Fallo: Typical anatomy surgically corrected."),
+          tags$p("Tetralogy of Fallot: Typical anatomy surgically corrected."),
           tags$p("Transposition of the Great Arteries: Transposition of the great arteries surgically corrected by the arterial switch procedure (Jatene) and not corrected by a Mustard/Senning or Rastelli-type procedure."),
           tags$p(tags$strong("Univentricular")),
           tags$p("Fontan/TCPC: Functional univentricular circulation of any ventricular morphology without a pumping chamber supporting the pulmonary circulation.")
