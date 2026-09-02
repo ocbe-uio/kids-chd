@@ -178,7 +178,9 @@ server <- function(input, output, session) {
         df[[ratio_col]] <- ratio
       }
       df
-  }, align = "lrcrcr")
+  }, align = function() {
+    if (any(!is.na(observed_values()))) "lrcrcr" else "lrcrc"
+  })
 
   output$plots <- renderUI({
     tabsetPanel(
