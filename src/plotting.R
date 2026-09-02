@@ -5,7 +5,8 @@ plot_metric_by_bmi <- function(
   group_label = NULL,
   show_ci = TRUE,
   legend_pos = "topleft",
-  conf_level = 0.95
+  conf_level = 0.95,
+  observed_value = NA_real_
 ) {
   bmis <- seq(bmi_range[1], bmi_range[2], length.out = 200)
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(bmis))
@@ -23,9 +24,9 @@ plot_metric_by_bmi <- function(
   faded_col <- c(color_girl_faded, color_boy_faded)
   par(bg = panel_bg)
   if (show_ci) {
-    ylim <- range(y_lower, y_upper, na.rm = TRUE)
+    ylim <- range(c(y_lower, y_upper, observed_value), na.rm = TRUE)
   } else {
-    ylim <- range(y_est, na.rm = TRUE)
+    ylim <- range(c(y_est, observed_value), na.rm = TRUE)
   }
   matplot(bmis, t(y_est), type = "n", lty = 1, col = strong_col,
           xlab = "BMI (kg/m²)", ylab = ylab, ylim = ylim,
@@ -73,7 +74,8 @@ plot_metric_by_height <- function(
   group_label = NULL,
   show_ci = TRUE,
   legend_pos = "topleft",
-  conf_level = 0.95
+  conf_level = 0.95,
+  observed_value = NA_real_
 ) {
   heights <- seq(height_range[1], height_range[2], length.out = 200)
   y_est <- y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(heights))
@@ -91,9 +93,9 @@ plot_metric_by_height <- function(
   faded_col <- c(color_girl_faded, color_boy_faded)
   par(bg = panel_bg)
   if (show_ci) {
-    ylim <- range(y_lower, y_upper, na.rm = TRUE)
+    ylim <- range(c(y_lower, y_upper, observed_value), na.rm = TRUE)
   } else {
-    ylim <- range(y_est, na.rm = TRUE)
+    ylim <- range(c(y_est, observed_value), na.rm = TRUE)
   }
   matplot(heights, t(y_est), type = "n", lty = 1, col = strong_col,
           xlab = "Height (cm)", ylab = ylab, ylim = ylim,
@@ -141,7 +143,8 @@ plot_metric_by_group <- function(
   group_labels = c("Simple", "Moderate", "Fontan"),
   show_ci = TRUE,
   legend_pos = "topright",
-  conf_level = 0.95
+  conf_level = 0.95,
+  observed_value = NA_real_
   ) {
   y_est <- matrix(NA, nrow = 2, ncol = length(groups))
   y_lower <- y_upper <- matrix(NA, nrow = 2, ncol = length(groups))
@@ -151,11 +154,11 @@ plot_metric_by_group <- function(
       p <- person(sex = sex, height = height, bmi = bmi)
       vals <- metric_fun(g, p, conf_level)[1, ]
       y_est[sex+1, i] <- vals[1]
-      y_range <- range(y_est, na.rm = TRUE)
+      y_range <- range(c(y_est, observed_value), na.rm = TRUE)
       if (show_ci) {
         y_lower[sex+1, i] <- vals[2]
         y_upper[sex+1, i] <- vals[3]
-        y_range <- range(y_lower, y_upper, na.rm = TRUE)
+        y_range <- range(c(y_lower, y_upper, observed_value), na.rm = TRUE)
       }
     }
   }

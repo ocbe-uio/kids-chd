@@ -38,10 +38,15 @@ server <- function(input, output, session) {
     if (identical(input$observed_sex, "girl")) strong_col[1] else strong_col[2]
   })
 
-  add_observed_point <- function(x, metric_name) {
+  observed_metric_value <- function(metric_name) {
     obs_value <- observed_values()[metric_name]
-    if (length(obs_value) == 1 && !is.na(obs_value)) {
-      points(x, obs_value, pch = 8, cex = 1.5, col = observed_color(), lwd = 2, xpd = NA)
+    if (length(obs_value) == 1 && !is.na(obs_value)) obs_value else NA_real_
+  }
+
+  add_observed_point <- function(x, metric_name) {
+    obs_value <- observed_metric_value(metric_name)
+    if (!is.na(obs_value)) {
+      points(x, obs_value, pch = 8, cex = 1.5, col = observed_color(), lwd = 2)
     }
   }
 
@@ -232,7 +237,8 @@ server <- function(input, output, session) {
       ylab = "VO2 ml/min",
       main = "VO2 by group",
       legend_pos = "bottomleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("vo2_ml_min")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "vo2_ml_min")
   })
@@ -245,7 +251,8 @@ server <- function(input, output, session) {
       main = "VO2 by height",
       group_label = group_names[input$group],
       height_range = input$height_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("vo2_ml_min")
     )
     add_observed_point(input$height, "vo2_ml_min")
   })
@@ -259,7 +266,8 @@ server <- function(input, output, session) {
       group_label = group_names[input$group],
       bmi_range = input$bmi_range,
       legend_pos = "topleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("vo2_ml_min")
     )
     add_observed_point(computed_bmi(), "vo2_ml_min")
   })
@@ -273,7 +281,8 @@ server <- function(input, output, session) {
       ylab = "VO2 ml/kg/min",
       main = "VO2/kg by group",
       legend_pos = "topright",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("vo2_ml_kg_min")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "vo2_ml_kg_min")
   })
@@ -286,7 +295,8 @@ server <- function(input, output, session) {
       main = "VO2/kg by height",
       group_label = group_names[input$group],
       height_range = input$height_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("vo2_ml_kg_min")
     )
     add_observed_point(input$height, "vo2_ml_kg_min")
   })
@@ -300,7 +310,8 @@ server <- function(input, output, session) {
       group_label = group_names[input$group],
       bmi_range = input$bmi_range,
       legend_pos = "bottomleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("vo2_ml_kg_min")
     )
     add_observed_point(computed_bmi(), "vo2_ml_kg_min")
   })
@@ -314,7 +325,8 @@ server <- function(input, output, session) {
       ylab = "Heart rate (BPM)",
       main = "Heart rate by group",
       legend_pos = "bottomleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("heart_rate")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "heart_rate")
   })
@@ -327,7 +339,8 @@ server <- function(input, output, session) {
       main = "Heart rate by height",
       group_label = group_names[input$group],
       height_range = input$height_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("heart_rate")
     )
     add_observed_point(input$height, "heart_rate")
   })
@@ -340,7 +353,8 @@ server <- function(input, output, session) {
       main = "Heart rate by BMI",
       group_label = group_names[input$group],
       bmi_range = input$bmi_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("heart_rate")
     )
     add_observed_point(computed_bmi(), "heart_rate")
   })
@@ -354,7 +368,8 @@ server <- function(input, output, session) {
       ylab = "Ventilation (l/min)",
       main = "Ventilation by group",
       legend_pos = "bottomleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("ventilation")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "ventilation")
   })
@@ -367,7 +382,8 @@ server <- function(input, output, session) {
       main = "Ventilation by height",
       group_label = group_names[input$group],
       height_range = input$height_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("ventilation")
     )
     add_observed_point(input$height, "ventilation")
   })
@@ -381,7 +397,8 @@ server <- function(input, output, session) {
       group_label = group_names[input$group],
       bmi_range = input$bmi_range,
       legend_pos = "bottomright",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("ventilation")
     )
     add_observed_point(computed_bmi(), "ventilation")
   })
@@ -395,7 +412,8 @@ server <- function(input, output, session) {
       ylab = "Oxygen pulse (ml/beat)",
       main = "Oxygen pulse by group",
       legend_pos = "topright",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("oxygen_pulse")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "oxygen_pulse")
   })
@@ -408,7 +426,8 @@ server <- function(input, output, session) {
       main = "Oxygen pulse by height",
       group_label = group_names[input$group],
       height_range = input$height_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("oxygen_pulse")
     )
     add_observed_point(input$height, "oxygen_pulse")
   })
@@ -421,7 +440,8 @@ server <- function(input, output, session) {
       main = "Oxygen pulse by BMI",
       group_label = group_names[input$group],
       bmi_range = input$bmi_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("oxygen_pulse")
     )
     add_observed_point(computed_bmi(), "oxygen_pulse")
   })
@@ -436,7 +456,8 @@ server <- function(input, output, session) {
       main = "VE/VCO2 slope by group",
       show_ci = FALSE,
       legend_pos = "topleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("ve_vco2_slope")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "ve_vco2_slope")
   })
@@ -451,7 +472,8 @@ server <- function(input, output, session) {
       height_range = input$height_range,
       show_ci = FALSE,
       legend_pos = "topright",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("ve_vco2_slope")
     )
     add_observed_point(input$height, "ve_vco2_slope")
   })
@@ -466,7 +488,8 @@ server <- function(input, output, session) {
       bmi_range = input$bmi_range,
       show_ci = FALSE,
       legend_pos = "topright",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("ve_vco2_slope")
     )
     add_observed_point(computed_bmi(), "ve_vco2_slope")
   })
@@ -512,7 +535,8 @@ server <- function(input, output, session) {
       ylab = "Breathing frequency (breaths/min)",
       main = "Breathing frequency by group",
       legend_pos = "bottomleft",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("breathing_frequency")
     )
     add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "breathing_frequency")
   })
@@ -526,7 +550,8 @@ server <- function(input, output, session) {
       group_label = group_names[input$group],
       height_range = input$height_range,
       legend_pos = "topright",
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("breathing_frequency")
     )
     add_observed_point(input$height, "breathing_frequency")
   })
@@ -539,7 +564,8 @@ server <- function(input, output, session) {
       main = "Breathing frequency by BMI",
       group_label = group_names[input$group],
       bmi_range = input$bmi_range,
-      conf_level = input$conf_level / 100
+      conf_level = input$conf_level / 100,
+      observed_value = observed_metric_value("breathing_frequency")
     )
     add_observed_point(computed_bmi(), "breathing_frequency")
   })
