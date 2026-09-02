@@ -161,6 +161,7 @@ ui <- fluidPage(
         tableOutput("results_table"),
         h2("Plots"),
         HTML("The selected diagnostic group and covariates are highlighted in the plots below."),
+        uiOutput("observed_value_note"),
         uiOutput("plots"),
         downloadButton("download_pdf", "Download PDF Report")
       )
@@ -184,7 +185,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      version 0.0.0.9049
+      version 0.0.0.9050
     </p>')
   )
 )
