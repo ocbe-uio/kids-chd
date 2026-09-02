@@ -143,7 +143,8 @@ ui <- fluidPage(
           numericInput("obs_ventilation", "Ventilation (l/min)", value = NA_real_, min = 0, step = 0.1),
           numericInput("obs_oxygen_pulse", "Oxygen pulse (ml/beat)", value = NA_real_, min = 0, step = 0.1),
           numericInput("obs_ve_vco2_slope", "Ventilatory efficiency (VE/VCO₂ slope)", value = NA_real_, min = 0, step = 0.1),
-          numericInput("obs_breathing_frequency", "Breathing frequency (breaths/min)", value = NA_real_, min = 0, step = 0.1)
+          numericInput("obs_breathing_frequency", "Breathing frequency (breaths/min)", value = NA_real_, min = 0, step = 0.1),
+          actionButton("clear_observed", "Clear observed data")
         )
       )
   ),

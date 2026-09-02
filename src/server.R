@@ -3,7 +3,7 @@ source("methods.R")
 source("models.R")
 source("plotting.R")
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   # Mapping of group IDs to display names (used in multiple plots)
   group_names <- c(simple = "Simple", moderate = "Moderate", fontan = "Fontan")
 
@@ -44,6 +44,16 @@ server <- function(input, output) {
       points(x, obs_value, pch = 8, cex = 1.5, col = observed_color(), lwd = 2)
     }
   }
+
+  observeEvent(input$clear_observed, {
+    updateNumericInput(session, "obs_vo2_ml_min", value = NA_real_)
+    updateNumericInput(session, "obs_vo2_ml_kg_min", value = NA_real_)
+    updateNumericInput(session, "obs_heart_rate", value = NA_real_)
+    updateNumericInput(session, "obs_ventilation", value = NA_real_)
+    updateNumericInput(session, "obs_oxygen_pulse", value = NA_real_)
+    updateNumericInput(session, "obs_ve_vco2_slope", value = NA_real_)
+    updateNumericInput(session, "obs_breathing_frequency", value = NA_real_)
+  })
 
   output$results_table <- renderTable({
     group <- get(input$group)
