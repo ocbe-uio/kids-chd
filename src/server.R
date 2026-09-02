@@ -19,17 +19,38 @@ server <- function(input, output) {
     sprintf("Calculated BMI: %.1f kg/m²", computed_bmi())
   })
 
+  observed_values <- reactive({
+    obs_or_na <- function(x) {
+      if (is.null(x)) NA_real_ else as.numeric(x)
+    }
+    c(
+      vo2_ml_min = obs_or_na(input$obs_vo2_ml_min),
+      vo2_ml_kg_min = obs_or_na(input$obs_vo2_ml_kg_min),
+      heart_rate = obs_or_na(input$obs_heart_rate),
+      ventilation = obs_or_na(input$obs_ventilation),
+      oxygen_pulse = obs_or_na(input$obs_oxygen_pulse),
+      ve_vco2_slope = obs_or_na(input$obs_ve_vco2_slope),
+      breathing_frequency = obs_or_na(input$obs_breathing_frequency)
+    )
+  })
+
+  observed_color <- reactive({
+    if (identical(input$observed_sex, "girl")) strong_col[1] else strong_col[2]
+  })
+
+  add_observed_point <- function(x, metric_name) {
+    obs_value <- observed_values()[metric_name]
+    if (length(obs_value) == 1 && !is.na(obs_value)) {
+      points(x, obs_value, pch = 8, cex = 1.5, col = observed_color(), lwd = 2)
+    }
+  }
+
   output$results_table <- renderTable({
     group <- get(input$group)
     conf_level <- input$conf_level / 100  # Convert from percentage to decimal
     # Calculate for both sexes: 1 = Boy, 0 = Girl
     person_male <- person(sex = 1, height = input$height, bmi = computed_bmi())
     person_female <- person(sex = 0, height = input$height, bmi = computed_bmi())
-
-    # Helper to get results for both sexes
-    get_metric <- function(fun) {
-      c(male = fun(group, person_male, conf_level), female = fun(group, person_female, conf_level))
-    }
 
     # For metrics with confidence intervals (assume matrix with 3 columns)
     get_metric_ci <- function(fun) {
@@ -71,6 +92,24 @@ server <- function(input, output) {
       sprintf("%.2f", oxygen_pulse_results$female[1, 1]),
       sprintf("%.2f", ve_vco2_slope_results$female[1, 1]),
       sprintf("%.2f", breathing_frequency_results$female[1, 1])
+    )
+    point_male <- c(
+      vo2_ml_min_results$male[1, 1],
+      vo2_ml_kg_min_results$male[1, 1],
+      heart_rate_results$male[1, 1],
+      ventilation_results$male[1, 1],
+      oxygen_pulse_results$male[1, 1],
+      ve_vco2_slope_results$male[1, 1],
+      breathing_frequency_results$male[1, 1]
+    )
+    point_female <- c(
+      vo2_ml_min_results$female[1, 1],
+      vo2_ml_kg_min_results$female[1, 1],
+      heart_rate_results$female[1, 1],
+      ventilation_results$female[1, 1],
+      oxygen_pulse_results$female[1, 1],
+      ve_vco2_slope_results$female[1, 1],
+      breathing_frequency_results$female[1, 1]
     )
     # Format confidence intervals with appropriate precision
     format_ci <- function(mat, digits = 2) {
@@ -117,8 +156,19 @@ server <- function(input, output) {
       df[[ci_girl_col]] <- ci_female
       # Reorder columns to match original intent
       df <- df[, c("Metric", "Value Boy", ci_boy_col, "Value Girl", ci_girl_col)]
+
+      observed <- observed_values()
+      has_observed <- any(!is.na(observed))
+      if (has_observed) {
+        selected_point_estimates <- if (identical(input$observed_sex, "girl")) point_female else point_male
+        ratio <- rep("", length(observed))
+        ratio_idx <- !is.na(observed) & !is.na(selected_point_estimates) & selected_point_estimates != 0
+        ratio[ratio_idx] <- sprintf("%.1f%%", 100 * observed[ratio_idx] / selected_point_estimates[ratio_idx])
+        ratio_col <- sprintf("Observed / predicted (%s)", if (identical(input$observed_sex, "girl")) "Girl" else "Boy")
+        df[[ratio_col]] <- ratio
+      }
       df
-  }, align = "lrcrc")
+  })
 
   output$plots <- renderUI({
     tabsetPanel(
@@ -172,6 +222,7 @@ server <- function(input, output) {
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "vo2_ml_min")
   })
   output$vo2_ml_min_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -184,6 +235,7 @@ server <- function(input, output) {
       height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "vo2_ml_min")
   })
   output$vo2_ml_min_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -197,6 +249,7 @@ server <- function(input, output) {
       legend_pos = "topleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "vo2_ml_min")
   })
 
   # VO2/kg plots
@@ -210,6 +263,7 @@ server <- function(input, output) {
       legend_pos = "topright",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "vo2_ml_kg_min")
   })
   output$vo2_ml_kg_min_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -222,6 +276,7 @@ server <- function(input, output) {
       height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "vo2_ml_kg_min")
   })
   output$vo2_ml_kg_min_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -235,6 +290,7 @@ server <- function(input, output) {
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "vo2_ml_kg_min")
   })
 
   # Heart rate plots
@@ -248,6 +304,7 @@ server <- function(input, output) {
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "heart_rate")
   })
   output$heart_rate_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -260,6 +317,7 @@ server <- function(input, output) {
       height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "heart_rate")
   })
   output$heart_rate_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -272,6 +330,7 @@ server <- function(input, output) {
       bmi_range = input$bmi_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "heart_rate")
   })
 
   # Ventilation plots
@@ -285,6 +344,7 @@ server <- function(input, output) {
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "ventilation")
   })
   output$ventilation_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -297,6 +357,7 @@ server <- function(input, output) {
       height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "ventilation")
   })
   output$ventilation_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -310,6 +371,7 @@ server <- function(input, output) {
       legend_pos = "bottomright",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "ventilation")
   })
 
   # Oxygen pulse plots
@@ -323,6 +385,7 @@ server <- function(input, output) {
       legend_pos = "topright",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "oxygen_pulse")
   })
   output$oxygen_pulse_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -335,6 +398,7 @@ server <- function(input, output) {
       height_range = input$height_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "oxygen_pulse")
   })
   output$oxygen_pulse_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -347,6 +411,7 @@ server <- function(input, output) {
       bmi_range = input$bmi_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "oxygen_pulse")
   })
 
   # VE/VCO2 slope plots
@@ -361,6 +426,7 @@ server <- function(input, output) {
       legend_pos = "topleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "ve_vco2_slope")
   })
   output$ve_vco2_slope_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -375,6 +441,7 @@ server <- function(input, output) {
       legend_pos = "topright",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "ve_vco2_slope")
   })
   output$ve_vco2_slope_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -389,6 +456,7 @@ server <- function(input, output) {
       legend_pos = "topright",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "ve_vco2_slope")
   })
 
   output$download_pdf <- downloadHandler(
@@ -434,6 +502,7 @@ server <- function(input, output) {
       legend_pos = "bottomleft",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(match(input$group, c("simple", "moderate", "fontan")), "breathing_frequency")
   })
   output$breathing_frequency_plot_height <- renderPlot({
     plot_metric_by_height(
@@ -447,6 +516,7 @@ server <- function(input, output) {
       legend_pos = "topright",
       conf_level = input$conf_level / 100
     )
+    add_observed_point(input$height, "breathing_frequency")
   })
   output$breathing_frequency_plot_bmi <- renderPlot({
     plot_metric_by_bmi(
@@ -459,6 +529,7 @@ server <- function(input, output) {
       bmi_range = input$bmi_range,
       conf_level = input$conf_level / 100
     )
+    add_observed_point(computed_bmi(), "breathing_frequency")
   })
 
 }
