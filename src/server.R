@@ -38,6 +38,23 @@ server <- function(input, output, session) {
     if (identical(input$observed_sex, "girl")) strong_col[1] else strong_col[2]
   })
 
+  output$observed_value_note <- renderUI({
+    if (!any(!is.na(observed_values()))) {
+      return(NULL)
+    }
+
+    tags$p(
+      tags$span(
+        "*",
+        style = paste0(
+          "color: ", observed_color(), "; ",
+          "font-weight: bold; font-size: 1.5em; line-height: 1;"
+        )
+      ),
+      HTML("&nbsp;marks the observed value entered.")
+    )
+  })
+
   observed_metric_value <- function(metric_name) {
     obs_value <- observed_values()[metric_name]
     if (length(obs_value) == 1 && !is.na(obs_value)) obs_value else NA_real_
