@@ -161,6 +161,7 @@ ui <- fluidPage(
         tableOutput("results_table"),
         h2("Plots"),
         HTML("The selected diagnostic group and covariates are highlighted in the plots below."),
+        HTML("An asterisk (*) marks the observed value entered."),
         uiOutput("plots"),
         downloadButton("download_pdf", "Download PDF Report")
       )
