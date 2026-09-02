@@ -178,7 +178,7 @@ server <- function(input, output, session) {
         df[[ratio_col]] <- ratio
       }
       df
-  })
+  }, align = "lrcrcr")
 
   output$plots <- renderUI({
     tabsetPanel(
