@@ -101,7 +101,11 @@ ui <- fluidPage(
       actionButton("submit", "Calculate endpoints"),
 
       # Collapsible options section
-      actionButton("toggle_options", label = "Additional Options ▼", style = "background-color: #e0e0e0; color: #555; border-color: #ccc;"),
+      div(
+        style = "display: flex; gap: 8px; align-items: center;",
+        actionButton("toggle_options", label = "Additional Options ▼", style = "background-color: #e0e0e0; color: #555; border-color: #ccc;"),
+        actionButton("toggle_observed", label = "Observed data ▼", style = "background-color: #e0e0e0; color: #555; border-color: #ccc;")
+      ),
       conditionalPanel(
         condition = "input.toggle_options % 2 == 1",
         div(style = "margin-top: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #f9f9f9;",
@@ -121,6 +125,26 @@ ui <- fluidPage(
             "bmi_range", "BMI range (kg/m²)",
             value = c(18.5, 25), min = 5, max = 35, step = 0.5
           )
+        )
+      ),
+      conditionalPanel(
+        condition = "input.toggle_observed % 2 == 1",
+        div(style = "margin-top: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #f9f9f9;",
+          h2("Observed data"),
+          radioButtons(
+            "observed_sex", "Sex",
+            choices = c("Boy" = "boy", "Girl" = "girl"),
+            selected = "boy",
+            inline = TRUE
+          ),
+          numericInput("obs_vo2_ml_min", "Absolute VO₂ (ml/min)", value = NA_real_, min = 0, step = 0.1),
+          numericInput("obs_vo2_ml_kg_min", "VO₂ relative to body mass (ml/kg/min)", value = NA_real_, min = 0, step = 0.1),
+          numericInput("obs_heart_rate", "Heart rate (BPM)", value = NA_real_, min = 0, step = 0.1),
+          numericInput("obs_ventilation", "Ventilation (l/min)", value = NA_real_, min = 0, step = 0.1),
+          numericInput("obs_oxygen_pulse", "Oxygen pulse (ml/beat)", value = NA_real_, min = 0, step = 0.1),
+          numericInput("obs_ve_vco2_slope", "Ventilatory efficiency (VE/VCO₂ slope)", value = NA_real_, min = 0, step = 0.1),
+          numericInput("obs_breathing_frequency", "Breathing frequency (breaths/min)", value = NA_real_, min = 0, step = 0.1),
+          actionButton("clear_observed", "Clear observed data")
         )
       )
   ),
@@ -160,7 +184,7 @@ ui <- fluidPage(
         View source code on GitHub
       </a>
       &nbsp;|&nbsp;
-      version 0.0.0.9046
+      version 0.0.0.9047
     </p>')
   )
 )
