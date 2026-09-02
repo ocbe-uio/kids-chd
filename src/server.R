@@ -41,7 +41,7 @@ server <- function(input, output, session) {
   add_observed_point <- function(x, metric_name) {
     obs_value <- observed_values()[metric_name]
     if (length(obs_value) == 1 && !is.na(obs_value)) {
-      points(x, obs_value, pch = 8, cex = 1.5, col = observed_color(), lwd = 2)
+      points(x, obs_value, pch = 8, cex = 1.5, col = observed_color(), lwd = 2, xpd = NA)
     }
   }
 
